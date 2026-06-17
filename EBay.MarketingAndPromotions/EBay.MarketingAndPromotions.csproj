@@ -12,6 +12,8 @@
     <Version>1.0.0</Version>
     <Authors>eBay</Authors>
     <Description>Marketing and Promotions SDK for eBay Marketing and Recommendation APIs</Description>
+    <PackageProjectUrl>https://github.com/eBay/marketing-and-promotions-dotnet-sdk</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/eBay/marketing-and-promotions-dotnet-sdk</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
