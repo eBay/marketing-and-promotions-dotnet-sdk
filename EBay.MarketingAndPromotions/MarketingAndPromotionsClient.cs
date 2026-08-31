@@ -13,23 +13,16 @@
 // limitations under the License.
 
 
-using EBay.MarketingAndPromotions.Clients.Rest;
 using EBay.MarketingAndPromotions.Configuration;
-using EBay.MarketingAndPromotions.Generated.Marketing;
-using EBay.MarketingAndPromotions.Generated.Recommendation;
 using Microsoft.Kiota.Abstractions.Authentication;
-using Microsoft.Kiota.Http.HttpClientLibrary;
 
 namespace EBay.MarketingAndPromotions;
 
-public sealed class MarketingAndPromotionsClient : IDisposable
+public partial class MarketingAndPromotionsClient : IDisposable
 {
     private readonly HttpClient _marketingHttpClient;
     private readonly HttpClient _recommendationHttpClient;
     private readonly bool _ownsHttpClients;
-
-    public MarketingClient Marketing { get; }
-    public RecommendationClient Recommendation { get; }
 
     /// <summary>
     /// DI-friendly constructor: accepts an HttpClient and ITokenContext from the container.
@@ -52,12 +45,7 @@ public sealed class MarketingAndPromotionsClient : IDisposable
         _ownsHttpClients = false;
 
         var auth = new BaseBearerTokenAuthenticationProvider(new KiotaAuthProvider(config, tokenContext));
-
-        Marketing = new MarketingClient(new MarketingApiClient(
-            new HttpClientRequestAdapter(auth, httpClient: BuildKiotaClient(config.MarketingBaseUrl, _marketingHttpClient))), config, tokenContext);
-
-        Recommendation = new RecommendationClient(new RecommendationApiClient(
-            new HttpClientRequestAdapter(auth, httpClient: BuildKiotaClient(config.RecommendationBaseUrl, _recommendationHttpClient))), config, tokenContext);
+        InitializeRestClients(auth, config, tokenContext);
     }
 
     /// <summary>
