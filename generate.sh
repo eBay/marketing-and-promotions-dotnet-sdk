@@ -29,7 +29,7 @@ echo ""
 echo "Regenerating Marketing API client..."
 dotnet kiota generate \
   -l csharp \
-  -d specs/sell_marketing_v1_oas3.yaml \
+  -d specs/openapi/marketing.yaml \
   -c MarketingApiClient \
   -n EBay.MarketingAndPromotions.Generated.Marketing \
   -o EBay.MarketingAndPromotions/Generated/Marketing \
@@ -39,7 +39,7 @@ echo ""
 echo "Regenerating Recommendation API client..."
 dotnet kiota generate \
   -l csharp \
-  -d specs/sell_recommendation_v1_oas3.yaml \
+  -d specs/openapi/recommendation.yaml \
   -c RecommendationApiClient \
   -n EBay.MarketingAndPromotions.Generated.Recommendation \
   -o EBay.MarketingAndPromotions/Generated/Recommendation \
