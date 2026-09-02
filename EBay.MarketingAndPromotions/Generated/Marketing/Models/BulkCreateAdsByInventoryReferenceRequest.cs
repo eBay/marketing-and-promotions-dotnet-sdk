@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This type defines the bulk request to create ads for eBay inventory reference IDs. eBay inventory reference IDs are seller-defined IDs used by the Inventory API.
+    /// This request object defines the fields for the &lt;b&gt;BulkCreateAdsByInventoryReference&lt;/b&gt; request.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class BulkCreateAdsByInventoryReferenceRequest : IAdditionalDataHolder, IParsable
