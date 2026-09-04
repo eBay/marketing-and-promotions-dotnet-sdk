@@ -21,9 +21,6 @@ namespace EBay.MarketingAndPromotions.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    private const string MarketingClientName = nameof(MarketingAndPromotionsClient) + ".Marketing";
-    private const string RecommendationClientName = nameof(MarketingAndPromotionsClient) + ".Recommendation";
-
     public static IServiceCollection AddMarketingAndPromotionsSdk(
         this IServiceCollection services,
         MarketingAndPromotionsConfiguration config)
@@ -34,20 +31,24 @@ public static class ServiceCollectionExtensions
         services.AddSingleton(config);
         services.AddSingleton<ITokenContext, AsyncLocalTokenContext>();
 
-        services.AddHttpClient(MarketingClientName)
-            .AddHttpMessageHandler(sp => new DiagnosticLoggingHandler(sp.GetRequiredService<MarketingAndPromotionsConfiguration>()))
-            .ConfigureHttpClient(c => c.Timeout = config.HttpTimeout);
-
-        services.AddHttpClient(RecommendationClientName)
-            .AddHttpMessageHandler(sp => new DiagnosticLoggingHandler(sp.GetRequiredService<MarketingAndPromotionsConfiguration>()))
-            .ConfigureHttpClient(c => c.Timeout = config.HttpTimeout);
+        services.AddHttpClient(MarketingAndPromotionsClient.MarketingClientName,
+                (sp, c) => c.BaseAddress = new Uri(sp.GetRequiredService<MarketingAndPromotionsConfiguration>().MarketingBaseUrl))
+            .ConfigureHttpClient((sp, c) => c.Timeout = sp.GetRequiredService<MarketingAndPromotionsConfiguration>().HttpTimeout)
+            .AddHttpMessageHandler(sp => new DiagnosticLoggingHandler(sp.GetRequiredService<MarketingAndPromotionsConfiguration>()));
+        services.AddHttpClient(MarketingAndPromotionsClient.RecommendationClientName,
+                (sp, c) => c.BaseAddress = new Uri(sp.GetRequiredService<MarketingAndPromotionsConfiguration>().RecommendationBaseUrl))
+            .ConfigureHttpClient((sp, c) => c.Timeout = sp.GetRequiredService<MarketingAndPromotionsConfiguration>().HttpTimeout)
+            .AddHttpMessageHandler(sp => new DiagnosticLoggingHandler(sp.GetRequiredService<MarketingAndPromotionsConfiguration>()));
 
         services.AddScoped<MarketingAndPromotionsClient>(sp =>
-            new MarketingAndPromotionsClient(
+        {
+            var factory = sp.GetRequiredService<IHttpClientFactory>();
+            return new MarketingAndPromotionsClient(
                 sp.GetRequiredService<MarketingAndPromotionsConfiguration>(),
-                sp.GetRequiredService<IHttpClientFactory>().CreateClient(MarketingClientName),
-                sp.GetRequiredService<IHttpClientFactory>().CreateClient(RecommendationClientName),
-                sp.GetRequiredService<ITokenContext>()));
+                factory.CreateClient(MarketingAndPromotionsClient.MarketingClientName),
+                factory.CreateClient(MarketingAndPromotionsClient.RecommendationClientName),
+                sp.GetRequiredService<ITokenContext>());
+        });
         services.AddScoped(sp => sp.GetRequiredService<MarketingAndPromotionsClient>().Marketing);
         services.AddScoped(sp => sp.GetRequiredService<MarketingAndPromotionsClient>().Recommendation);
 

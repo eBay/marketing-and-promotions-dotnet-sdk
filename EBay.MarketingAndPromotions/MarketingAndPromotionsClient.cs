@@ -20,69 +20,57 @@ namespace EBay.MarketingAndPromotions;
 
 public partial class MarketingAndPromotionsClient : IDisposable
 {
-    private readonly HttpClient _marketingHttpClient;
-    private readonly HttpClient _recommendationHttpClient;
-    private readonly bool _ownsHttpClients;
+    // Named client keys used by ServiceCollectionExtensions
+    internal const string MarketingClientName = "MarketingAndPromotionsClient.Marketing";
+    internal const string RecommendationClientName = "MarketingAndPromotionsClient.Recommendation";
+
+    private readonly HttpClient[] _ownedClients;
 
     /// <summary>
-    /// DI-friendly constructor: accepts an HttpClient and ITokenContext from the container.
-    /// The HttpClient should be created via IHttpClientFactory with DiagnosticLoggingHandler
-    /// already wired in (see ServiceCollectionExtensions).
+    /// DI-friendly constructor: each HttpClient is a named client from IHttpClientFactory
+    /// with DiagnosticLoggingHandler and BaseAddress already configured.
     /// </summary>
     internal MarketingAndPromotionsClient(
         MarketingAndPromotionsConfiguration config,
-        HttpClient marketingHttpClient,
-        HttpClient recommendationHttpClient,
+        HttpClient marketingClient,
+        HttpClient recommendationClient,
         ITokenContext tokenContext)
     {
-        ArgumentNullException.ThrowIfNull(config);
-        ArgumentNullException.ThrowIfNull(marketingHttpClient);
-        ArgumentNullException.ThrowIfNull(recommendationHttpClient);
-        ArgumentNullException.ThrowIfNull(tokenContext);
-
-        _marketingHttpClient = marketingHttpClient;
-        _recommendationHttpClient = recommendationHttpClient;
-        _ownsHttpClients = false;
+        _ownedClients = [];
 
         var auth = new BaseBearerTokenAuthenticationProvider(new KiotaAuthProvider(config, tokenContext));
-        InitializeRestClients(auth, config, tokenContext);
+
+        InitializeRestClients(auth, marketingClient, recommendationClient, config, tokenContext);
     }
 
     /// <summary>
     /// Standalone constructor for use outside DI (tests, scripts).
-    /// Builds its own handler chain including DiagnosticLoggingHandler.
+    /// Creates its own HttpClients with DiagnosticLoggingHandler.
     /// </summary>
     public MarketingAndPromotionsClient(MarketingAndPromotionsConfiguration config)
-        : this(
-            config,
-            BuildStandaloneHttpClient(config),
-            BuildStandaloneHttpClient(config),
-            new AsyncLocalTokenContext())
     {
-        _ownsHttpClients = true;
+        var tokenContext = new AsyncLocalTokenContext();
+        var auth = new BaseBearerTokenAuthenticationProvider(new KiotaAuthProvider(config, tokenContext));
+
+        var marketingClient = BuildStandaloneHttpClient(config, config.MarketingBaseUrl);
+        var recommendationClient = BuildStandaloneHttpClient(config, config.RecommendationBaseUrl);
+        _ownedClients = [marketingClient, recommendationClient];
+
+        InitializeRestClients(auth, marketingClient, recommendationClient, config, tokenContext);
     }
 
-    private static HttpClient BuildKiotaClient(string baseUrl, HttpClient httpClient)
-    {
-        httpClient.BaseAddress = new Uri(baseUrl);
-        return httpClient;
-    }
-
-    private static HttpClient BuildStandaloneHttpClient(MarketingAndPromotionsConfiguration config)
+    private static HttpClient BuildStandaloneHttpClient(MarketingAndPromotionsConfiguration config, string baseUrl)
     {
         var handler = new DiagnosticLoggingHandler(config)
         {
             InnerHandler = new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromMinutes(2) }
         };
-        return new HttpClient(handler) { Timeout = config.HttpTimeout };
+        return new HttpClient(handler) { BaseAddress = new Uri(baseUrl), Timeout = config.HttpTimeout };
     }
 
     public void Dispose()
     {
-        if (_ownsHttpClients)
-        {
-            _marketingHttpClient.Dispose();
-            _recommendationHttpClient.Dispose();
-        }
+        foreach (var client in _ownedClients)
+            client.Dispose();
     }
 }

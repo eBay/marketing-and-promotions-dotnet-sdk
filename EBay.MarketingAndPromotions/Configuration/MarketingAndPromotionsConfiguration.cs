@@ -23,13 +23,13 @@ public sealed class MarketingAndPromotionsConfiguration
     public string MarketingBaseUrl
     {
         get => _marketingBaseUrl;
-        set => _marketingBaseUrl = RequireHttps(value, nameof(MarketingBaseUrl));
+        set => _marketingBaseUrl = RequireHttps(value);
     }
 
     public string RecommendationBaseUrl
     {
         get => _recommendationBaseUrl;
-        set => _recommendationBaseUrl = RequireHttps(value, nameof(RecommendationBaseUrl));
+        set => _recommendationBaseUrl = RequireHttps(value);
     }
 
     /// <summary>Fallback bearer token used when no per-call accessToken is supplied.</summary>
@@ -54,10 +54,10 @@ public sealed class MarketingAndPromotionsConfiguration
 
     internal IEnumerable<string> AllowedHosts => ["api.ebay.com", "apim.ebay.com", "apiz.ebay.com"];
 
-    private static string RequireHttps(string value, string paramName)
+    private static string RequireHttps(string value)
     {
         if (!value.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-            throw new ArgumentException("Only HTTPS endpoints are allowed.", paramName);
+            throw new ArgumentException($"URL must use HTTPS: '{value}'", nameof(value));
         return value;
     }
 }

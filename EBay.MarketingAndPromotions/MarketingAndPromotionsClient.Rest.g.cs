@@ -29,13 +29,15 @@ public partial class MarketingAndPromotionsClient
 
     private void InitializeRestClients(
         IAuthenticationProvider auth,
+        HttpClient marketingClient,
+        HttpClient recommendationClient,
         MarketingAndPromotionsConfiguration config,
         ITokenContext tokenContext)
     {
         Marketing = new MarketingClient(new MarketingApiClient(
-            new HttpClientRequestAdapter(auth, httpClient: BuildKiotaClient(config.MarketingBaseUrl, _marketingHttpClient))), config, tokenContext);
+            new HttpClientRequestAdapter(auth, httpClient: marketingClient)), config, tokenContext);
 
         Recommendation = new RecommendationClient(new RecommendationApiClient(
-            new HttpClientRequestAdapter(auth, httpClient: BuildKiotaClient(config.RecommendationBaseUrl, _recommendationHttpClient))), config, tokenContext);
+            new HttpClientRequestAdapter(auth, httpClient: recommendationClient)), config, tokenContext);
     }
 }
