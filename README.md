@@ -326,7 +326,7 @@ When OpenAPI specs change:
 
 # Or manually:
 dotnet tool restore
-dotnet kiota generate -l csharp -d specs/sell_marketing_v1_oas3.yaml ...
+dotnet kiota generate -l csharp -d specs/openapi/marketing.yaml ...
 dotnet build EBay.MarketingAndPromotions/EBay.MarketingAndPromotions.csproj
 ```
 

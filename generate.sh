@@ -29,7 +29,7 @@ echo ""
 echo "Regenerating Marketing API client..."
 dotnet kiota generate \
   -l csharp \
-  -d specs/sell_marketing_v1_oas3.yaml \
+  -d specs/openapi/marketing.yaml \
   -c MarketingApiClient \
   -n EBay.MarketingAndPromotions.Generated.Marketing \
   -o EBay.MarketingAndPromotions/Generated/Marketing \
@@ -39,16 +39,19 @@ echo ""
 echo "Regenerating Recommendation API client..."
 dotnet kiota generate \
   -l csharp \
-  -d specs/sell_recommendation_v1_oas3.yaml \
+  -d specs/openapi/recommendation.yaml \
   -c RecommendationApiClient \
   -n EBay.MarketingAndPromotions.Generated.Recommendation \
   -o EBay.MarketingAndPromotions/Generated/Recommendation \
   --ebc --co
 
+echo "Adding license headers to generated files..."
+./add-license-headers.sh ./EBay.MarketingAndPromotions/Generated
+
 # Build the project
 echo ""
 echo "Building the SDK..."
-dotnet build EBay.MarketingAndPromotions/EBay.MarketingAndPromotions.csproj
+DOTNET_ROLL_FORWARD=LatestMajor dotnet build EBay.MarketingAndPromotions/EBay.MarketingAndPromotions.csproj
 
 echo ""
 echo "========================================="
