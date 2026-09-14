@@ -16,17 +16,12 @@
 
 set -euo pipefail
 
-echo "========================================="
-echo "Marketing and Promotions SDK - Regeneration"
-echo "========================================="
-
-# Restore dotnet tools
-echo "Restoring .NET tools..."
+echo "Restoring tools..."
 dotnet tool restore
 
-# Regenerate Kiota clients
-echo ""
-echo "Regenerating Marketing API client..."
+echo "Regenerating REST clients via Kiota..."
+rm -rf ./EBay.MarketingAndPromotions/Generated
+
 dotnet kiota generate \
   -l csharp \
   -d specs/openapi/marketing.yaml \
@@ -35,8 +30,6 @@ dotnet kiota generate \
   -o EBay.MarketingAndPromotions/Generated/Marketing \
   --ebc --co
 
-echo ""
-echo "Regenerating Recommendation API client..."
 dotnet kiota generate \
   -l csharp \
   -d specs/openapi/recommendation.yaml \
@@ -48,12 +41,7 @@ dotnet kiota generate \
 echo "Adding license headers to generated files..."
 ./add-license-headers.sh ./EBay.MarketingAndPromotions/Generated
 
-# Build the project
-echo ""
-echo "Building the SDK..."
+echo "Building (triggers StrawberryShake GraphQL codegen)..."
 DOTNET_ROLL_FORWARD=LatestMajor dotnet build EBay.MarketingAndPromotions/EBay.MarketingAndPromotions.csproj
 
-echo ""
-echo "========================================="
-echo "Done! SDK regenerated successfully."
-echo "========================================="
+echo "Done."

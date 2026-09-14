@@ -1,6 +1,6 @@
 {
   "descriptionHash": "B6226F49D2DCFEAC13E441D6D9515FB90D78AABB85279849866EF267666E7A29C3A761FB5E5E7C918316A88EDEE195A425DC2C6906E2F080EE8E50E220F0EE0F",
-  "descriptionLocation": "../../../specs/sell_recommendation_v1_oas3.yaml",
+  "descriptionLocation": "../../../specs/openapi/recommendation.yaml",
   "lockFileVersion": "1.0.0",
   "kiotaVersion": "1.31.0",
   "clientClassName": "RecommendationApiClient",
