@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Recommendation.Models
 {
     /// <summary>
-    /// The high-level object used to return a set of Promoted Listings ad recommendations.
+    /// This type defines the set of Promoted Listings ad recommendations.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class PagedListingRecommendationCollection : IAdditionalDataHolder, IParsable

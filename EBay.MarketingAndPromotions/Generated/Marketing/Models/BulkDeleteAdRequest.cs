@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This request object defines the fields for the &lt;b&gt;bulkDeleteAdsByListingId&lt;/b&gt; request.
+    /// This type defines the fields that the call uses to remove ads in bulk.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class BulkDeleteAdRequest : IAdditionalDataHolder, IParsable

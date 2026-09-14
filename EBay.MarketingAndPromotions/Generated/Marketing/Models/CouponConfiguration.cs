@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// The configuration of a coded coupon discount.
+    /// This type defines a coded coupon discount. It is required if the discount type is &lt;code&gt;CODED_COUPON&lt;/code&gt;.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class CouponConfiguration : IAdditionalDataHolder, IParsable

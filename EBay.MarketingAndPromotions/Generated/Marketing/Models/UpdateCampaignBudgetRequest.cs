@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This type defines the request fields for the budget details that shall be updated.
+    /// A type that contains the fields for the &lt;b&gt;UpdateCampaignBudget&lt;/b&gt; request.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class UpdateCampaignBudgetRequest : IAdditionalDataHolder, IParsable

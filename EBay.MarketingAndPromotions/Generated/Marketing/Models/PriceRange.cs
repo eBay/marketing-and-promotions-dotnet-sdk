@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This container is used if the seller wants to apply the email campaign to listings based on a price range.&lt;br&gt;&lt;br&gt;The &lt;b&gt;priceRange&lt;/b&gt; container consists of the &lt;b&gt;currency&lt;/b&gt;, &lt;b&gt;gte&lt;/b&gt;, and &lt;b&gt;lte&lt;/b&gt; fields.&lt;br&gt;&lt;br&gt; &quot;gte&quot; stands for &quot;greater than or equal to&quot; and &quot;lte&quot; stands for &quot;less than or equal to&quot;. Either &lt;b&gt;gte&lt;/b&gt;, &lt;b&gt;lte&lt;/b&gt;, or both must be used.&lt;br&gt;&lt;br&gt;&lt;b&gt;currency&lt;/b&gt; is a required field if including a price range. One of the three-digit currency codes from &lt;b&gt;CurrencyCodeEnum&lt;/b&gt; must be specified.&lt;br&gt;&lt;br&gt;&lt;span class=&quot;tablenote&quot;&gt;&lt;b&gt;Note: &lt;/b&gt;Use this object when the &lt;b&gt;itemSelectMode&lt;/b&gt; is set to &lt;code&gt;AUTO&lt;/code&gt;.&lt;/span&gt;
+    /// This type defines the price range for the listings in an email campaign.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class PriceRange : IAdditionalDataHolder, IParsable

@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This type defines the fields to update the campaign name and start and end dates.
+    /// This type specifies the updated name, and start and end dates for an update-campaign request.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class UpdateCampaignIdentificationRequest : IAdditionalDataHolder, IParsable

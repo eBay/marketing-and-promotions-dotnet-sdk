@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This type defines the request fields for the ad rate strategy that shall be updated.
+    /// A type that defines the request fields used to update the ad rate strategy for a Promoted Listings ad campaign.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class UpdateAdrateStrategyRequest : IAdditionalDataHolder, IParsable

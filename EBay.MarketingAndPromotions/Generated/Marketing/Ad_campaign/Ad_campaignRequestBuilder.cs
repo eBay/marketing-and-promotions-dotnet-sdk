@@ -73,7 +73,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public Ad_campaignRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/ad_campaign{?campaign_name*,campaign_status*,campaign_targeting_types*,channels*,end_date_range*,funding_strategy*,limit*,offset*,start_date_range*}", pathParameters)
+        public Ad_campaignRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/ad_campaign{?campaign_name*,campaign_status*,campaign_targeting_types*,channels*,end_date_range*,funding_strategy*,limit*,marketplace_id*,offset*,start_date_range*}", pathParameters)
         {
         }
         /// <summary>
@@ -81,7 +81,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public Ad_campaignRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/ad_campaign{?campaign_name*,campaign_status*,campaign_targeting_types*,channels*,end_date_range*,funding_strategy*,limit*,offset*,start_date_range*}", rawUrl)
+        public Ad_campaignRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/ad_campaign{?campaign_name*,campaign_status*,campaign_targeting_types*,channels*,end_date_range*,funding_strategy*,limit*,marketplace_id*,offset*,start_date_range*}", rawUrl)
         {
         }
         /// <summary>
@@ -90,9 +90,9 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign
         /// <returns>A <see cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.CampaignPagedCollectionResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 400 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 409 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 500 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 400 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 409 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.CampaignPagedCollectionResponse?> GetAsync(Action<RequestConfiguration<global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Ad_campaignRequestBuilder.Ad_campaignRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -105,9 +105,9 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.CampaignPagedCollectionResponse>(requestInfo, global::EBay.MarketingAndPromotions.Generated.Marketing.Models.CampaignPagedCollectionResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
@@ -118,9 +118,9 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign
         /// <param name="body">This type defines the fields for the create campaign request.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 400 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 409 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 500 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 400 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 409 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Ad_campaignPostResponse?> PostAsync(global::EBay.MarketingAndPromotions.Generated.Marketing.Models.CreateCampaignRequest body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -134,9 +134,9 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign
             var requestInfo = ToPostRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Ad_campaignPostResponse>(requestInfo, global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Ad_campaignPostResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
@@ -207,35 +207,14 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign
             public string CampaignName { get; set; }
 #endif
             /// <summary>This query parameter specifies the status of the campaign(s) being retrieved.&lt;br&gt;&lt;br&gt;&lt;span class=&quot;tablenote&quot;&gt;&lt;b&gt;Note:&lt;/b&gt; The results might not include all the campaigns with this status if other filters exclude them.&lt;/span&gt;&lt;br&gt;&lt;b&gt;Valid values:&lt;/b&gt; See &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns.campaignstatusenum&quot;&gt;CampaignStatusEnum&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;&lt;b&gt;Maximum: &lt;/b&gt; 1 status</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
             [QueryParameter("campaign_status")]
-            public string? CampaignStatus { get; set; }
-#nullable restore
-#else
-            [QueryParameter("campaign_status")]
-            public string CampaignStatus { get; set; }
-#endif
+            public global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.GetCampaign_statusQueryParameterType? CampaignStatus { get; set; }
             /// <summary>This query parameter specifies the targeting type of the campaign(s) to be retrieved.&lt;br&gt;&lt;br&gt;The results will be filtered to only include campaigns with the specified targeting type. If not specified, all campaigns matching other filter parameters will be returned. The results might not include these campaigns if other search conditions exclude them.&lt;br&gt;&lt;br&gt;&lt;b&gt;Valid values:&lt;/b&gt; See &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns.campaigntargetingtypeenum&quot;&gt;CampaignTargetingTypeEnum&lt;/a&gt;</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
             [QueryParameter("campaign_targeting_types")]
-            public string? CampaignTargetingTypes { get; set; }
-#nullable restore
-#else
-            [QueryParameter("campaign_targeting_types")]
-            public string CampaignTargetingTypes { get; set; }
-#endif
+            public global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.GetCampaign_targeting_typesQueryParameterType? CampaignTargetingTypes { get; set; }
             /// <summary>This query parameter specifies the channel for the campaign(s) being retrieved.&lt;br&gt;&lt;br&gt;The results will be filtered to only include campaigns with the specified channel. If not specified, all campaigns matching other filter parameters will be returned. The results might not include these campaigns if other search conditions exclude them.&lt;br /&gt;&lt;br /&gt;&lt;b&gt;Valid Values:&lt;/b&gt; See &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns.channelenum&quot;&gt;ChannelEnum&lt;/a&gt;</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
             [QueryParameter("channels")]
-            public string? Channels { get; set; }
-#nullable restore
-#else
-            [QueryParameter("channels")]
-            public string Channels { get; set; }
-#endif
+            public global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.GetChannelsQueryParameterType? Channels { get; set; }
             /// <summary>This query parameter specifies the range of a campaign&apos;s end date. The results are filtered to include only campaigns with an end date that is within specified range. &lt;br&gt;&lt;br&gt;&lt;b&gt;Valid format (UTC)&lt;/b&gt;: &lt;ul&gt;&lt;li&gt;&lt;code&gt; yyyy-MM-ddThh:mm:ssZ..yyyy-MM-ddThh:mm:ssZ &lt;/code&gt;  (campaign ends within this range)&lt;/li&gt;&lt;li&gt;&lt;code&gt;yyyy-MM-ddThh:mm:ssZ..&lt;/code&gt; (campaign ends on or after this date)&lt;/li&gt;&lt;li&gt;&lt;code&gt;..yyyy-MM-ddThh:mm:ssZ &lt;/code&gt; (campaign ends on or before this date)&lt;/li&gt;&lt;li&gt;&lt;code&gt;2016-09-08T00:00.00.000Z..2016-09-09T00:00:00Z&lt;/code&gt; (campaign ends on September 08, 2016)&lt;/li&gt;&lt;/ul&gt;&lt;br&gt;&lt;span class=&quot;tablenote&quot;&gt;&lt;b&gt;Note:&lt;/b&gt;The results might not include all the campaigns ending on this date if other filters exclude them.&lt;/span&gt;</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -247,15 +226,8 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign
             public string EndDateRange { get; set; }
 #endif
             /// <summary>This query parameter specifies the funding strategy for the campaign(s) being retrieved.&lt;br /&gt;&lt;br /&gt;The results will be filtered to only include campaigns with the specified funding model. If not specified, all campaigns matching the other filter parameters will be returned. The results might not include these campaigns if other search conditions exclude them.&lt;br /&gt;&lt;br /&gt;&lt;b&gt;Valid Values:&lt;/b&gt; See &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-getreporttasks.fundingmodelenum&quot;&gt;FundingModelEnum&lt;/a&gt;</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
             [QueryParameter("funding_strategy")]
-            public string? FundingStrategy { get; set; }
-#nullable restore
-#else
-            [QueryParameter("funding_strategy")]
-            public string FundingStrategy { get; set; }
-#endif
+            public global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.GetFunding_strategyQueryParameterType? FundingStrategy { get; set; }
             /// <summary>&lt;p&gt;This query parameter specifies the maximum number of campaigns to return on a page in the paginated response.&lt;/p&gt;  &lt;b&gt;Default: &lt;/b&gt;10&lt;br&gt;&lt;br&gt;&lt;b&gt;Maximum: &lt;/b&gt; 500</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -265,6 +237,16 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign
 #else
             [QueryParameter("limit")]
             public string Limit { get; set; }
+#endif
+            /// <summary>This parameter specifies the eBay marketplace ID of the site for which you want to retrieve campaigns.&lt;br&gt;&lt;br&gt;See &lt;a href=&quot;/develop/api/sell/request_headers#marketplace-id-values&quot; target=&quot;_blank&quot;&gt;Marketplace ID values&lt;/a&gt; for supported Marketplace ID values.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("marketplace_id")]
+            public string? MarketplaceId { get; set; }
+#nullable restore
+#else
+            [QueryParameter("marketplace_id")]
+            public string MarketplaceId { get; set; }
 #endif
             /// <summary>This query parameter specifies the number of campaigns to skip in the result set before returning the first report in the paginated response.&lt;br&gt;&lt;br&gt;Combine &lt;b&gt;offset&lt;/b&gt; with the &lt;b&gt;limit&lt;/b&gt; query parameter to control the items returned in the response. For example, if you supply an &lt;b&gt;offset&lt;/b&gt; of &lt;code&gt;0&lt;/code&gt; and a &lt;b&gt;limit&lt;/b&gt; of &lt;code&gt;10&lt;/code&gt;, the first page of the response contains the first 10 items from the complete list of items retrieved by the call. If &lt;b&gt;offset&lt;/b&gt; is &lt;code&gt;10&lt;/code&gt; and &lt;b&gt;limit&lt;/b&gt; is &lt;code&gt;20&lt;/code&gt;, the first page of the response contains items 11-30 from the complete result set.&lt;br&gt;&lt;br&gt; &lt;b&gt;Default:&lt;/b&gt; 0</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER

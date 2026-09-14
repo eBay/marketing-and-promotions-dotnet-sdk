@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This request works with listings created via the &lt;a href=&quot;/api-docs/sell/inventory/resources/methods&quot; target=&quot;_blank&quot;&gt;Inventory API&lt;/a&gt;.&lt;br /&gt;&lt;br /&gt;The request is to delete a set of ads in bulk, as specified by a list of inventory reference IDs from the specified campaign.
+    /// This type defines the request fields that &lt;b&gt;bulkDeleteAdsByInventoryReference&lt;/b&gt; uses to delete ads in bulk.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class BulkDeleteAdsByInventoryReferenceRequest : IAdditionalDataHolder, IParsable

@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// The bulk request to update the ads.
+    /// A type that defines the fields for the &lt;b&gt;BulkUpdateAdStatus&lt;/b&gt; request.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class BulkUpdateAdStatusRequest : IAdditionalDataHolder, IParsable

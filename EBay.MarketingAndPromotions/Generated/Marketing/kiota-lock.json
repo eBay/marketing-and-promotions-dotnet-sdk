@@ -1,8 +1,8 @@
 {
-  "descriptionHash": "1620D30311142C4E63625C11B127E7E166367FAF819C6823F7550398FB623B08E08C6BCE046F53884B52A1B1FE4F9B1791FF4AA2EC9280326C80E1C2C7955858",
-  "descriptionLocation": "../../../specs/openapi/marketing.yaml",
+  "descriptionHash": "776581AB3572A4B999C8806DA5C8869D0B0EC5832F02258C40622E2DC917DBC20EEA22C929E5CD8505A6C87901C0C629102C82A1B4B7CE3A16F90A1C155D202F",
+  "descriptionLocation": "../../../specs/openapi/marketing.json",
   "lockFileVersion": "1.0.0",
-  "kiotaVersion": "1.31.0",
+  "kiotaVersion": "1.35.0",
   "clientClassName": "MarketingApiClient",
   "typeAccessModifier": "Public",
   "clientNamespaceName": "EBay.MarketingAndPromotions.Generated.Marketing",
@@ -30,5 +30,6 @@
   ],
   "includePatterns": [],
   "excludePatterns": [],
-  "disabledValidationRules": []
+  "disabledValidationRules": [],
+  "allowedExternalOrigins": []
 }

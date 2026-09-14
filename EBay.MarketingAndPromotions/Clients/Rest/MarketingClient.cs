@@ -175,7 +175,6 @@ public sealed class MarketingClient
         }, ct));
 
     /// <summary>
-    /// <b>Note:</b> This method is only available for select partners who have been approved for the priority strategy program. For information about how to request access to this program, refer to <see href="/api-docs/sell/static/marketing/pl-verify-eligibility.html#access-requests"> Priority Strategy Access Requests</see> in the Promoted Listings Playbook. To determine if a seller qualifies for priority strategy, use the <see href="/api-docs/sell/account/resources/advertising_eligibility/methods/getAdvertisingEligibility">getAdvertisingEligibility</see> method in Account API.
     /// This method works with listings created with either the <see href="/Devzone/XML/docs/Reference/eBay/index.html">Trading API</see> or the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see>.
     /// This method updates the status of ads in bulk.
     /// Specify the <b>campaign_id</b> you want to update as a URI parameter, and configure the <b>adGroupStatus</b> in the request payload.
@@ -217,15 +216,17 @@ public sealed class MarketingClient
     /// This method retrieves Promoted Listings ads that are associated with listings created with either the <see href="/Devzone/XML/docs/Reference/eBay/index.html">Trading API</see> or the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see>.
     /// The method retrieves ads related to the specified campaign. Specify the Promoted Listings campaign to target with the <b>campaign_id</b> path parameter.
     /// Because of the large number of possible results, you can use query parameters to paginate the result set by specifying a <b>limit</b>, which dictates how many ads to return on each page of the response. You can also specify how many ads to skip in the result set before returning the first result using the <b>offset</b> path parameter.
+    /// To retrieve video ads preference information for each ad, set the <b>fieldgroups</b> query parameter to <c>VIDEO</c>.
     /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve the current campaign IDs for the seller.
     /// </summary>
     public Task<AdPagedCollectionResponse?> GetAdsAsync(
         string campaignId,
         string? adGroupIds = null,
-        string? adStatus = null,
+        Generated.Marketing.Ad_campaign.Item.Ad.GetAd_statusQueryParameterType? adStatus = null,
         string? limit = null,
         string? listingIds = null,
         string? offset = null,
+        Generated.Marketing.Ad_campaign.Item.Ad.GetFieldgroupsQueryParameterType? fieldgroups = null,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
@@ -253,6 +254,10 @@ public sealed class MarketingClient
             if (offset is not null)
             {
                 cfg.QueryParameters.Offset = offset;
+            }
+            if (fieldgroups is not null)
+            {
+                cfg.QueryParameters.Fieldgroups = fieldgroups;
             }
             RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
         }, ct));
@@ -315,11 +320,13 @@ public sealed class MarketingClient
     /// <summary>
     /// This method retrieves the specified ad from the specified campaign.
     /// In the request, supply the <b>campaign_id</b> and <b>ad_id</b> as path parameters.
+    /// To retrieve video ads preference information for the ad, set the <b>fieldgroups</b> query parameter to <c>VIDEO</c>.
     /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve a list of the seller's current campaign IDs and call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad-getads">getAds</see> to retrieve their current ad IDs.
     /// </summary>
     public Task<Ad?> GetAdAsync(
         string adId,
         string campaignId,
+        Generated.Marketing.Ad_campaign.Item.Ad.Item.GetFieldgroupsQueryParameterType? fieldgroups = null,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
@@ -328,6 +335,10 @@ public sealed class MarketingClient
             accessToken,
             () => _kiota.Ad_campaign[campaignId].Ad[adId].GetAsync(cfg =>
         {
+            if (fieldgroups is not null)
+            {
+                cfg.QueryParameters.Fieldgroups = fieldgroups;
+            }
             RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
         }, ct));
 
@@ -358,7 +369,7 @@ public sealed class MarketingClient
     /// Specify the campaign ID (as a path parameter) and a list of <b>inventoryReferenceId</b> and <b>inventoryReferenceType</b> pairs to be deleted.
     /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to get a list of the seller's current campaign IDs.
     /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
-    /// When using the CPC funding model, use the bulkUpdateAdsStatusByInventoryReference method to change the status of ads to ARCHIVED.
+    /// When using the CPC funding model, use the bulkUpdateAdsStatusByInventoryReference method to change the status of ads to <c>ARCHIVED</c>.
     /// </summary>
     public Task<AdIds?> DeleteAdsByInventoryReferenceAsync(
         string campaignId,
@@ -384,7 +395,7 @@ public sealed class MarketingClient
     public Task<Ads?> GetAdsByInventoryReferenceAsync(
         string campaignId,
         string inventoryReferenceId,
-        string inventoryReferenceType,
+        Generated.Marketing.Ad_campaign.Item.Get_ads_by_inventory_reference.GetInventory_reference_typeQueryParameterType inventoryReferenceType,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
@@ -427,7 +438,7 @@ public sealed class MarketingClient
     /// </summary>
     public Task<AdGroupPagedCollectionResponse?> GetAdGroupsAsync(
         string campaignId,
-        string? adGroupStatus = null,
+        Generated.Marketing.Ad_campaign.Item.Ad_group.GetAd_group_statusQueryParameterType? adGroupStatus = null,
         string? limit = null,
         string? offset = null,
         string? accessToken = null,
@@ -575,14 +586,15 @@ public sealed class MarketingClient
     /// </summary>
     public Task<CampaignPagedCollectionResponse?> GetCampaignsAsync(
         string? campaignName = null,
-        string? campaignStatus = null,
-        string? campaignTargetingTypes = null,
-        string? channels = null,
+        Generated.Marketing.Ad_campaign.GetCampaign_statusQueryParameterType? campaignStatus = null,
+        Generated.Marketing.Ad_campaign.GetCampaign_targeting_typesQueryParameterType? campaignTargetingTypes = null,
+        Generated.Marketing.Ad_campaign.GetChannelsQueryParameterType? channels = null,
         string? endDateRange = null,
-        string? fundingStrategy = null,
+        Generated.Marketing.Ad_campaign.GetFunding_strategyQueryParameterType? fundingStrategy = null,
         string? limit = null,
         string? offset = null,
         string? startDateRange = null,
+        string? marketplaceId = null,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
@@ -626,6 +638,10 @@ public sealed class MarketingClient
             if (startDateRange is not null)
             {
                 cfg.QueryParameters.StartDateRange = startDateRange;
+            }
+            if (marketplaceId is not null)
+            {
+                cfg.QueryParameters.MarketplaceId = marketplaceId;
             }
             RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
         }, ct));
@@ -719,7 +735,7 @@ public sealed class MarketingClient
     /// </summary>
     public Task<Campaigns?> FindCampaignByAdReferenceAsync(
         string? inventoryReferenceId = null,
-        string? inventoryReferenceType = null,
+        Generated.Marketing.Ad_campaign.Find_campaign_by_ad_reference.GetInventory_reference_typeQueryParameterType? inventoryReferenceType = null,
         string? listingId = null,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
@@ -909,7 +925,7 @@ public sealed class MarketingClient
 
     /// <summary>
     /// This method updates the daily budget for a priority strategy campaign that uses the Cost Per Click (CPC) funding model.
-    /// A click occurs when an eBay user finds and clicks on the seller’s listing (within the search results) after using a keyword that the seller has created for the campaign. For each ad in an ad group in the campaign, each click triggers a cost, which gets subtracted from the campaign’s daily budget. If the cost of the clicks exceeds the daily budget, the Promoted Listings campaign will be paused until the next day.
+    /// A click occurs when an eBay user finds and clicks on the sellerÃÂ¢ÃÂÃÂs listing (within the search results) after using a keyword that the seller has created for the campaign. For each ad in an ad group in the campaign, each click triggers a cost, which gets subtracted from the campaignÃÂ¢ÃÂÃÂs daily budget. If the cost of the clicks exceeds the daily budget, the Promoted Listings campaign will be paused until the next day.
     /// Specify the <b>campaign_id</b> as a path parameter. You can retrieve the campaign IDs for a seller by calling the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> method.
     /// <b>Note:</b> The daily budget for a campaign can only be updated 15 times per day. If this limit is exceeded, an error will occur and you will be blocked from updating the budget until the next day.
     /// </summary>
@@ -999,7 +1015,7 @@ public sealed class MarketingClient
     public Task<KeywordPagedCollectionResponse?> GetKeywordsAsync(
         string campaignId,
         string? adGroupIds = null,
-        string? keywordStatus = null,
+        Generated.Marketing.Ad_campaign.Item.Keyword.GetKeyword_statusQueryParameterType? keywordStatus = null,
         string? limit = null,
         string? offset = null,
         string? accessToken = null,
@@ -1131,7 +1147,7 @@ public sealed class MarketingClient
         string adGroupIds,
         string? campaignIds = null,
         string? limit = null,
-        string? negativeKeywordStatus = null,
+        Generated.Marketing.Negative_keyword.GetNegative_keyword_statusQueryParameterType? negativeKeywordStatus = null,
         string? offset = null,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
@@ -1434,7 +1450,7 @@ public sealed class MarketingClient
     /// - RUNNING discounts: You can change the <b>endDate</b> and the item's inventory but you cannot change the discount or the start date.
     /// - ENDED discounts: Nothing can be changed.
     /// </summary>
-    public Task UpdateItemPriceMarkdownPromotionAsync(
+    public Task<BaseResponse?> UpdateItemPriceMarkdownPromotionAsync(
         string promotionId,
         ItemPriceMarkdown body,
         string? accessToken = null,
@@ -1567,7 +1583,7 @@ public sealed class MarketingClient
         string? offset = null,
         string? q = null,
         string? sort = null,
-        string? status = null,
+        ItemMarkdownStatusEnum? status = null,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
@@ -1926,6 +1942,47 @@ public sealed class MarketingClient
         {
             cfg.QueryParameters.EndDate = endDate;
             cfg.QueryParameters.StartDate = startDate;
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// Call this method to create or update video ads preferences for a single listing in an ad campaign. This operation accepts one <b>listingId</b> and one <b>videoAdsPreferences</b> object and updates the seller's video ads preference for a single listing. A video ad is served only when the video is available and approved. If the video is unavailable or not approved, the ad may fall back to the static listing image.
+    /// Use <b>upsertVideoAdsPreferences</b> when your application is handling one listing at a time and you want a simple way to enable or disable video ads for that listing. Setting <b>videoAdsEnabled</b> to <c>true</c> enables video ads for any ads associated with the specified listing ID within the campaign, while <c>false</c> opts any ads associated with that listing ID within the campaign out of video ads.
+    /// <b>Note: </b>Use this operation only for listings in Promoted Listings priority campaigns that use the Cost Per Click (CPC) funding model and already have a video attached to the listing. Video ads preferences are managed at the campaign level, not the ad group level. When a listing ID is opted into video ads for a given campaign, all ads associated with that listing ID within the campaign are opted into video ads.
+    /// To confirm the updated state, retrieve the affected ad or ads with the <b>fieldgroups</b> query parameter set to <c>VIDEO</c> so <b>videoAdsPreferences</b> is included in the response.
+    /// </summary>
+    public Task<UpsertVideoAdsPreferencesResponse?> UpsertVideoAdsPreferencesAsync(
+        string campaignId,
+        UpsertVideoAdsPreferencesRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Upsert_video_ads_preferences.PutAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// Call this method to create or update video ads preferences for multiple listings in a single ad campaign request. This operation is designed for bulk updates and accepts a <b>requests</b> array, where each item identifies a <b>listingId</b> and its <b>videoAdsPreferences</b> settings, including <b>videoAdsEnabled</b>. This request updates the seller's video ads preference, but a video ad is served only when the video is available and approved. If the video is unavailable or not approved, the ad may fall back to the static listing image.
+    /// <b>Note: </b>A maximum of 500 listing IDs is supported per call.
+    /// Use <b>bulkUpsertVideoAdsPreferences</b> when you want to enable or disable video ads across several listings efficiently, rather than sending one request per listing. Setting <b>videoAdsEnabled</b> to <c>true</c> enables video ads for ads associated with the specified listing IDs within the campaign, while <c>false</c> opts those ads out of video ads.
+    /// <b>Note: </b>Use this operation only for listings in Promoted Listings priority campaigns that use the Cost Per Click (CPC) funding model and already have a video attached to the listing. Video ads preferences are managed at the campaign level, not the ad group level. When a listing ID is opted into video ads for a given campaign, all ads associated with that listing ID within the campaign are opted into video ads.
+    /// To confirm the updated state, retrieve the affected ad or ads with the <b>fieldgroups</b> query parameter set to <c>VIDEO</c> so <b>videoAdsPreferences</b> is included in the response.
+    /// </summary>
+    public Task<BulkUpsertVideoAdsPreferencesResponse?> BulkUpsertVideoAdsPreferencesAsync(
+        string campaignId,
+        BulkUpsertVideoAdsPreferencesRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Bulk_upsert_video_ads_preferences.PutAsync(body, cfg =>
+        {
             RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
         }, ct));
 }

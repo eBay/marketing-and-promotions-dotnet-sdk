@@ -45,7 +45,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public string Href { get; set; }
 #endif
-        /// <summary>The number of items returned on a single page from the result set. This value can be set in the request with the &lt;b&gt;limit&lt;/b&gt; query parameter.</summary>
+        /// <summary>The number of items returned on a single page from the result set. This value can be set in the request with the &lt;b&gt;limit&lt;/b&gt; query parameter.&lt;p&gt;&lt;b&gt;Default&lt;/b&gt;: &lt;code&gt;10&lt;/code&gt;</summary>
         public int? Limit { get; set; }
         /// <summary>The call URI that can be used to retrieve the next page in the result set. Basically, all of the request parameters will remain the same except the offset value, which will be increased to retrieve the next page of results. &lt;br&gt;&lt;br&gt;&lt;b&gt;Max length&lt;/b&gt;: 2048</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -55,7 +55,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public string Next { get; set; }
 #endif
-        /// <summary>The number of results skipped in the result set before listing the first result on the current page. This value can be set in the request with the &lt;b&gt;offset&lt;/b&gt; query parameter. If the &lt;b&gt;offset&lt;/b&gt; value is not set, it defaults to zero.&lt;p class=&quot;tablenote&quot;&gt;&lt;strong&gt;Note: &lt;/strong&gt;The items in a paginated result set use a zero-based list where the first item in the list has an offset of &lt;code&gt;0&lt;/code&gt;.&lt;/p&gt;</summary>
+        /// <summary>The number of results skipped in the result set before listing the first result on the current page. This value can be set in the request with the &lt;b&gt;offset&lt;/b&gt; query parameter. If the &lt;b&gt;offset&lt;/b&gt; value is not set, it defaults to zero.&lt;p&gt;&lt;b&gt;Default&lt;/b&gt;: &lt;code&gt;0&lt;/code&gt;&lt;/p&gt;&lt;p class=&quot;tablenote&quot;&gt;&lt;strong&gt;Note: &lt;/strong&gt;The items in a paginated result set use a zero-based list where the first item in the list has an offset of &lt;code&gt;0&lt;/code&gt;.&lt;/p&gt;</summary>
         public int? Offset { get; set; }
         /// <summary>The call URI that can be used to retrieve the previous page in the result set. Basically, all of the request parameters will remain the same except the offset value, which will be decreased to retrieve the previous page of results. &lt;br&gt;&lt;br&gt;&lt;b&gt;Max length&lt;/b&gt;: 2048</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER

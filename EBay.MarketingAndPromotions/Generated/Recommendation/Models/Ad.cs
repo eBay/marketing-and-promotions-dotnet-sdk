@@ -37,14 +37,8 @@ namespace EBay.MarketingAndPromotions.Generated.Recommendation.Models
 #else
         public List<global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.BidPercentages> BidPercentages { get; set; }
 #endif
-        /// <summary>An enum whose values describe whether or not eBay recommends you place the associated listing in a Promoted Listings ad campaign.  &lt;br&gt;&lt;br&gt;IDs deemed &lt;code&gt;RECOMMENDED&lt;/code&gt; by eBay are the listings with the highest potential of benefiting from being promoted. The recommendation calculation is based on marketplace trends, like buyer demand and the competition in the item’s category.  &lt;p class=&quot;tablenote&quot;&gt;&lt;b&gt;Note:&lt;/b&gt; A &lt;b&gt;promoteWithAd&lt;/b&gt; value cannot be calculated for listings that are part of Promoted Listings campaigns.  &lt;br&gt;&lt;br&gt;Because of this, if you call &lt;b&gt;findListingRecommendations&lt;/b&gt; with a specific set of listing IDs, the &lt;b&gt;promoteWithAd&lt;/b&gt; field is not returned for any of the listings that are involved in a promotion. However, as long as they are eligible, the trending &lt;b&gt;bidPercentage&lt;/b&gt; &lt;i&gt;is&lt;/i&gt; returned for all specified listings, even if they are part of an ad campaign.&lt;/p&gt; For implementation help, refer to &lt;a href=&apos;https://developer.ebay.com/api-docs/sell/recommendation/types/api:PromoteWithAd&apos;&gt;eBay API documentation&lt;/a&gt;</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? PromoteWithAd { get; set; }
-#nullable restore
-#else
-        public string PromoteWithAd { get; set; }
-#endif
+        /// <summary>An enum whose values describe whether or not eBay recommends you place the associated listing in a Promoted Listings ad campaign.  &lt;br&gt;&lt;br&gt;IDs deemed &lt;code&gt;RECOMMENDED&lt;/code&gt; by eBay are the listings with the highest potential of benefiting from being promoted. The recommendation calculation is based on marketplace trends, like buyer demand and the competition in the item’s category.  &lt;p class=&quot;tablenote&quot;&gt;&lt;b&gt;Note:&lt;/b&gt; A &lt;b&gt;promoteWithAd&lt;/b&gt; value cannot be calculated for listings that are part of Promoted Listings campaigns.  &lt;br&gt;&lt;br&gt;Because of this, if you call &lt;b&gt;findListingRecommendations&lt;/b&gt; with a specific set of listing IDs, the &lt;b&gt;promoteWithAd&lt;/b&gt; field is not returned for any of the listings that are involved in a promotion. However, as long as they are eligible, the trending &lt;b&gt;bidPercentage&lt;/b&gt; &lt;i&gt;is&lt;/i&gt; returned for all specified listings, even if they are part of an ad campaign.&lt;/p&gt;</summary>
+        public global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.PromoteWithAd? PromoteWithAd { get; set; }
         /// <summary>
         /// Instantiates a new <see cref="global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.Ad"/> and sets the default values.
         /// </summary>
@@ -71,7 +65,7 @@ namespace EBay.MarketingAndPromotions.Generated.Recommendation.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "bidPercentages", n => { BidPercentages = n.GetCollectionOfObjectValues<global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.BidPercentages>(global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.BidPercentages.CreateFromDiscriminatorValue)?.AsList(); } },
-                { "promoteWithAd", n => { PromoteWithAd = n.GetStringValue(); } },
+                { "promoteWithAd", n => { PromoteWithAd = n.GetEnumValue<global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.PromoteWithAd>(); } },
             };
         }
         /// <summary>
@@ -82,7 +76,7 @@ namespace EBay.MarketingAndPromotions.Generated.Recommendation.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteCollectionOfObjectValues<global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.BidPercentages>("bidPercentages", BidPercentages);
-            writer.WriteStringValue("promoteWithAd", PromoteWithAd);
+            writer.WriteEnumValue<global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.PromoteWithAd>("promoteWithAd", PromoteWithAd);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

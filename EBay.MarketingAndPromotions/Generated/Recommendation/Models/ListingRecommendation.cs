@@ -37,7 +37,7 @@ namespace EBay.MarketingAndPromotions.Generated.Recommendation.Models
 #else
         public string ListingId { get; set; }
 #endif
-        /// <summary>A complex type that contains information about how a seller can improve their listing configurations. The &lt;code&gt;AD&lt;/code&gt; object contains Promoted Listings recommendations and information, which the seller can use to improve buyer conversions. The response can also contain an optional message about the returned data.</summary>
+        /// <summary>This return object provides the eBay recommendations and information related to the associated listing ID.  &lt;br&gt;&lt;br&gt;The container currently returns the &lt;code&gt;AD&lt;/code&gt; recommendation type, which contains information that sellers can use to configure Promoted Listings ad campaigns.  &lt;br&gt;&lt;br&gt;This container is returned with each &lt;b&gt;ListingRecommendation&lt;/b&gt; object, &lt;i&gt;except&lt;/i&gt; when: &lt;ul&gt;&lt;li&gt;The listing ID is not eligible for Promoted Listings&lt;/li&gt; &lt;li&gt;The listing ID is currently in a Promoted Listings campaign&lt;/li&gt; &lt;li&gt;The listing ID is invalid&lt;/li&gt;&lt;/ul&gt;</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.MarketingRecommendation? Marketing { get; set; }

@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// The data requested to retrieve the suggested bids.
+    /// A type that defines the targeted bid.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class TargetedBidRequest : IAdditionalDataHolder, IParsable
