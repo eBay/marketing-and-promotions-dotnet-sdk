@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// The required data to retrieve suggested keywords.
+    /// A type that provides details for the targeted keywords.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class TargetedKeywordRequest : IAdditionalDataHolder, IParsable

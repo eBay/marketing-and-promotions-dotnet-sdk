@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This type defines the fields for the &lt;b&gt;UpdateAdGroup&lt;/b&gt; request.
+    /// A type that contains the fields used by the &lt;b&gt;UpdateAdGroup&lt;/b&gt; request.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class UpdateAdGroupRequest : IAdditionalDataHolder, IParsable

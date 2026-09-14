@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This type defines the fields used in the &lt;b&gt;suggestMaxCpc&lt;/b&gt; request.
+    /// This type defines the fields used in the &lt;b&gt;suggestMaxCpc&lt;/b&gt; request. To retrieve the suggested &lt;b&gt;maxCpc&lt;/b&gt; value for a smart targeting campaign, a seller must specify the listings associated with the campaign, as well as the marketplace on which the campaign is hosted.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SuggestMaxCpcRequest : IAdditionalDataHolder, IParsable

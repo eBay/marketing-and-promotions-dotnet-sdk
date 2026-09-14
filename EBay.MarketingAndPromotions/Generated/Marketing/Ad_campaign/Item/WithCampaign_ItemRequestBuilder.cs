@@ -26,6 +26,7 @@ using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Bulk_upda
 using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Bulk_update_ads_status;
 using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Bulk_update_ads_status_by_listing_id;
 using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Bulk_update_keyword;
+using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Bulk_upsert_video_ads_preferences;
 using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Clone;
 using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Create_ads_by_inventory_reference;
 using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Delete_ads_by_inventory_reference;
@@ -39,6 +40,7 @@ using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Update_ad
 using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Update_bidding_strategy;
 using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Update_campaign_budget;
 using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Update_campaign_identification;
+using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Upsert_video_ads_preferences;
 using EBay.MarketingAndPromotions.Generated.Marketing.Models;
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
@@ -116,6 +118,11 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item
         {
             get => new global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Bulk_update_keyword.Bulk_update_keywordRequestBuilder(PathParameters, RequestAdapter);
         }
+        /// <summary>The bulk_upsert_video_ads_preferences property</summary>
+        public global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Bulk_upsert_video_ads_preferences.Bulk_upsert_video_ads_preferencesRequestBuilder Bulk_upsert_video_ads_preferences
+        {
+            get => new global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Bulk_upsert_video_ads_preferences.Bulk_upsert_video_ads_preferencesRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The clone property</summary>
         public global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Clone.CloneRequestBuilder Clone
         {
@@ -181,6 +188,11 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item
         {
             get => new global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Update_campaign_identification.Update_campaign_identificationRequestBuilder(PathParameters, RequestAdapter);
         }
+        /// <summary>The upsert_video_ads_preferences property</summary>
+        public global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Upsert_video_ads_preferences.Upsert_video_ads_preferencesRequestBuilder Upsert_video_ads_preferences
+        {
+            get => new global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Upsert_video_ads_preferences.Upsert_video_ads_preferencesRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>
         /// Instantiates a new <see cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.WithCampaign_ItemRequestBuilder"/> and sets the default values.
         /// </summary>
@@ -203,9 +215,9 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 400 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 404 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 409 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 500 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 404 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 409 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -219,9 +231,9 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
             };
             await RequestAdapter.SendNoContentAsync(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
         }
@@ -232,9 +244,9 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 400 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 404 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 404 status code</exception>
         /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 409 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 500 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Campaign?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -248,9 +260,9 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
                 { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Campaign>(requestInfo, global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Campaign.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }

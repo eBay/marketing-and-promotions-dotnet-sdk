@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This type defines the fields that describe an item price markdown discount.
+    /// This type defines the fields used to describe an item price markdown discount.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class ItemPriceMarkdown : IAdditionalDataHolder, IParsable

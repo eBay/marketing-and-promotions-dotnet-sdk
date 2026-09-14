@@ -42,7 +42,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.It
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public WithAd_ItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/ad_campaign/{campaign_id}/ad/{ad_id}", pathParameters)
+        public WithAd_ItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/ad_campaign/{campaign_id}/ad/{ad_id}{?fieldgroups*}", pathParameters)
         {
         }
         /// <summary>
@@ -50,7 +50,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.It
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public WithAd_ItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/ad_campaign/{campaign_id}/ad/{ad_id}", rawUrl)
+        public WithAd_ItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/ad_campaign/{campaign_id}/ad/{ad_id}{?fieldgroups*}", rawUrl)
         {
         }
         /// <summary>
@@ -58,10 +58,10 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.It
         /// </summary>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 400 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 404 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 409 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 500 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 400 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 404 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 409 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -74,39 +74,39 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.It
             var requestInfo = ToDeleteRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
             };
             await RequestAdapter.SendNoContentAsync(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// This method retrieves the specified ad from the specified campaign.  &lt;p&gt;In the request, supply the &lt;b&gt;campaign_id&lt;/b&gt; and &lt;b&gt;ad_id&lt;/b&gt; as path parameters.&lt;/p&gt; &lt;p&gt;Call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns&quot;&gt;getCampaigns&lt;/a&gt; to retrieve a list of the seller&apos;s current campaign IDs and call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-ad-getads&quot;&gt;getAds&lt;/a&gt; to retrieve their current ad IDs.&lt;/p&gt;
+        /// This method retrieves the specified ad from the specified campaign.  &lt;p&gt;In the request, supply the &lt;b&gt;campaign_id&lt;/b&gt; and &lt;b&gt;ad_id&lt;/b&gt; as path parameters.&lt;/p&gt;&lt;p&gt;To retrieve video ads preference information for the ad, set the &lt;b&gt;fieldgroups&lt;/b&gt; query parameter to &lt;code&gt;VIDEO&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;Call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns&quot;&gt;getCampaigns&lt;/a&gt; to retrieve a list of the seller&apos;s current campaign IDs and call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-ad-getads&quot;&gt;getAds&lt;/a&gt; to retrieve their current ad IDs.&lt;/p&gt;
         /// </summary>
         /// <returns>A <see cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Ad"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 400 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 404 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 400 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 404 status code</exception>
         /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 409 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 500 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Ad?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Ad?> GetAsync(Action<RequestConfiguration<global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.Item.WithAd_ItemRequestBuilder.WithAd_ItemRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Ad> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Ad> GetAsync(Action<RequestConfiguration<global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.Item.WithAd_ItemRequestBuilder.WithAd_ItemRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
                 { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Ad>(requestInfo, global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Ad.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
@@ -130,17 +130,17 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.It
             return requestInfo;
         }
         /// <summary>
-        /// This method retrieves the specified ad from the specified campaign.  &lt;p&gt;In the request, supply the &lt;b&gt;campaign_id&lt;/b&gt; and &lt;b&gt;ad_id&lt;/b&gt; as path parameters.&lt;/p&gt; &lt;p&gt;Call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns&quot;&gt;getCampaigns&lt;/a&gt; to retrieve a list of the seller&apos;s current campaign IDs and call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-ad-getads&quot;&gt;getAds&lt;/a&gt; to retrieve their current ad IDs.&lt;/p&gt;
+        /// This method retrieves the specified ad from the specified campaign.  &lt;p&gt;In the request, supply the &lt;b&gt;campaign_id&lt;/b&gt; and &lt;b&gt;ad_id&lt;/b&gt; as path parameters.&lt;/p&gt;&lt;p&gt;To retrieve video ads preference information for the ad, set the &lt;b&gt;fieldgroups&lt;/b&gt; query parameter to &lt;code&gt;VIDEO&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;Call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns&quot;&gt;getCampaigns&lt;/a&gt; to retrieve a list of the seller&apos;s current campaign IDs and call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-ad-getads&quot;&gt;getAds&lt;/a&gt; to retrieve their current ad IDs.&lt;/p&gt;
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.Item.WithAd_ItemRequestBuilder.WithAd_ItemRequestBuilderGetQueryParameters>>? requestConfiguration = default)
         {
 #nullable restore
 #else
-        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
+        public RequestInformation ToGetRequestInformation(Action<RequestConfiguration<global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.Item.WithAd_ItemRequestBuilder.WithAd_ItemRequestBuilderGetQueryParameters>> requestConfiguration = default)
         {
 #endif
             var requestInfo = new RequestInformation(Method.GET, UrlTemplate, PathParameters);
@@ -156,6 +156,16 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.It
         public global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.Item.WithAd_ItemRequestBuilder WithUrl(string rawUrl)
         {
             return new global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.Item.WithAd_ItemRequestBuilder(rawUrl, RequestAdapter);
+        }
+        /// <summary>
+        /// This method retrieves the specified ad from the specified campaign.  &lt;p&gt;In the request, supply the &lt;b&gt;campaign_id&lt;/b&gt; and &lt;b&gt;ad_id&lt;/b&gt; as path parameters.&lt;/p&gt;&lt;p&gt;To retrieve video ads preference information for the ad, set the &lt;b&gt;fieldgroups&lt;/b&gt; query parameter to &lt;code&gt;VIDEO&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;Call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns&quot;&gt;getCampaigns&lt;/a&gt; to retrieve a list of the seller&apos;s current campaign IDs and call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-ad-getads&quot;&gt;getAds&lt;/a&gt; to retrieve their current ad IDs.&lt;/p&gt;
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
+        public partial class WithAd_ItemRequestBuilderGetQueryParameters 
+        {
+            /// <summary>A comma-separated list of values that controls what is returned in the response. If not provided, standard ad fields are returned. &lt;ul&gt;&lt;li&gt;&lt;b&gt;DEFAULT&lt;/b&gt;: Returns the standard ad fields. The &lt;b&gt;videoAdsPreferences&lt;/b&gt; container is not included in the response.&lt;/li&gt;&lt;li&gt;&lt;b&gt;VIDEO&lt;/b&gt;: Adds the &lt;b&gt;videoAdsPreferences&lt;/b&gt; container to the response, including video ads preferences for each ad.&lt;/li&gt;&lt;/ul&gt;</summary>
+            [QueryParameter("fieldgroups")]
+            public global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.Item.GetFieldgroupsQueryParameterType? Fieldgroups { get; set; }
         }
     }
 }

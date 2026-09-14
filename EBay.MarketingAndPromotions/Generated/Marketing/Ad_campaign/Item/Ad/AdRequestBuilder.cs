@@ -49,7 +49,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public AdRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/ad_campaign/{campaign_id}/ad{?ad_group_ids*,ad_status*,limit*,listing_ids*,offset*}", pathParameters)
+        public AdRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/ad_campaign/{campaign_id}/ad{?ad_group_ids*,ad_status*,fieldgroups*,limit*,listing_ids*,offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -57,19 +57,19 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public AdRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/ad_campaign/{campaign_id}/ad{?ad_group_ids*,ad_status*,limit*,listing_ids*,offset*}", rawUrl)
+        public AdRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/ad_campaign/{campaign_id}/ad{?ad_group_ids*,ad_status*,fieldgroups*,limit*,listing_ids*,offset*}", rawUrl)
         {
         }
         /// <summary>
-        /// This method retrieves Promoted Listings ads that are associated with listings created with either the &lt;a href=&quot;/Devzone/XML/docs/Reference/eBay/index.html&quot; title=&quot;Trading API Reference&quot; target=&quot;_blank&quot;&gt;Trading API&lt;/a&gt; or the &lt;a href=&quot;/api-docs/sell/inventory/resources/methods&quot; title=&quot;Inventory API Reference&quot; target=&quot;_blank&quot;&gt;Inventory API&lt;/a&gt;. &lt;p&gt;The method retrieves ads related to the specified campaign. Specify the Promoted Listings campaign to target with the &lt;b&gt;campaign_id&lt;/b&gt; path parameter.&lt;/p&gt;  &lt;p&gt;Because of the large number of possible results, you can use query parameters to paginate the result set by specifying a &lt;b&gt;limit&lt;/b&gt;, which dictates how many ads to return on each page of the response. You can also specify how many ads to skip in the result set before returning the first result using the &lt;b&gt;offset&lt;/b&gt; path parameter.&lt;/p&gt;  &lt;p&gt;Call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns&quot;&gt;getCampaigns&lt;/a&gt; to retrieve the current campaign IDs for the seller.&lt;/p&gt;
+        /// This method retrieves Promoted Listings ads that are associated with listings created with either the &lt;a href=&quot;/Devzone/XML/docs/Reference/eBay/index.html&quot; title=&quot;Trading API Reference&quot; target=&quot;_blank&quot;&gt;Trading API&lt;/a&gt; or the &lt;a href=&quot;/api-docs/sell/inventory/resources/methods&quot; title=&quot;Inventory API Reference&quot; target=&quot;_blank&quot;&gt;Inventory API&lt;/a&gt;. &lt;p&gt;The method retrieves ads related to the specified campaign. Specify the Promoted Listings campaign to target with the &lt;b&gt;campaign_id&lt;/b&gt; path parameter.&lt;/p&gt;  &lt;p&gt;Because of the large number of possible results, you can use query parameters to paginate the result set by specifying a &lt;b&gt;limit&lt;/b&gt;, which dictates how many ads to return on each page of the response. You can also specify how many ads to skip in the result set before returning the first result using the &lt;b&gt;offset&lt;/b&gt; path parameter.&lt;/p&gt;&lt;p&gt;To retrieve video ads preference information for each ad, set the &lt;b&gt;fieldgroups&lt;/b&gt; query parameter to &lt;code&gt;VIDEO&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;Call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns&quot;&gt;getCampaigns&lt;/a&gt; to retrieve the current campaign IDs for the seller.&lt;/p&gt;
         /// </summary>
         /// <returns>A <see cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.AdPagedCollectionResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 400 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 404 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 409 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 500 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 400 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 404 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 409 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.AdPagedCollectionResponse?> GetAsync(Action<RequestConfiguration<global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.AdRequestBuilder.AdRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -82,10 +82,10 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.AdPagedCollectionResponse>(requestInfo, global::EBay.MarketingAndPromotions.Generated.Marketing.Models.AdPagedCollectionResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
@@ -96,10 +96,10 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad
         /// <param name="body">This request object defines the fields used in the &lt;b&gt;createAdByListingId&lt;/b&gt; request.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 400 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 404 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 409 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 500 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 400 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 404 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 409 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.AdPostResponse?> PostAsync(global::EBay.MarketingAndPromotions.Generated.Marketing.Models.CreateAdRequest body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -113,15 +113,15 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad
             var requestInfo = ToPostRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.AdPostResponse>(requestInfo, global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.AdPostResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// This method retrieves Promoted Listings ads that are associated with listings created with either the &lt;a href=&quot;/Devzone/XML/docs/Reference/eBay/index.html&quot; title=&quot;Trading API Reference&quot; target=&quot;_blank&quot;&gt;Trading API&lt;/a&gt; or the &lt;a href=&quot;/api-docs/sell/inventory/resources/methods&quot; title=&quot;Inventory API Reference&quot; target=&quot;_blank&quot;&gt;Inventory API&lt;/a&gt;. &lt;p&gt;The method retrieves ads related to the specified campaign. Specify the Promoted Listings campaign to target with the &lt;b&gt;campaign_id&lt;/b&gt; path parameter.&lt;/p&gt;  &lt;p&gt;Because of the large number of possible results, you can use query parameters to paginate the result set by specifying a &lt;b&gt;limit&lt;/b&gt;, which dictates how many ads to return on each page of the response. You can also specify how many ads to skip in the result set before returning the first result using the &lt;b&gt;offset&lt;/b&gt; path parameter.&lt;/p&gt;  &lt;p&gt;Call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns&quot;&gt;getCampaigns&lt;/a&gt; to retrieve the current campaign IDs for the seller.&lt;/p&gt;
+        /// This method retrieves Promoted Listings ads that are associated with listings created with either the &lt;a href=&quot;/Devzone/XML/docs/Reference/eBay/index.html&quot; title=&quot;Trading API Reference&quot; target=&quot;_blank&quot;&gt;Trading API&lt;/a&gt; or the &lt;a href=&quot;/api-docs/sell/inventory/resources/methods&quot; title=&quot;Inventory API Reference&quot; target=&quot;_blank&quot;&gt;Inventory API&lt;/a&gt;. &lt;p&gt;The method retrieves ads related to the specified campaign. Specify the Promoted Listings campaign to target with the &lt;b&gt;campaign_id&lt;/b&gt; path parameter.&lt;/p&gt;  &lt;p&gt;Because of the large number of possible results, you can use query parameters to paginate the result set by specifying a &lt;b&gt;limit&lt;/b&gt;, which dictates how many ads to return on each page of the response. You can also specify how many ads to skip in the result set before returning the first result using the &lt;b&gt;offset&lt;/b&gt; path parameter.&lt;/p&gt;&lt;p&gt;To retrieve video ads preference information for each ad, set the &lt;b&gt;fieldgroups&lt;/b&gt; query parameter to &lt;code&gt;VIDEO&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;Call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns&quot;&gt;getCampaigns&lt;/a&gt; to retrieve the current campaign IDs for the seller.&lt;/p&gt;
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -171,7 +171,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad
             return new global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.AdRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// This method retrieves Promoted Listings ads that are associated with listings created with either the &lt;a href=&quot;/Devzone/XML/docs/Reference/eBay/index.html&quot; title=&quot;Trading API Reference&quot; target=&quot;_blank&quot;&gt;Trading API&lt;/a&gt; or the &lt;a href=&quot;/api-docs/sell/inventory/resources/methods&quot; title=&quot;Inventory API Reference&quot; target=&quot;_blank&quot;&gt;Inventory API&lt;/a&gt;. &lt;p&gt;The method retrieves ads related to the specified campaign. Specify the Promoted Listings campaign to target with the &lt;b&gt;campaign_id&lt;/b&gt; path parameter.&lt;/p&gt;  &lt;p&gt;Because of the large number of possible results, you can use query parameters to paginate the result set by specifying a &lt;b&gt;limit&lt;/b&gt;, which dictates how many ads to return on each page of the response. You can also specify how many ads to skip in the result set before returning the first result using the &lt;b&gt;offset&lt;/b&gt; path parameter.&lt;/p&gt;  &lt;p&gt;Call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns&quot;&gt;getCampaigns&lt;/a&gt; to retrieve the current campaign IDs for the seller.&lt;/p&gt;
+        /// This method retrieves Promoted Listings ads that are associated with listings created with either the &lt;a href=&quot;/Devzone/XML/docs/Reference/eBay/index.html&quot; title=&quot;Trading API Reference&quot; target=&quot;_blank&quot;&gt;Trading API&lt;/a&gt; or the &lt;a href=&quot;/api-docs/sell/inventory/resources/methods&quot; title=&quot;Inventory API Reference&quot; target=&quot;_blank&quot;&gt;Inventory API&lt;/a&gt;. &lt;p&gt;The method retrieves ads related to the specified campaign. Specify the Promoted Listings campaign to target with the &lt;b&gt;campaign_id&lt;/b&gt; path parameter.&lt;/p&gt;  &lt;p&gt;Because of the large number of possible results, you can use query parameters to paginate the result set by specifying a &lt;b&gt;limit&lt;/b&gt;, which dictates how many ads to return on each page of the response. You can also specify how many ads to skip in the result set before returning the first result using the &lt;b&gt;offset&lt;/b&gt; path parameter.&lt;/p&gt;&lt;p&gt;To retrieve video ads preference information for each ad, set the &lt;b&gt;fieldgroups&lt;/b&gt; query parameter to &lt;code&gt;VIDEO&lt;/code&gt;.&lt;/p&gt; &lt;p&gt;Call &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns&quot;&gt;getCampaigns&lt;/a&gt; to retrieve the current campaign IDs for the seller.&lt;/p&gt;
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class AdRequestBuilderGetQueryParameters 
@@ -187,15 +187,11 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad
             public string AdGroupIds { get; set; }
 #endif
             /// <summary>A comma-separated list of ad statuses. The results will be filtered to only include the given statuses of the ad. If none are provided, all ads are returned.&lt;br&gt;&lt;br&gt;See &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-ad-getads.adstatusenum&quot;&gt;AdStatusEnum&lt;/a&gt; for supported values.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
             [QueryParameter("ad_status")]
-            public string? AdStatus { get; set; }
-#nullable restore
-#else
-            [QueryParameter("ad_status")]
-            public string AdStatus { get; set; }
-#endif
+            public global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.GetAd_statusQueryParameterType? AdStatus { get; set; }
+            /// <summary>A comma-separated list of values that controls what is returned in the response. If not provided, standard ad fields are returned. &lt;ul&gt;&lt;li&gt;&lt;b&gt;DEFAULT&lt;/b&gt;: Returns the standard ad fields. The &lt;b&gt;videoAdsPreferences&lt;/b&gt; container is not included in the response.&lt;/li&gt;&lt;li&gt;&lt;b&gt;VIDEO&lt;/b&gt;: Adds the &lt;b&gt;videoAdsPreferences&lt;/b&gt; container to the response, including video ads preferences for each ad.&lt;/li&gt;&lt;/ul&gt;</summary>
+            [QueryParameter("fieldgroups")]
+            public global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad.GetFieldgroupsQueryParameterType? Fieldgroups { get; set; }
             /// <summary>Specifies the maximum number of ads to return on a page in the paginated response.&lt;br&gt;&lt;br&gt;&lt;b&gt;Default: &lt;/b&gt;10 &lt;br&gt;&lt;br&gt;&lt;b&gt;Maximum:&lt;/b&gt; 500</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

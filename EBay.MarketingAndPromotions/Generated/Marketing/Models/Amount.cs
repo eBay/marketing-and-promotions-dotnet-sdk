@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// The total revenue from all the purchased items that were part of a discount but &lt;i&gt;did not trigger&lt;/i&gt; a discount during the discount period.
+    /// A complex type that describes the value of a monetary amount as represented by a global currency.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class Amount : IAdditionalDataHolder, IParsable

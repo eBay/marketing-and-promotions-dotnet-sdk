@@ -81,6 +81,14 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public string ListingId { get; set; }
 #endif
+        /// <summary>A container for the details of video ads that are associated with an ad. This container is returned only when the &lt;b&gt;fieldgroups&lt;/b&gt; query parameter is set to &lt;code&gt;VIDEO&lt;/code&gt;.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::EBay.MarketingAndPromotions.Generated.Marketing.Models.VideoAdsPreferences? VideoAdsPreferences { get; set; }
+#nullable restore
+#else
+        public global::EBay.MarketingAndPromotions.Generated.Marketing.Models.VideoAdsPreferences VideoAdsPreferences { get; set; }
+#endif
         /// <summary>
         /// Instantiates a new <see cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Ad"/> and sets the default values.
         /// </summary>
@@ -114,6 +122,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
                 { "inventoryReferenceId", n => { InventoryReferenceId = n.GetStringValue(); } },
                 { "inventoryReferenceType", n => { InventoryReferenceType = n.GetEnumValue<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.InventoryReferenceTypeEnum>(); } },
                 { "listingId", n => { ListingId = n.GetStringValue(); } },
+                { "videoAdsPreferences", n => { VideoAdsPreferences = n.GetObjectValue<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.VideoAdsPreferences>(global::EBay.MarketingAndPromotions.Generated.Marketing.Models.VideoAdsPreferences.CreateFromDiscriminatorValue); } },
             };
         }
         /// <summary>
@@ -131,6 +140,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
             writer.WriteStringValue("inventoryReferenceId", InventoryReferenceId);
             writer.WriteEnumValue<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.InventoryReferenceTypeEnum>("inventoryReferenceType", InventoryReferenceType);
             writer.WriteStringValue("listingId", ListingId);
+            writer.WriteObjectValue<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.VideoAdsPreferences>("videoAdsPreferences", VideoAdsPreferences);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

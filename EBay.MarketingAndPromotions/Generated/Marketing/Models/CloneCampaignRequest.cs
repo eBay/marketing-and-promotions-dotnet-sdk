@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This type defines the fields for a clone campaign request.
+    /// This type defines the fields needed for a clone-campaign request.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class CloneCampaignRequest : IAdditionalDataHolder, IParsable

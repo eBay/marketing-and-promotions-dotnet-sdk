@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// The suggested bid associated with the keyword. 
+    /// A type that defines the data for a payment amount, such as the sale price.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class ProposedBid : IAdditionalDataHolder, IParsable

@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This type defines the fields for the &lt;b&gt;updateBid&lt;/b&gt; request.
+    /// This type specifies the bid percentage for an ad campaign.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class UpdateBidPercentageRequest : IAdditionalDataHolder, IParsable

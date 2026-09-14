@@ -29,14 +29,8 @@ namespace EBay.MarketingAndPromotions.Generated.Recommendation.Models
     {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
-        /// <summary>The basis by which the ad rate is calculated.&lt;br /&gt;&lt;br /&gt;&lt;b&gt;Valid Values:&lt;/b&gt; &lt;code&gt;ITEM&lt;/code&gt; and &lt;code&gt;TRENDING&lt;/code&gt; For implementation help, refer to &lt;a href=&apos;https://developer.ebay.com/api-docs/sell/recommendation/types/api:Basis&apos;&gt;eBay API documentation&lt;/a&gt;</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Basis { get; set; }
-#nullable restore
-#else
-        public string Basis { get; set; }
-#endif
+        /// <summary>The basis by which the ad rate is calculated.&lt;br /&gt;&lt;br /&gt;&lt;b&gt;Valid Values:&lt;/b&gt; &lt;code&gt;ITEM&lt;/code&gt; and &lt;code&gt;TRENDING&lt;/code&gt;</summary>
+        public global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.Basis? Basis { get; set; }
         /// <summary>The bid percentage data is a single precision value, as calculated by the associated basis. &lt;p&gt;In Promoted listings ad campaigns, the &lt;b&gt;bid percentage&lt;/b&gt; (also known as the &lt;i&gt;ad rate&lt;/i&gt;) is a user-defined value that sets the level that eBay raises the visibility of the listing in the marketplace. It is also the rate that is used to calculate the Promoted Listings fee.&lt;/p&gt; &lt;p&gt;&lt;b&gt;Minimum value:&lt;/b&gt; 1.0 &amp;nbsp; &lt;b&gt;Maximum value:&lt;/b&gt; 100.0&lt;/p&gt;</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -70,7 +64,7 @@ namespace EBay.MarketingAndPromotions.Generated.Recommendation.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "basis", n => { Basis = n.GetStringValue(); } },
+                { "basis", n => { Basis = n.GetEnumValue<global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.Basis>(); } },
                 { "value", n => { Value = n.GetStringValue(); } },
             };
         }
@@ -81,7 +75,7 @@ namespace EBay.MarketingAndPromotions.Generated.Recommendation.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteStringValue("basis", Basis);
+            writer.WriteEnumValue<global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.Basis>("basis", Basis);
             writer.WriteStringValue("value", Value);
             writer.WriteAdditionalData(AdditionalData);
         }

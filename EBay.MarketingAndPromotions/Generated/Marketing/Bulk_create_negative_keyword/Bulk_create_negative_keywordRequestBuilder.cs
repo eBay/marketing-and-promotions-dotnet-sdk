@@ -54,10 +54,10 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Bulk_create_negative_k
         /// <param name="body">A type that defines the fields for the bulk request to create negative keywords.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 400 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 400 status code</exception>
         /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 403 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 409 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 500 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 409 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.BulkCreateNegativeKeywordResponse?> PostAsync(global::EBay.MarketingAndPromotions.Generated.Marketing.Models.BulkCreateNegativeKeywordRequest body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -71,10 +71,10 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Bulk_create_negative_k
             var requestInfo = ToPostRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
                 { "403", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.BulkCreateNegativeKeywordResponse>(requestInfo, global::EBay.MarketingAndPromotions.Generated.Marketing.Models.BulkCreateNegativeKeywordResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }

@@ -53,10 +53,10 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Suggest_bu
         /// <returns>A <see cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.SuggestBudgetResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 400 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 400 status code</exception>
         /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 404 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 409 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 500 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 409 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.SuggestBudgetResponse?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -69,10 +69,10 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Suggest_bu
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
                 { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.SuggestBudgetResponse>(requestInfo, global::EBay.MarketingAndPromotions.Generated.Marketing.Models.SuggestBudgetResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }

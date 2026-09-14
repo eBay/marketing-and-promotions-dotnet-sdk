@@ -17,7 +17,7 @@ using System.Runtime.Serialization;
 using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
-    /// <summary>The &lt;b&gt;report_type&lt;/b&gt;, as specified in the request to create the report task.&lt;br/&gt;&lt;br/&gt;&lt;span class=&quot;tablenote&quot;&gt;&lt;b&gt;Note:&lt;/b&gt; INVENTORY_PERFORMANCE_REPORT is not currently available; availability date is pending.&lt;/span&gt;</summary>
+    /// <summary>Indicates type of report associated with the report task.&lt;br/&gt;&lt;br/&gt;&lt;span class=&quot;tablenote&quot;&gt;&lt;b&gt;Note:&lt;/b&gt; &lt;code&gt;INVENTORY_PERFORMANCE_REPORT&lt;/code&gt; is not currently available; availability date is pending.&lt;/span&gt;</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum ReportTypeEnum
     {

@@ -19,31 +19,34 @@ using Microsoft.Kiota.Abstractions.Serialization;
 using System.Collections.Generic;
 using System.IO;
 using System;
-namespace EBay.MarketingAndPromotions.Generated.Marketing.Item_price_markdown.Item
+namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
+    /// <summary>
+    /// This request type defines the video ads preference settings to apply to a single listing in a Promoted Listings campaign that uses the CPC funding model. It is used as the &lt;b&gt;videoAdsPreferences&lt;/b&gt; field value in both &lt;b&gt;bulkUpsertVideoAdsPreferences&lt;/b&gt; and &lt;b&gt;upsertVideoAdsPreferences&lt;/b&gt;.
+    /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-    #pragma warning disable CS1591
-    public partial class WithPromotion_PutResponse : IAdditionalDataHolder, IParsable
-    #pragma warning restore CS1591
+    public partial class VideoAdsPreferences : IAdditionalDataHolder, IParsable
     {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
+        /// <summary>When &lt;code&gt;true&lt;/code&gt;, video ads are enabled for the specified listing in the campaign, and any ads associated with that listing ID within the campaign are opted into video ads. When &lt;code&gt;false&lt;/code&gt;, any ads associated with the specified listing ID within the campaign are opted out of video ads.</summary>
+        public bool? VideoAdsEnabled { get; set; }
         /// <summary>
-        /// Instantiates a new <see cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Item_price_markdown.Item.WithPromotion_PutResponse"/> and sets the default values.
+        /// Instantiates a new <see cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.VideoAdsPreferences"/> and sets the default values.
         /// </summary>
-        public WithPromotion_PutResponse()
+        public VideoAdsPreferences()
         {
             AdditionalData = new Dictionary<string, object>();
         }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
-        /// <returns>A <see cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Item_price_markdown.Item.WithPromotion_PutResponse"/></returns>
+        /// <returns>A <see cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.VideoAdsPreferences"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static global::EBay.MarketingAndPromotions.Generated.Marketing.Item_price_markdown.Item.WithPromotion_PutResponse CreateFromDiscriminatorValue(IParseNode parseNode)
+        public static global::EBay.MarketingAndPromotions.Generated.Marketing.Models.VideoAdsPreferences CreateFromDiscriminatorValue(IParseNode parseNode)
         {
             if(ReferenceEquals(parseNode, null)) throw new ArgumentNullException(nameof(parseNode));
-            return new global::EBay.MarketingAndPromotions.Generated.Marketing.Item_price_markdown.Item.WithPromotion_PutResponse();
+            return new global::EBay.MarketingAndPromotions.Generated.Marketing.Models.VideoAdsPreferences();
         }
         /// <summary>
         /// The deserialization information for the current model
@@ -53,6 +56,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Item_price_markdown.It
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "videoAdsEnabled", n => { VideoAdsEnabled = n.GetBoolValue(); } },
             };
         }
         /// <summary>
@@ -62,6 +66,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Item_price_markdown.It
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteBoolValue("videoAdsEnabled", VideoAdsEnabled);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

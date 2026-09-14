@@ -47,7 +47,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #endif
         /// <summary>An HTTP status code is returned for each keyword to indicate the success or failure of updating that keyword.</summary>
         public int? StatusCode { get; set; }
-        /// <summary>List of warnings associated with this operation</summary>
+        /// <summary>A list of warnings associated with this operation.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public List<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3>? Warnings { get; set; }

@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// A type that defines the fields for the bulk request to create negative keywords.
+    /// A type that contains the fields for the bulk request to create negative keywords.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class BulkCreateNegativeKeywordRequest : IAdditionalDataHolder, IParsable

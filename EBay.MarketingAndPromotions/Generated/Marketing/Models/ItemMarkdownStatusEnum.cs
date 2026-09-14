@@ -17,7 +17,7 @@ using System.Runtime.Serialization;
 using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
-    /// <summary>Indicates the state assigned to the markdown discount using one of the &lt;b&gt;status&lt;/b&gt; values.</summary>
+    /// <summary>This enumerated type defines the item markdown status of a discount. | - **PENDING**: Indicates the system is still processing the item price markdown discount request. - **MARKED_DOWN**: Indicates item price markdown discount request succeeded and the discount has been scheduled. - **MARKED_UP**: Indicates the item is no longer in the markdown discount and the price has been &quot;marked up&quot; to its standard price. - **SKIPPED**: Indicates item price markdown discount has been skipped. - **FAILED**: Indicates item price markdown discount request failed. Check the configuration of your discount and resubmit the request.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum ItemMarkdownStatusEnum
     {

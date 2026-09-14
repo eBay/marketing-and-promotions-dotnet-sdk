@@ -37,7 +37,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public string Name { get; set; }
 #endif
-        /// <summary>A description of the error.</summary>
+        /// <summary>The value that was set for the element specified in the &lt;b&gt;name&lt;/b&gt; field.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Value { get; set; }

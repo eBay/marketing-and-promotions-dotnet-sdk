@@ -16,16 +16,17 @@
 #pragma warning disable CS0618
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
+using Microsoft.Kiota.Abstractions;
 using System.Collections.Generic;
 using System.IO;
 using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This type defines the elements of error and warning messages.
+    /// This type defines the fields returned in an error condition.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-    public partial class ErrorDetailV3 : IAdditionalDataHolder, IParsable
+    public partial class ErrorDetailV3 : ApiException, IAdditionalDataHolder, IParsable
     {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
@@ -47,7 +48,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #endif
         /// <summary>A positive integer that uniquely identifies the specific error condition that occurred. Your application can use error codes as identifiers in your customized error-handling algorithms.</summary>
         public int? ErrorId { get; set; }
-        /// <summary>Identifies specific request elements associated with the error, if any. inputRefId&apos;s response is format specific. For JSON, use &lt;i&gt;JSONPath&lt;/i&gt; notation.</summary>
+        /// <summary>An array of reference IDs that identify the specific request elements most closely associated to the error or warning, if any. For JSON, use &lt;i&gt;JSONPath&lt;/i&gt; notation.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public List<string>? InputRefIds { get; set; }
@@ -55,7 +56,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public List<string> InputRefIds { get; set; }
 #endif
-        /// <summary>An expanded version of message that should be around 100-200 characters long, but is not required to be such.</summary>
+        /// <summary>A detailed description of the condition that caused the error or warning and information on what to do to correct the problem. The string is normally 100-200 characters in length, but is not required to be such.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? LongMessage { get; set; }
@@ -63,15 +64,17 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public string LongMessage { get; set; }
 #endif
-        /// <summary>An end user and app developer friendly device agnostic message. It explains what the error or warning is, and how to fix it (in a general sense). Its value is at most 50 characters long. If applicable, the value is localized in the end user&apos;s requested locale.</summary>
+        /// <summary>The primary error message.</summary>
+        public override string Message { get => MessageEscaped ?? string.Empty; }
+        /// <summary>A short description of the condition that caused the error or warning. This value is at most 50 characters long and, if applicable, is localized in the end user&apos;s requested locale.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public string? Message { get; set; }
+        public string? MessageEscaped { get; set; }
 #nullable restore
 #else
-        public string Message { get; set; }
+        public string MessageEscaped { get; set; }
 #endif
-        /// <summary>Identifies specific response elements associated with the error, if any. Path format is the same as &lt;code&gt;inputRefId&lt;/code&gt;.</summary>
+        /// <summary>An array of reference IDs that identify the specific response elements most closely associated to the error or warning, if any. The path format is the same as &lt;code&gt;inputRefId&lt;/code&gt;.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public List<string>? OutputRefIds { get; set; }
@@ -79,7 +82,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public List<string> OutputRefIds { get; set; }
 #endif
-        /// <summary>This optional complex field type contains a list of one or more context-specific &lt;code&gt;ErrorParameter&lt;/code&gt; objects, with each item in the list entry being a parameter (or input field name) that caused an error condition. Each &lt;code&gt;ErrorParameter&lt;/code&gt; object consists of two fields, a &lt;code&gt;name&lt;/code&gt; and a &lt;code&gt;value&lt;/code&gt;.</summary>
+        /// <summary>An array that contains contextual information about the error or warning. The list often includes the parameter or input fields that triggered the warning or error condition.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public List<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorParameterV3>? Parameters { get; set; }
@@ -87,7 +90,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public List<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorParameterV3> Parameters { get; set; }
 #endif
-        /// <summary>Name of the domain&apos;s subsystem or subdivision. For example, checkout is a subdomain in the buying domain.</summary>
+        /// <summary>The name of the subdomain in which the error or warning occurred. For example, checkout is a subdomain in the buying domain.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Subdomain { get; set; }
@@ -125,7 +128,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
                 { "errorId", n => { ErrorId = n.GetIntValue(); } },
                 { "inputRefIds", n => { InputRefIds = n.GetCollectionOfPrimitiveValues<string>()?.AsList(); } },
                 { "longMessage", n => { LongMessage = n.GetStringValue(); } },
-                { "message", n => { Message = n.GetStringValue(); } },
+                { "message", n => { MessageEscaped = n.GetStringValue(); } },
                 { "outputRefIds", n => { OutputRefIds = n.GetCollectionOfPrimitiveValues<string>()?.AsList(); } },
                 { "parameters", n => { Parameters = n.GetCollectionOfObjectValues<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorParameterV3>(global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorParameterV3.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "subdomain", n => { Subdomain = n.GetStringValue(); } },
@@ -143,7 +146,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
             writer.WriteIntValue("errorId", ErrorId);
             writer.WriteCollectionOfPrimitiveValues<string>("inputRefIds", InputRefIds);
             writer.WriteStringValue("longMessage", LongMessage);
-            writer.WriteStringValue("message", Message);
+            writer.WriteStringValue("message", MessageEscaped);
             writer.WriteCollectionOfPrimitiveValues<string>("outputRefIds", OutputRefIds);
             writer.WriteCollectionOfObjectValues<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorParameterV3>("parameters", Parameters);
             writer.WriteStringValue("subdomain", Subdomain);

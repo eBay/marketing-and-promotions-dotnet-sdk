@@ -27,7 +27,7 @@ namespace EBay.MarketingAndPromotions.Generated.Recommendation.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MarketingRecommendation : IAdditionalDataHolder, IParsable
     {
-        /// <summary>A complex type that contains recommendations and information on how to configure Promoted Listings ad campaigns.</summary>
+        /// <summary>An object that contains Promoted Listings recommendations and information related to the associated listing ID.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::EBay.MarketingAndPromotions.Generated.Recommendation.Models.Ad? Ad { get; set; }

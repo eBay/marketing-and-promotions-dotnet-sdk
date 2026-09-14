@@ -110,7 +110,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_report_metadata.Ite
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class WithReport_typeItemRequestBuilderGetQueryParameters 
         {
-            /// <summary>The channel used in the report. The channel must be compatible with the report type specified in the path parameter. Refer to the &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-getreporttasks.channelenum&quot;&gt;ChannelEnum&lt;/a&gt; type for supported values. &lt;br&gt;&lt;br&gt;&lt;span class=&quot;tablenote&quot;&gt;&lt;b&gt;Note:&lt;/b&gt; The channel parameter is only applicable for COST_PER_CLICK funding model.&lt;/span&gt;</summary>
+            /// <summary>The channel used in the report. The channel must be compatible with the report type specified in the path parameter. Refer to the &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-getreporttasks.channelenum&quot;&gt;ChannelEnum&lt;/a&gt; type for supported values. &lt;br&gt;&lt;br&gt;&lt;span class=&quot;tablenote&quot;&gt;&lt;b&gt;Note:&lt;/b&gt; The channel parameter is only applicable for &lt;code&gt;COST_PER_CLICK&lt;/code&gt; funding model.&lt;/span&gt;</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
             [QueryParameter("channel")]

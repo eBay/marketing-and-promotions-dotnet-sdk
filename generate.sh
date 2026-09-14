@@ -16,6 +16,9 @@
 
 set -euo pipefail
 
+echo "Pinning Kiota to 1.35.0..."
+dotnet tool update microsoft.openapi.kiota --local --version 1.35.0 --allow-downgrade
+
 echo "Restoring tools..."
 dotnet tool restore
 
@@ -24,7 +27,7 @@ rm -rf ./EBay.MarketingAndPromotions/Generated
 
 dotnet kiota generate \
   -l csharp \
-  -d specs/openapi/marketing.yaml \
+  -d specs/openapi/marketing.json \
   -c MarketingApiClient \
   -n EBay.MarketingAndPromotions.Generated.Marketing \
   -o EBay.MarketingAndPromotions/Generated/Marketing \
@@ -32,7 +35,7 @@ dotnet kiota generate \
 
 dotnet kiota generate \
   -l csharp \
-  -d specs/openapi/recommendation.yaml \
+  -d specs/openapi/recommendation.json \
   -c RecommendationApiClient \
   -n EBay.MarketingAndPromotions.Generated.Recommendation \
   -o EBay.MarketingAndPromotions/Generated/Recommendation \

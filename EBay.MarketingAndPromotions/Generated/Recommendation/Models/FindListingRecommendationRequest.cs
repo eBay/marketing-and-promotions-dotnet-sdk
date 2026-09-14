@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Recommendation.Models
 {
     /// <summary>
-    /// An list of listing ID values for which you want Promoted Listings ad configuration information.
+    /// This type defines the list of listing ID values for which you want Promoted Listings ad configuration information.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FindListingRecommendationRequest : IAdditionalDataHolder, IParsable

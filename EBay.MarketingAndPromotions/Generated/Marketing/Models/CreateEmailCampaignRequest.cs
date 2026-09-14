@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// Create a new email campaign request.
+    /// This type defines the &lt;b&gt;createEmailCampaign&lt;/b&gt; request payload.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class CreateEmailCampaignRequest : IAdditionalDataHolder, IParsable

@@ -53,10 +53,10 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Get_a
         /// <returns>A <see cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Ads"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 400 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 404 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 409 status code</exception>
-        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error">When receiving a 500 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 400 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 404 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 409 status code</exception>
+        /// <exception cref="global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Ads?> GetAsync(Action<RequestConfiguration<global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Get_ads_by_inventory_reference.Get_ads_by_inventory_referenceRequestBuilder.Get_ads_by_inventory_referenceRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -69,10 +69,10 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Get_a
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
-                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Error.CreateFromDiscriminatorValue },
+                { "400", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "404", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "409", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
+                { "500", global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorDetailV3.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Ads>(requestInfo, global::EBay.MarketingAndPromotions.Generated.Marketing.Models.Ads.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
@@ -121,15 +121,8 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Get_a
             public string InventoryReferenceId { get; set; }
 #endif
             /// <summary>This query parameter specifies the type of the item the &lt;b&gt;inventory_reference_id&lt;/b&gt; references.&lt;br&gt;&lt;br&gt;&lt;b&gt;Valid values&lt;/b&gt;:&lt;ul&gt;&lt;li&gt;INVENTORY_ITEM&lt;/li&gt;&lt;li&gt;INVENTORY_ITEM_GROUP&lt;/li&gt;&lt;/ul&gt;&lt;br&gt;See &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-ad-getadsbyinventoryreference.inventoryreferencetypeenum&quot;&gt;InventoryReferenceType&lt;/a&gt; for more information.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
             [QueryParameter("inventory_reference_type")]
-            public string? InventoryReferenceType { get; set; }
-#nullable restore
-#else
-            [QueryParameter("inventory_reference_type")]
-            public string InventoryReferenceType { get; set; }
-#endif
+            public global::EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Get_ads_by_inventory_reference.GetInventory_reference_typeQueryParameterType? InventoryReferenceType { get; set; }
         }
     }
 }

@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This container includes parameters that define an ad campaign funding strategy. The set of seller-configurable parameters depends on the selected &lt;b&gt;fundingModel&lt;/b&gt; value.&lt;br/&gt;&lt;br/&gt;Currently, the supported funding models are &lt;code&gt;COST_PER_SALE&lt;/code&gt; (CPS) and &lt;code&gt;COST_PER_CLICK&lt;/code&gt; (CPC). For onsite ads, the CPC model supports two bidding strategies: &lt;code&gt;FIXED&lt;/code&gt; and &lt;code&gt;DYNAMIC&lt;/code&gt;.
+    /// This type defines how the Promoted Listings fee is calculated for a Promoted Listings ad campaign.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FundingStrategy : IAdditionalDataHolder, IParsable
