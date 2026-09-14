@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This type defines the fields needed to create ads by inventory reference ID request.
+    /// This request object defines the fields used in the &lt;b&gt;createAdsByInventoryReference&lt;/b&gt; request.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class CreateAdsByInventoryReferenceRequest : IAdditionalDataHolder, IParsable

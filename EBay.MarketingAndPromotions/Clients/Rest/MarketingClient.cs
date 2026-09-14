@@ -12,39 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using System;
-using System.IO;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using EBay.MarketingAndPromotions.Configuration;
-using EBay.MarketingAndPromotions.Exceptions;
-using EBay.MarketingAndPromotions.Generated.Marketing;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Find_campaign_by_ad_reference;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Get_campaign_by_name;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Ad_group;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Clone;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Get_ads_by_inventory_reference;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Keyword;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Suggest_items;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign.Item.Update_campaign_budget;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_report_metadata;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_report_metadata.Item;
-using EBay.MarketingAndPromotions.Generated.Marketing.Ad_report_task;
-using EBay.MarketingAndPromotions.Generated.Marketing.Email_campaign;
-using EBay.MarketingAndPromotions.Generated.Marketing.Email_campaign.Audience;
-using EBay.MarketingAndPromotions.Generated.Marketing.Email_campaign.Report;
-using EBay.MarketingAndPromotions.Generated.Marketing.Item_price_markdown;
-using EBay.MarketingAndPromotions.Generated.Marketing.Item_price_markdown.Item;
 using EBay.MarketingAndPromotions.Generated.Marketing.Models;
-using EBay.MarketingAndPromotions.Generated.Marketing.Negative_keyword;
-using EBay.MarketingAndPromotions.Generated.Marketing.Promotion;
-using EBay.MarketingAndPromotions.Generated.Marketing.Promotion.Item.Get_listing_set;
-using EBay.MarketingAndPromotions.Generated.Marketing.Promotion_report;
-using EBay.MarketingAndPromotions.Generated.Marketing.Promotion_summary_report;
+using EBay.MarketingAndPromotions.Generated.Marketing;
 using Microsoft.Kiota.Abstractions;
 
 namespace EBay.MarketingAndPromotions.Clients.Rest;
@@ -54,463 +24,1908 @@ public sealed class MarketingClient
     private readonly MarketingApiClient _kiota;
     private readonly MarketingAndPromotionsConfiguration _config;
     private readonly ITokenContext _tokenContext;
+    private readonly IRequestAdapter _adapter;
 
-    internal MarketingClient(MarketingApiClient kiota, MarketingAndPromotionsConfiguration config, ITokenContext tokenContext)
-        => (_kiota, _config, _tokenContext) = (kiota, config, tokenContext);
-
-    private void ApplyHeaders(RequestHeaders headers, RequestOptions? callOptions)
+    internal MarketingClient(MarketingApiClient kiota, MarketingAndPromotionsConfiguration config, ITokenContext tokenContext, IRequestAdapter adapter)
     {
-        foreach (var (k, v) in _config.DefaultRequestOptions.Headers)
-            headers.TryAdd(k, v);
-        if (callOptions is null) return;
-        foreach (var (k, v) in callOptions.Headers)
-            headers[k] = new[] { v };
+        _kiota = kiota;
+        _config = config;
+        _tokenContext = tokenContext;
+        _adapter = adapter;
     }
 
-    private static async Task<T?> ExecuteAsync<T>(Func<Task<T?>> op)
-    {
-        try { return await op(); }
-        catch (ApiException ex) when (ex.ResponseStatusCode == (int)HttpStatusCode.Unauthorized)
-        {
-            throw new UnauthorizedException(ex);
-        }
-        catch (ApiException ex)
-        {
-            throw new SdkException($"REST API error ({ex.ResponseStatusCode})", ex);
-        }
-    }
-
-    private static async Task ExecuteAsync(Func<Task> op)
-    {
-        try { await op(); }
-        catch (ApiException ex) when (ex.ResponseStatusCode == (int)HttpStatusCode.Unauthorized)
-        {
-            throw new UnauthorizedException(ex);
-        }
-        catch (ApiException ex)
-        {
-            throw new SdkException($"REST API error ({ex.ResponseStatusCode})", ex);
-        }
-    }
-
-    // ── Campaigns ─────────────────────────────────────────────────────────────
-
-    public Task<CampaignPagedCollectionResponse?> GetCampaignsAsync(
-        Action<RequestConfiguration<Ad_campaignRequestBuilder.Ad_campaignRequestBuilderGetQueryParameters>>? configure = null,
-        string? accessToken = null,
-        RequestOptions? requestOptions = null,
-        CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign.GetAsync(cfg =>
-        {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
-
-    public Task<Campaign?> GetCampaignAsync(string campaignId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].GetAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<Ad_campaignPostResponse?> CreateCampaignAsync(CreateCampaignRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task DeleteCampaignAsync(string campaignId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].DeleteAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task EndCampaignAsync(string campaignId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].End.PostAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task PauseCampaignAsync(string campaignId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Pause.PostAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task ResumeCampaignAsync(string campaignId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Resume.PostAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<ClonePostResponse?> CloneCampaignAsync(string campaignId, CloneCampaignRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Clone.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<Update_campaign_budgetPostResponse?> UpdateCampaignBudgetAsync(string campaignId, UpdateCampaignBudgetRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Update_campaign_budget.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task UpdateCampaignIdentificationAsync(string campaignId, UpdateCampaignIdentificationRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Update_campaign_identification.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task UpdateBiddingStrategyAsync(string campaignId, UpdateBiddingStrategyRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Update_bidding_strategy.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task UpdateAdRateStrategyAsync(string campaignId, UpdateAdrateStrategyRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Update_ad_rate_strategy.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<SuggestBudgetResponse?> SuggestBudgetAsync(string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign.Suggest_budget.GetAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<SuggestMaxCpcResponse?> SuggestMaxCpcAsync(SuggestMaxCpcRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign.Suggest_max_cpc.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<Campaigns?> FindCampaignByAdReferenceAsync(
-        Action<RequestConfiguration<Find_campaign_by_ad_referenceRequestBuilder.Find_campaign_by_ad_referenceRequestBuilderGetQueryParameters>>? configure = null,
-        string? accessToken = null,
-        RequestOptions? requestOptions = null,
-        CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign.Find_campaign_by_ad_reference.GetAsync(cfg =>
-        {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
-
-    public Task<Campaign?> GetCampaignByNameAsync(
-        Action<RequestConfiguration<Get_campaign_by_nameRequestBuilder.Get_campaign_by_nameRequestBuilderGetQueryParameters>>? configure = null,
-        string? accessToken = null,
-        RequestOptions? requestOptions = null,
-        CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign.Get_campaign_by_name.GetAsync(cfg =>
-        {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
-
-    // ── Ad Groups ─────────────────────────────────────────────────────────────
-
-    public Task<AdGroupPagedCollectionResponse?> GetAdGroupsAsync(
+    /// <summary>
+    /// This method adds multiple listings that are managed with the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see> to an existing Promoted Listings campaign.
+    /// For general strategy campaigns using the Cost Per Sale (CPS) model, bulk ads may be directly created for the listing.
+    /// For each listing specified in the request, this method:
+    /// - Creates an ad for the listing.
+    /// - Sets the bid percentage (also known as the <i>ad rate</i>) for the ads created.
+    /// - Associates the ads created with the specified campaign.
+    /// To create ads for a listing, specify their <b>inventoryReferenceId</b> and <b>inventoryReferenceType</b>, plus the <b>bidPercentage</b> for the ad in the payload of the request. Specify the campaign to which you want to associate the ads using the <b>campaign_id</b> path parameter.
+    /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// Use <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-createcampaign">createCampaign</see> to create a new campaign and use <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to get a list of existing campaigns.
+    /// </summary>
+    public Task<BulkCreateAdsByInventoryReferenceResponse?> BulkCreateAdsByInventoryReferenceAsync(
         string campaignId,
-        Action<RequestConfiguration<Ad_groupRequestBuilder.Ad_groupRequestBuilderGetQueryParameters>>? configure = null,
+        BulkCreateAdsByInventoryReferenceRequest body,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Ad_group.GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Bulk_create_ads_by_inventory_reference.PostAsync(body, cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<AdGroup?> GetAdGroupAsync(string campaignId, string adGroupId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Ad_group[adGroupId].GetAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method adds multiple listings to an existing Promoted Listings campaign using <b>listingId</b> values generated by the <see href="/Devzone/XML/docs/Reference/eBay/index.html">Trading API</see> or <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see>, or using values generated by an ad group ID.
+    /// For general strategy campaigns using the Cost Per Sale (CPS) funding model, bulk ads may be directly created for the listing.
+    /// For each listing ID specified in the request, this method:
+    /// - Creates an ad for the listing.
+    /// - Sets the bid percentage (also known as the <i>ad rate</i>) for the ad.
+    /// - Associates the ad with the specified campaign.
+    /// To create an ad for a listing, specify its <b>listingId</b>, plus the <b>bidPercentage</b> for the ad in the payload of the request. Specify the campaign to associate the ads with using the <b>campaign_id</b> path parameter. Listing IDs are generated by eBay when a seller creates listings with the Trading API.
+    /// You can specify a maximum of <b>500 listings per call</b> and each campaign can have ads for a maximum of 50,000 items. Be aware when using this call that each variation in a multiple-variation listing creates an individual ad.
+    /// For manual targeting priority strategy campaigns using the Cost Per Click (CPC) funding model, an ad group must be created first. If no ad group has been created for the campaign, ads cannot be created.
+    /// <b>Note:</b> Ad groups are not required when adding listings to a smart targeting campaign.
+    /// For the ad group specified in the request, this method associates the ad with the specified ad group.
+    /// To create an ad for an ad group, specify the name of the ad group plus the <b>defaultBid</b> for the ad in the payload of the request. Specify the campaign to associate the ads with using the <b>campaign_id</b> path parameter. Ad groups are generated using the <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_group-createadgroup">createAdGroup</see> method.
+    /// You can specify one or more ad groups per campaign.
+    /// Use <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-createcampaign">createCampaign</see> to create a new campaign and use <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to get a list of existing campaigns.
+    /// </summary>
+    public Task<BulkAdResponse?> BulkCreateAdsByListingIdAsync(
+        string campaignId,
+        BulkCreateAdRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Bulk_create_ads_by_listing_id.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<Ad_groupPostResponse?> CreateAdGroupAsync(string campaignId, CreateAdGroupRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Ad_group.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method works with listings created with the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see>.
+    /// The method deletes a set of ads, as specified by a list of inventory reference IDs, from the specified campaign. <i>Inventory reference IDs</i> are seller-defined IDs that are used with the Inventory API</see>.
+    /// Pass the <b>campaign_id</b> as a path parameter and populate the payload with a list of <b>inventoryReferenceId</b> and <b>inventoryReferenceType</b> pairs that you want to delete.
+    /// Get the campaign IDs for a seller by calling <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> and call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad-getads">getAds</see> to get a list of the seller's inventory reference IDs.
+    /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// </summary>
+    public Task<BulkDeleteAdsByInventoryReferenceResponse?> BulkDeleteAdsByInventoryReferenceAsync(
+        string campaignId,
+        BulkDeleteAdsByInventoryReferenceRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Bulk_delete_ads_by_inventory_reference.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task UpdateAdGroupAsync(string campaignId, string adGroupId, UpdateAdGroupRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Ad_group[adGroupId].PutAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method works with listing IDs created with either the <see href="/Devzone/XML/docs/Reference/eBay/index.html">Trading API</see> or the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see>.
+    /// The method deletes a set of ads, as specified by a list of <b>listingID</b> values from a Promoted Listings campaign. A listing ID value is generated by eBay when a seller creates a listing with either the Trading API and Inventory API.
+    /// Pass the <b>campaign_id</b> as a path parameter and populate the payload with the set of listing IDs that you want to delete.
+    /// Get the campaign IDs for a seller by calling <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> and call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad-getads">getAds</see> to get a list of the seller's inventory reference IDs.
+    /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// When using the CPC funding model, use the <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad-bulkupdateadsbidbylistingid">bulkUpdateAdsStatusByListingId</see> method to change the status of ads to <c>ARCHIVED</c>.
+    /// </summary>
+    public Task<BulkDeleteAdResponse?> BulkDeleteAdsByListingIdAsync(
+        string campaignId,
+        BulkDeleteAdRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Bulk_delete_ads_by_listing_id.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<TargetedBidsPagedCollection?> SuggestBidsAsync(string campaignId, string adGroupId, TargetedBidRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Ad_group[adGroupId].Suggest_bids.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method works with listings created with either the <see href="/Devzone/XML/docs/Reference/eBay/index.html">Trading API</see> or the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see>.
+    /// The method updates the <b>bidPercentage</b> values for a set of ads associated with the specified campaign.
+    /// Specify the <b>campaign_id</b> as a path parameter and supply a set of listing IDs with their associated updated <b>bidPercentage</b> values in the request body. An eBay listing ID is generated when a listing is created with the Trading API.
+    /// Get the campaign IDs for a seller by calling <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> and call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad-getads">getAds</see> to get a list of the seller's inventory reference IDs.
+    /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// </summary>
+    public Task<BulkUpdateAdsByInventoryReferenceResponse?> BulkUpdateAdsBidByInventoryReferenceAsync(
+        string campaignId,
+        BulkCreateAdsByInventoryReferenceRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Bulk_update_ads_bid_by_inventory_reference.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<TargetedKeywordsPagedCollection?> SuggestKeywordsAsync(string campaignId, string adGroupId, TargetedKeywordRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Ad_group[adGroupId].Suggest_keywords.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method works with listings created with either the <see href="/Devzone/XML/docs/Reference/eBay/index.html">Trading API</see> or the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see>.
+    /// The method updates the <b>bidPercentage</b> values for a set of ads associated with the specified campaign.
+    /// Specify the <b>campaign_id</b> as a path parameter and supply a set of listing IDs with their associated updated <b>bidPercentage</b> values in the request body. An eBay listing ID is generated when a listing is created with the Trading API.
+    /// Get the campaign IDs for a seller by calling <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> and call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad-getads">getAds</see> to get a list of the seller's inventory reference IDs.
+    /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// </summary>
+    public Task<BulkAdUpdateResponse?> BulkUpdateAdsBidByListingIdAsync(
+        string campaignId,
+        BulkCreateAdRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Bulk_update_ads_bid_by_listing_id.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    // ── Ads ───────────────────────────────────────────────────────────────────
+    /// <summary>
+    /// <b>Note:</b> This method is only available for select partners who have been approved for the priority strategy program. For information about how to request access to this program, refer to <see href="/api-docs/sell/static/marketing/pl-verify-eligibility.html#access-requests"> Priority Strategy Access Requests</see> in the Promoted Listings Playbook. To determine if a seller qualifies for priority strategy, use the <see href="/api-docs/sell/account/resources/advertising_eligibility/methods/getAdvertisingEligibility">getAdvertisingEligibility</see> method in Account API.
+    /// This method works with listings created with either the <see href="/Devzone/XML/docs/Reference/eBay/index.html">Trading API</see> or the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see>.
+    /// This method updates the status of ads in bulk.
+    /// Specify the <b>campaign_id</b> you want to update as a URI parameter, and configure the <b>adGroupStatus</b> in the request payload.
+    /// </summary>
+    public Task<BulkAdUpdateStatusResponse?> BulkUpdateAdsStatusAsync(
+        string campaignId,
+        BulkUpdateAdStatusRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Bulk_update_ads_status.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
+    /// <summary>
+    /// The method updates the status of ads in bulk, based on listing ID values.
+    /// Specify the <b>campaign_id</b> as a path parameter and supply a set of listing IDs with their updated <b>adStatus</b> values in the request body. An eBay listing ID is generated when a listing is created with the Trading API.
+    /// Get the campaign IDs for a seller by calling <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> and call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad-getads">getAds</see> to retrieve a list of seller inventory reference IDs.
+    /// </summary>
+    public Task<BulkAdUpdateStatusByListingIdResponse?> BulkUpdateAdsStatusByListingIdAsync(
+        string campaignId,
+        BulkUpdateAdStatusByListingIdRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Bulk_update_ads_status_by_listing_id.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method retrieves Promoted Listings ads that are associated with listings created with either the <see href="/Devzone/XML/docs/Reference/eBay/index.html">Trading API</see> or the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see>.
+    /// The method retrieves ads related to the specified campaign. Specify the Promoted Listings campaign to target with the <b>campaign_id</b> path parameter.
+    /// Because of the large number of possible results, you can use query parameters to paginate the result set by specifying a <b>limit</b>, which dictates how many ads to return on each page of the response. You can also specify how many ads to skip in the result set before returning the first result using the <b>offset</b> path parameter.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve the current campaign IDs for the seller.
+    /// </summary>
     public Task<AdPagedCollectionResponse?> GetAdsAsync(
         string campaignId,
-        Action<RequestConfiguration<AdRequestBuilder.AdRequestBuilderGetQueryParameters>>? configure = null,
+        string? adGroupIds = null,
+        string? adStatus = null,
+        string? limit = null,
+        string? listingIds = null,
+        string? offset = null,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Ad.GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Ad.GetAsync(cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            if (adGroupIds is not null)
+            {
+                cfg.QueryParameters.AdGroupIds = adGroupIds;
+            }
+            if (adStatus is not null)
+            {
+                cfg.QueryParameters.AdStatus = adStatus;
+            }
+            if (limit is not null)
+            {
+                cfg.QueryParameters.Limit = limit;
+            }
+            if (listingIds is not null)
+            {
+                cfg.QueryParameters.ListingIds = listingIds;
+            }
+            if (offset is not null)
+            {
+                cfg.QueryParameters.Offset = offset;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<Generated.Marketing.Models.Ad?> GetAdAsync(string campaignId, string adId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Ad[adId].GetAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method adds a listing to an existing Promoted Listings campaign using a <b>listingId</b> value generated by the <see href="/Devzone/XML/docs/Reference/eBay/index.html">Trading API</see> or <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see>, or using a value generated by an ad group ID.
+    /// For general strategy campaigns using the Cost Per Sale (CPS) funding model, an ad may be directly created for the listing.
+    /// For the listing ID specified in the request, this method:
+    /// - Creates an ad for the listing.
+    /// - Sets the bid percentage (also known as the <i>ad rate</i>) for the ad.
+    /// - Associates the ad with the specified campaign.
+    /// To create an ad for a listing, specify its <b>listingId</b>, plus the <b>bidPercentage</b> for the ad in the payload of the request. Specify the campaign to associate the ad with using the <b>campaign_id</b> path parameter. Listing IDs are generated by eBay when a seller creates listings with the Trading API.
+    /// For manual targeting priority strategy campaigns using the Cost Per Click (CPC) funding model, an ad group must be created first. If no ad group has been created for the campaign, ads cannot be created.
+    /// <b>Note:</b> Ad groups are not required when adding listings to a smart targeting campaign.
+    /// For the ad group specified in the request, this method associates the ad with the specified ad group.
+    /// To create an ad for an ad group, specify the name of the ad group in the payload of the request. Specify the campaign to associate the ads with using the <b>campaign_id</b> path parameter. Ad groups are generated using the <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_group-createadgroup">createAdGroup</see> method.
+    /// You can specify one or more ad groups per campaign.
+    /// Use <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-createcampaign">createCampaign</see> to create a new campaign and use <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to get a list of existing campaigns.
+    /// This call has no response payload. If the ad is successfully created, a <c>201 Created</c> HTTP status code and the <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad-getad">getAd</see> URI of the ad are returned in the location header.
+    /// </summary>
+    public Task CreateAdByListingIdAsync(
+        string campaignId,
+        CreateAdRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Ad.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<AdPostResponse?> CreateAdAsync(string campaignId, CreateAdRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Ad.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method adds a listing that is managed with the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see> to an existing Promoted Listings campaign.
+    /// For general strategy campaigns using the Cost Per Sale (CPS) funding model, an ad may be directly created for the listing.
+    /// For each listing specified in the request, this method:
+    /// - Creates an ad for the listing.
+    /// - Sets the bid percentage (also known as the <i>ad rate</i>) for the ads created.
+    /// - Associates the created ad with the specified campaign.
+    /// To create an ad for a listing, specify its <b>inventoryReferenceId</b> and <b>inventoryReferenceType</b>, plus the <b>bidPercentage</b> for the ad in the payload of the request. Specify the campaign to associate the ad with using the <b>campaign_id</b> path parameter.
+    /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// Use <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-createcampaign">createCampaign</see> to create a new campaign and use <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to get a list of existing campaigns.
+    /// </summary>
+    public Task<AdReferences?> CreateAdsByInventoryReferenceAsync(
+        string campaignId,
+        CreateAdsByInventoryReferenceRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Create_ads_by_inventory_reference.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task DeleteAdAsync(string campaignId, string adId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Ad[adId].DeleteAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method retrieves the specified ad from the specified campaign.
+    /// In the request, supply the <b>campaign_id</b> and <b>ad_id</b> as path parameters.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve a list of the seller's current campaign IDs and call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad-getads">getAds</see> to retrieve their current ad IDs.
+    /// </summary>
+    public Task<Ad?> GetAdAsync(
+        string adId,
+        string campaignId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Ad[adId].GetAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task UpdateAdBidAsync(string campaignId, string adId, UpdateBidPercentageRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Ad[adId].Update_bid.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method removes the specified ad from the specified campaign.
+    /// Pass the ID of the ad to delete with the ID of the campaign associated with the ad as path parameters to the call.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to get the current list of the seller's campaign IDs.
+    /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// When using the CPC funding model, use the <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad-bulkupdateadsstatusbylistingid">bulkUpdateAdsStatusByListingId</see> method to change the status of ads to <c>ARCHIVED</c>.
+    /// </summary>
+    public Task DeleteAdAsync(
+        string adId,
+        string campaignId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Ad[adId].DeleteAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<AdReferences?> CreateAdsByInventoryReferenceAsync(string campaignId, CreateAdsByInventoryReferenceRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Create_ads_by_inventory_reference.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method works with listings that are managed with the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see>.
+    /// The method deletes ads using a list of seller-defined inventory reference IDs, used with the Inventory API, that are associated with the specified campaign ID.
+    /// Specify the campaign ID (as a path parameter) and a list of <b>inventoryReferenceId</b> and <b>inventoryReferenceType</b> pairs to be deleted.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to get a list of the seller's current campaign IDs.
+    /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// When using the CPC funding model, use the bulkUpdateAdsStatusByInventoryReference method to change the status of ads to ARCHIVED.
+    /// </summary>
+    public Task<AdIds?> DeleteAdsByInventoryReferenceAsync(
+        string campaignId,
+        DeleteAdsByInventoryReferenceRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Delete_ads_by_inventory_reference.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
+    /// <summary>
+    /// This method retrieves Promoted Listings ads associated with listings that are managed with the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see> from the specified campaign.
+    /// Supply the <b>campaign_id</b> as a path parameter and use query parameters to specify the <b>inventory_reference_id</b> and <b>inventory_reference_type</b> pairs.
+    /// In the Inventory API, an <i>inventory reference ID</i> is either a seller-defined <b>SKU</b> value or an <b>inventoryItemGroupKey</b> (a seller-defined ID for an inventory item group, which is an entity that's used in the Inventory API to create a multiple-variation listing). To indicate a listing managed by the Inventory API, you must always specify both an <b>inventory_reference_id</b> and the associated <b>inventory_reference_type</b>.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve all of the seller's the current campaign IDs.
+    /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// </summary>
     public Task<Ads?> GetAdsByInventoryReferenceAsync(
         string campaignId,
-        Action<RequestConfiguration<Get_ads_by_inventory_referenceRequestBuilder.Get_ads_by_inventory_referenceRequestBuilderGetQueryParameters>>? configure = null,
+        string inventoryReferenceId,
+        string inventoryReferenceType,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Get_ads_by_inventory_reference.GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Get_ads_by_inventory_reference.GetAsync(cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            cfg.QueryParameters.InventoryReferenceId = inventoryReferenceId;
+            cfg.QueryParameters.InventoryReferenceType = inventoryReferenceType;
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<AdIds?> DeleteAdsByInventoryReferenceAsync(string campaignId, DeleteAdsByInventoryReferenceRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Delete_ads_by_inventory_reference.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<TargetedAdsPagedCollection?> GetSuggestedItemsAsync(
+    /// <summary>
+    /// This method updates the bid percentage (also known as the "ad rate") for the specified ad in the specified campaign.
+    /// In the request, supply the <b>campaign_id</b> and <b>ad_id</b> as path parameters, and supply the new <b>bidPercentage</b> value in the payload of the call.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve a seller's current campaign IDs and call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad-getads">getAds</see> to get their ad IDs.
+    /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// </summary>
+    public Task UpdateBidAsync(
+        string adId,
         string campaignId,
-        Action<RequestConfiguration<Suggest_itemsRequestBuilder.Suggest_itemsRequestBuilderGetQueryParameters>>? configure = null,
+        UpdateBidPercentageRequest body,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Suggest_items.GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Ad[adId].Update_bid.PostAsync(body, cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<BulkAdResponse?> BulkCreateAdsByListingIdAsync(string campaignId, BulkCreateAdRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Bulk_create_ads_by_listing_id.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method retrieves ad groups for the specified campaign.
+    /// Each campaign can only have <b>one</b> ad group.
+    /// In the request, supply the <b>campaign_id</b> as the path parameter.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve a list of the current campaign IDs for a seller.
+    /// </summary>
+    public Task<AdGroupPagedCollectionResponse?> GetAdGroupsAsync(
+        string campaignId,
+        string? adGroupStatus = null,
+        string? limit = null,
+        string? offset = null,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Ad_group.GetAsync(cfg =>
+        {
+            if (adGroupStatus is not null)
+            {
+                cfg.QueryParameters.AdGroupStatus = adGroupStatus;
+            }
+            if (limit is not null)
+            {
+                cfg.QueryParameters.Limit = limit;
+            }
+            if (offset is not null)
+            {
+                cfg.QueryParameters.Offset = offset;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<BulkCreateAdsByInventoryReferenceResponse?> BulkCreateAdsByInventoryReferenceAsync(string campaignId, BulkCreateAdsByInventoryReferenceRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Bulk_create_ads_by_inventory_reference.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method adds an ad group to an existing priority strategy campaign that uses manual targeting.
+    /// To create an ad group for a campaign, specify the <b>defaultBid</b> for the ad group in the payload of the request. Then specify the campaign to which the ad group should be associated using the <b>campaign_id</b> path parameter.
+    /// Each campaign can have one or more associated ad groups.
+    /// </summary>
+    public Task CreateAdGroupAsync(
+        string campaignId,
+        CreateAdGroupRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Ad_group.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<BulkDeleteAdResponse?> BulkDeleteAdsByListingIdAsync(string campaignId, BulkDeleteAdRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Bulk_delete_ads_by_listing_id.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method retrieves the details of a specified ad group, such as the ad group’s default bid and status.
+    /// In the request, specify the <b>campaign_id</b> and <b>ad_group_id</b> as path parameters.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve a list of the current campaign IDs for a seller and call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_group-getadgroups">getAdGroups</see> for the ad group ID of the ad group you wish to retrieve.
+    /// </summary>
+    public Task<AdGroup?> GetAdGroupAsync(
+        string adGroupId,
+        string campaignId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Ad_group[adGroupId].GetAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<BulkDeleteAdsByInventoryReferenceResponse?> BulkDeleteAdsByInventoryReferenceAsync(string campaignId, BulkDeleteAdsByInventoryReferenceRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Bulk_delete_ads_by_inventory_reference.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method updates the ad group associated with a campaign.
+    /// With this method, you can modify the <b>default bid</b> for the ad group, change the state of the ad group, or change the name of the ad group. Pass the <b>ad_group_id</b> you want to update as a URI parameter, and configure the <b>adGroupStatus</b> and <b>defaultBid</b> in the request payload.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_group-getadgroup">getAdGroup</see> to retrieve the current default bid and status of the ad group that you would like to update.
+    /// </summary>
+    public Task UpdateAdGroupAsync(
+        string adGroupId,
+        string campaignId,
+        UpdateAdGroupRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Ad_group[adGroupId].PutAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<BulkAdUpdateResponse?> BulkUpdateAdsBidByListingIdAsync(string campaignId, BulkCreateAdRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Bulk_update_ads_bid_by_listing_id.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method allows sellers to retrieve the suggested bids for input keywords and match type.
+    /// </summary>
+    public Task<TargetedBidsPagedCollection?> SuggestBidsAsync(
+        string adGroupId,
+        string campaignId,
+        TargetedBidRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Ad_group[adGroupId].Suggest_bids.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<BulkUpdateAdsByInventoryReferenceResponse?> BulkUpdateAdsBidByInventoryReferenceAsync(string campaignId, BulkCreateAdsByInventoryReferenceRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Bulk_update_ads_bid_by_inventory_reference.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method allows sellers to retrieve a list of keyword ideas to be targeted for Promoted Listings campaigns.
+    /// </summary>
+    public Task<TargetedKeywordsPagedCollection?> SuggestKeywordsAsync(
+        string adGroupId,
+        string campaignId,
+        TargetedKeywordRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Ad_group[adGroupId].Suggest_keywords.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<BulkAdUpdateStatusResponse?> BulkUpdateAdsStatusAsync(string campaignId, BulkUpdateAdStatusRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Bulk_update_ads_status.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method clones (makes a copy of) the specified campaign's <b>campaign criterion</b>. The <b>campaign criterion</b> is a container for the fields that define the criteria for a rule-based campaign.
+    /// To clone a campaign, supply the <b>campaign_id</b> as a path parameter in your call. There is no request payload.
+    /// The ID of the newly-cloned campaign is returned in the <b>Location</b> response header.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve a seller's current campaign IDs.
+    /// <b>Requirement: </b>In order to clone a campaign, the <b>campaignStatus</b> must be <c>ENDED</c> and the campaign must define a set of selection rules (it must be a rules-based campaign).
+    /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// </summary>
+    public Task CloneCampaignAsync(
+        string campaignId,
+        CloneCampaignRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Clone.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<BulkAdUpdateStatusByListingIdResponse?> BulkUpdateAdsStatusByListingIdAsync(string campaignId, BulkUpdateAdStatusByListingIdRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Bulk_update_ads_status_by_listing_id.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method retrieves the details for all of the seller's defined campaigns. Request parameters can be used to retrieve a specific campaign, such as the campaign's name, the start and end date, the channel, the status, and the funding model (i.e., Cost Per Sale (CPS) or Cost Per Click (CPC)).
+    /// You can filter the result set by a campaign name, end date range, start date range, campaign channel, or campaign status. You can also paginate the records returned from the result set using the <b>limit</b> query parameter, and control which records to return using the <b>offset</b> parameter.
+    /// </summary>
+    public Task<CampaignPagedCollectionResponse?> GetCampaignsAsync(
+        string? campaignName = null,
+        string? campaignStatus = null,
+        string? campaignTargetingTypes = null,
+        string? channels = null,
+        string? endDateRange = null,
+        string? fundingStrategy = null,
+        string? limit = null,
+        string? offset = null,
+        string? startDateRange = null,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign.GetAsync(cfg =>
+        {
+            if (campaignName is not null)
+            {
+                cfg.QueryParameters.CampaignName = campaignName;
+            }
+            if (campaignStatus is not null)
+            {
+                cfg.QueryParameters.CampaignStatus = campaignStatus;
+            }
+            if (campaignTargetingTypes is not null)
+            {
+                cfg.QueryParameters.CampaignTargetingTypes = campaignTargetingTypes;
+            }
+            if (channels is not null)
+            {
+                cfg.QueryParameters.Channels = channels;
+            }
+            if (endDateRange is not null)
+            {
+                cfg.QueryParameters.EndDateRange = endDateRange;
+            }
+            if (fundingStrategy is not null)
+            {
+                cfg.QueryParameters.FundingStrategy = fundingStrategy;
+            }
+            if (limit is not null)
+            {
+                cfg.QueryParameters.Limit = limit;
+            }
+            if (offset is not null)
+            {
+                cfg.QueryParameters.Offset = offset;
+            }
+            if (startDateRange is not null)
+            {
+                cfg.QueryParameters.StartDateRange = startDateRange;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    // ── Keywords ──────────────────────────────────────────────────────────────
+    /// <summary>
+    /// This method can be used to create a Promoted Listings general, priority, or offsite campaign.
+    /// A Promoted Listings <i>campaign</i> is the structure in which you place the ads or ad group for the listings you wish to promote.
+    /// <b>Note:</b> Campaigns can only contain ads for a maximum of 50,000 items.
+    /// General strategy campaigns utilize a Cost Per Sale (CPS) funding model. Sellers can set the ad rate and bidding strategies that are right for their business through the <b>adRateStrategy</b>, <b>biddingStrategy</b>, <b>bidPercentage</b> fields. For more information on general strategy campaigns, see <see href="/api-docs/sell/static/marketing/pl-campaign-flow-pls.html">Promoted Listings general strategy campaign flow</see>.
+    /// Priority strategy campaigns utilize a Cost per Click (CPC) funding model. Sellers can create a daily budget through the <b>budget</b> container and choose what <b>channel</b> that their ads appear on. In addition, priority strategy campaigns give sellers the ability to create ad groups and specify keywords to ensure their ads reach their intended audience. For more information on priority strategy campaigns, see <see href="/api-docs/sell/static/marketing/pl-campaign-flow-pla.html">Promoted listings priority strategy campaign flow</see>.
+    /// Promoted Offsite campaigns give sellers the ability to create their own advertising campaign and promote their eBay listing in leading external search channels. For more information on Promoted Offsite campaigns, see <see href="/api-docs/sell/static/marketing/offsite-ads.html">Promoted Offsite</see>.
+    /// <b>Note:</b> Sellers can use the <see href="/api-docs/sell/account/resources/advertising_eligibility/methods/getAdvertisingEligibility">getAdvertisingEligibility</see> method of the <see href="/api-docs/sell/account/overview.html">Account API v1</see> to determine their eligibility status for eBay advertising programs.
+    /// To create a basic campaign, supply:
+    /// - The user-defined campaign name
+    /// - The start date (and optionally the end date) of the campaign
+    /// - The eBay marketplace on which the campaign is hosted
+    /// - Details on the campaign funding model
+    /// For details on creating Promoted Listings campaigns and how to select the items to be included in your campaigns, see <see href="/api-docs/sell/static/marketing/pl-create-campaign.html">Promoted Listings campaign creation</see>.
+    /// </summary>
+    public Task CreateCampaignAsync(
+        CreateCampaignRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
+    /// <summary>
+    /// This method retrieves the details of a single campaign, as specified with the <b>campaign_id</b> query parameter.
+    /// This method returns all the details of a campaign (including the campaign's the selection rules), except the for the listing IDs or inventory reference IDs included in the campaign. These IDs are returned by <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad-getads">getAds</see>.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve a list of the seller's campaign IDs.
+    /// </summary>
+    public Task<Campaign?> GetCampaignAsync(
+        string campaignId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].GetAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method deletes the campaign specified by the <c>campaign_id</c> query parameter.
+    /// <b>Note: </b> You can only delete campaigns that have ended.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve the <b>campaign_id</b> and the campaign status (<c>RUNNING</c>, <c>PAUSED</c>, <c>ENDED</c>, and so on) for all the seller's campaigns.
+    /// </summary>
+    public Task DeleteCampaignAsync(
+        string campaignId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].DeleteAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method ends an active (<c>RUNNING</c>) or paused campaign. Specify the campaign you want to end by supplying its campaign ID in a query parameter.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve the <b>campaign_id</b> and the campaign status (<c>RUNNING</c>, <c>PAUSED</c>, <c>ENDED</c>, and so on) for all the seller's campaigns.
+    /// </summary>
+    public Task EndCampaignAsync(
+        string campaignId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].End.PostAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method retrieves the campaigns containing the listing that is specified using either a listing ID, or an inventory reference ID and inventory reference type pair. The request accepts either a <b>listing_id</b>, <i>or</i> an <b>inventory_reference_id</b> and <b>inventory_reference_type</b> pair, as used in the Inventory API.
+    /// eBay <i>listing IDs</i> are generated by either the <see href="/Devzone/XML/docs/Reference/eBay/index.html">Trading API</see> or the <see href="/api-docs/sell/inventory/resources/methods">Inventory API</see> when you create a listing.
+    /// An <i>inventory reference ID</i> can be either a seller-defined <b>SKU</b> or <b>inventoryItemGroupKey</b>, as specified in the Inventory API.
+    /// <b>Note:</b> This method only applies to the Cost Per Sale (CPS) funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// </summary>
+    public Task<Campaigns?> FindCampaignByAdReferenceAsync(
+        string? inventoryReferenceId = null,
+        string? inventoryReferenceType = null,
+        string? listingId = null,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign.Find_campaign_by_ad_reference.GetAsync(cfg =>
+        {
+            if (inventoryReferenceId is not null)
+            {
+                cfg.QueryParameters.InventoryReferenceId = inventoryReferenceId;
+            }
+            if (inventoryReferenceType is not null)
+            {
+                cfg.QueryParameters.InventoryReferenceType = inventoryReferenceType;
+            }
+            if (listingId is not null)
+            {
+                cfg.QueryParameters.ListingId = listingId;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method retrieves the details of a single campaign, as specified with the <b>campaign_name</b> query parameter. Note that the campaign name you specify must be an exact, case-sensitive match of the name of the campaign you want to retrieve.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve a list of the seller's campaign names.
+    /// </summary>
+    public Task<Campaign?> GetCampaignByNameAsync(
+        string campaignName,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign.Get_campaign_by_name.GetAsync(cfg =>
+        {
+            cfg.QueryParameters.CampaignName = campaignName;
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method pauses an active (RUNNING) campaign.
+    /// You can restart the campaign by calling <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-resumecampaign">resumeCampaign</see>, as long as the campaign's end date is in the future.
+    /// <b>Note:</b>The listings associated with a paused campaign cannot be added into another campaign.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve the <b>campaign_id</b> and the campaign status (<c>RUNNING</c>, <c>PAUSED</c>, <c>ENDED</c>, and so on) for all the seller's campaigns.
+    /// </summary>
+    public Task PauseCampaignAsync(
+        string campaignId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Pause.PostAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method resumes a paused campaign, as long as its end date is in the future. Supply the <b>campaign_id</b> for the campaign you want to restart as a query parameter in the request.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve the <b>campaign_id</b> and the campaign status (<c>RUNNING</c>, <c>PAUSED</c>, <c>ENDED</c>, and so on) for all the seller's campaigns.
+    /// </summary>
+    public Task ResumeCampaignAsync(
+        string campaignId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Resume.PostAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> This method is only supported for Promoted Offsite campaigns. Sellers can use the <see href="/api-docs/sell/account/resources/advertising_eligibility/methods/getAdvertisingEligibility">getAdvertisingEligibility</see> method of the <see href="/api-docs/sell/account/overview.html">Account API v1</see> to determine if they are eligible for offsite campaigns.
+    /// This method allows sellers to retrieve the suggested budget for an offsite campaign.
+    /// </summary>
+    public Task<SuggestBudgetResponse?> SuggestBudgetAsync(
+        string xEBAYCMARKETPLACEID,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign.Suggest_budget.GetAsync(cfg =>
+        {
+            cfg.Headers.TryAdd("X-EBAY-C-MARKETPLACE-ID", xEBAYCMARKETPLACEID);
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method allows sellers to obtain ideas for listings, which can be targeted for Promoted Listings campaigns.
+    /// </summary>
+    public Task<TargetedAdsPagedCollection?> SuggestItemsAsync(
+        string campaignId,
+        string? categoryIds = null,
+        string? limit = null,
+        string? offset = null,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Suggest_items.GetAsync(cfg =>
+        {
+            if (categoryIds is not null)
+            {
+                cfg.QueryParameters.CategoryIds = categoryIds;
+            }
+            if (limit is not null)
+            {
+                cfg.QueryParameters.Limit = limit;
+            }
+            if (offset is not null)
+            {
+                cfg.QueryParameters.Offset = offset;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> This method is only supported for smart targeting priority strategy campaigns. Sellers can use the <see href="/api-docs/sell/account/resources/advertising_eligibility/methods/getAdvertisingEligibility">getAdvertisingEligibility</see> method of the Account API v1 to determine if they are eligible for a priority strategy campaign.
+    /// This method allows sellers to retrieve the suggested maximum cost-per-click value for a smart targeting campaign. This value is required when creating a smart targeting campaign and indicates the maximum amount for which the eBay suggested bid can be adjusted.
+    /// </summary>
+    public Task<SuggestMaxCpcResponse?> SuggestMaxCpcAsync(
+        SuggestMaxCpcRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign.Suggest_max_cpc.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method updates the ad rate strategy for an existing rules-based general strategy ad campaign that uses the Cost Per Sale (CPS) funding model.
+    /// Specify the <b>campaign_id</b> as a path parameter. You can retrieve the campaign IDs for a seller by calling the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> method.
+    /// <b>Note:</b> This method only applies to the CPS funding model; it does not apply to the Cost Per Click (CPC) funding model. See <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// </summary>
+    public Task UpdateAdRateStrategyAsync(
+        string campaignId,
+        UpdateAdrateStrategyRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Update_ad_rate_strategy.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method allows sellers to change the bidding strategy for a specified Cost Per Click (CPC) campaign that uses manual targeting. Available bidding strategies are:
+    /// - <c>FIXED</c>
+    /// When using a fixed bidding strategy, sellers manually assign and adjust keyword bids for the CPC campaign.
+    /// - <c>DYNAMIC</c>
+    /// When using a dynamic bidding strategy, eBay will manage a campaign's keyword bids and automatically update them daily to the suggested bid.
+    /// <b>Note:</b> For a CPC campaign using dynamic bidding, sellers can continue to manually add keywords for the campaign, but they are no longer able to manually adjust their associated bid values. In order to manually adjust bid values, sellers must use the <c>FIXED</c> bidding strategy.
+    /// In addition, this method allows sellers to modify the <b>maxCPC</b> value of a smart targeting campaign.
+    /// <b>Note:</b> This method only applies to the Cost Per Click (CPC) funding model; it does not apply to the Cost Per Sale (CPS) funding model. Refer to <see href="/api-docs/sell/static/marketing/pl-overview.html#funding-model">Funding Models</see> in the <i>Promoted Listings Playbook</i> for more information.
+    /// </summary>
+    public Task UpdateBiddingStrategyAsync(
+        string campaignId,
+        UpdateBiddingStrategyRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Update_bidding_strategy.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method updates the daily budget for a priority strategy campaign that uses the Cost Per Click (CPC) funding model.
+    /// A click occurs when an eBay user finds and clicks on the seller’s listing (within the search results) after using a keyword that the seller has created for the campaign. For each ad in an ad group in the campaign, each click triggers a cost, which gets subtracted from the campaign’s daily budget. If the cost of the clicks exceeds the daily budget, the Promoted Listings campaign will be paused until the next day.
+    /// Specify the <b>campaign_id</b> as a path parameter. You can retrieve the campaign IDs for a seller by calling the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> method.
+    /// <b>Note:</b> The daily budget for a campaign can only be updated 15 times per day. If this limit is exceeded, an error will occur and you will be blocked from updating the budget until the next day.
+    /// </summary>
+    public Task UpdateCampaignBudgetAsync(
+        string campaignId,
+        UpdateCampaignBudgetRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Update_campaign_budget.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method can be used to change the name of a campaign, as well as modify the start or end dates.
+    /// Specify the <b>campaign_id</b> you want to update as a URI parameter, and configure the <b>campaignName</b> and <b>startDate</b> in the request payload.
+    /// If you want to change only the end date of the campaign, specify the current campaign name, set <b>endDate</b> as desired, and set <b>startDate</b> to the actual start date of the campaign. This applies if the campaign status is <c>RUNNING</c> or <c>PAUSED</c>. You can retrieve the <b>startDate</b> using the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaign.campaign.startdate">getCampaign</see> method.
+    /// Note that if you do not set a new end date in this call, any current <b>endDate</b> value will be set to <c>null</c>. To preserve the currently-set end date, you must specify the value again in your request.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> to retrieve a seller's campaign details, including the campaign ID, campaign name, and the start and end dates of the campaign.
+    /// </summary>
+    public Task UpdateCampaignIdentificationAsync(
+        string campaignId,
+        UpdateCampaignIdentificationRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Update_campaign_identification.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method adds keywords, in bulk, to an existing priority strategy ad group in a campaign that uses manual targeting.
+    /// This method also sets the CPC rate for each keyword, depending on the selected bidding strategy, as follows:
+    /// - <c>FIXED</c>: If the seller provides a keyword bid, that bid value will be used.
+    /// If no bid is provided, the adgroup's default bid value will be used.
+    /// - <c>DYNAMIC</c>: The eBay suggested bid will be used.
+    /// If the seller passes in a value, a warning will be returned.
+    /// In the request, supply the <b>campaign_id</b> as a path parameter.
+    /// Call the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> method to retrieve a list of current campaign IDs for a specified seller.
+    /// </summary>
+    public Task<BulkCreateKeywordResponse?> BulkCreateKeywordAsync(
+        string campaignId,
+        BulkCreateKeywordRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Bulk_create_keyword.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method updates the bids and statuses of keywords, in bulk, for an existing priority strategy campaign.
+    /// In the request, supply the <b>campaign_id</b> as a path parameter.
+    /// Call the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> method to retrieve a list of current campaign IDs for a specified seller.
+    /// </summary>
+    public Task<BulkUpdateKeywordResponse?> BulkUpdateKeywordAsync(
+        string campaignId,
+        BulkUpdateKeywordRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Bulk_update_keyword.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method can be used to retrieve all of the keywords for ad groups in priority strategy campaigns that use the Cost Per Click (CPC) funding model.
+    /// In the request, specify the <b>campaign_id</b> as a path parameter. If one or more <b>ad_group_ids</b> are passed in the request body, the keywords for those ad groups will be returned. If <b>ad_group_ids</b> are not passed in the response body, the call will return all the keywords in the campaign.
+    /// Call the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> method to retrieve a list of current campaign IDs for a seller.
+    /// </summary>
     public Task<KeywordPagedCollectionResponse?> GetKeywordsAsync(
         string campaignId,
-        Action<RequestConfiguration<KeywordRequestBuilder.KeywordRequestBuilderGetQueryParameters>>? configure = null,
+        string? adGroupIds = null,
+        string? keywordStatus = null,
+        string? limit = null,
+        string? offset = null,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Keyword.GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Keyword.GetAsync(cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            if (adGroupIds is not null)
+            {
+                cfg.QueryParameters.AdGroupIds = adGroupIds;
+            }
+            if (keywordStatus is not null)
+            {
+                cfg.QueryParameters.KeywordStatus = keywordStatus;
+            }
+            if (limit is not null)
+            {
+                cfg.QueryParameters.Limit = limit;
+            }
+            if (offset is not null)
+            {
+                cfg.QueryParameters.Offset = offset;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<Keyword?> GetKeywordAsync(string campaignId, string keywordId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Keyword[keywordId].GetAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method creates keywords using a specified campaign ID for an existing priority strategy campaign that uses manual targeting.
+    /// In the request, supply the <b>campaign_id</b> as a path parameter.
+    /// Call the <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_group-suggestkeywords">suggestKeywords</see> method to retrieve a list of keyword ideas to be targeted for priority strategy campaigns, and call the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> method to retrieve a list of current campaign IDs for a seller.
+    /// </summary>
+    public Task CreateKeywordAsync(
+        string campaignId,
+        CreateKeywordRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Keyword.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<KeywordPostResponse?> CreateKeywordAsync(string campaignId, CreateKeywordRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Keyword.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method retrieves details on a specific keyword from an ad group within a priority strategy campaign that uses the Cost Per Click (CPC) funding model.
+    /// In the request, specify the <b>campaign_id</b> and <b>keyword_id</b> as path parameters.
+    /// Call the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> method to retrieve a list of current campaign IDs for a seller and call the <see href="/develop/api/sell/marketing_api#sell-marketing_api-keyword-getkeywords">getKeywords</see> method to retrieve their keyword IDs.
+    /// </summary>
+    public Task<Keyword?> GetKeywordAsync(
+        string campaignId,
+        string keywordId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Keyword[keywordId].GetAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<UpdateKeywordResponse?> UpdateKeywordAsync(string campaignId, string keywordId, UpdateKeywordRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Keyword[keywordId].PutAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method updates keywords using a campaign ID and keyword ID for an existing priority strategy campaign.
+    /// In the request, specify the <b>campaign_id</b> and <b>keyword_id</b> as path parameters.
+    /// Call the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> method to retrieve a list of current campaign IDs for a seller and call the <see href="/develop/api/sell/marketing_api#sell-marketing_api-keyword-getkeywords">getKeywords</see> method to retrieve their keyword IDs.
+    /// </summary>
+    public Task<UpdateKeywordResponse?> UpdateKeywordAsync(
+        string campaignId,
+        string keywordId,
+        UpdateKeywordRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_campaign[campaignId].Keyword[keywordId].PutAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<BulkCreateKeywordResponse?> BulkCreateKeywordsAsync(string campaignId, BulkCreateKeywordRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Bulk_create_keyword.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method adds negative keywords, in bulk, to an existing ad group in a priority strategy campaign that uses manual targeting.
+    /// Specify the <b>campaignId</b> and <b>adGroupId</b> in the request body, along with the <b>negativeKeywordText</b> and <b>negativeKeywordMatchType</b>.
+    /// Call the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> method to retrieve a list of current campaign IDs for a specified seller.
+    /// </summary>
+    public Task<BulkCreateNegativeKeywordResponse?> BulkCreateNegativeKeywordAsync(
+        BulkCreateNegativeKeywordRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Bulk_create_negative_keyword.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<BulkUpdateKeywordResponse?> BulkUpdateKeywordsAsync(string campaignId, BulkUpdateKeywordRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_campaign[campaignId].Bulk_update_keyword.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method updates the statuses of existing negative keywords, in bulk.
+    /// Specify the <b>negativeKeywordId</b> and <b>negativeKeywordStatus</b> in the request body.
+    /// </summary>
+    public Task<BulkUpdateNegativeKeywordResponse?> BulkUpdateNegativeKeywordAsync(
+        BulkUpdateNegativeKeywordRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Bulk_update_negative_keyword.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    // ── Negative Keywords ─────────────────────────────────────────────────────
-
+    /// <summary>
+    /// This method can be used to retrieve all of the negative keywords for ad groups in priority strategy campaigns that use the Cost Per Click (CPC) funding model.
+    /// The results can be filtered using the <b>campaign_ids</b>, <b>ad_group_ids</b>, and <b>negative_keyword_status</b> query parameters.
+    /// Call the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> method to retrieve a list of current campaign IDs for a seller.
+    /// </summary>
     public Task<NegativeKeywordPagedCollectionResponse?> GetNegativeKeywordsAsync(
-        Action<RequestConfiguration<Negative_keywordRequestBuilder.Negative_keywordRequestBuilderGetQueryParameters>>? configure = null,
+        string adGroupIds,
+        string? campaignIds = null,
+        string? limit = null,
+        string? negativeKeywordStatus = null,
+        string? offset = null,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Negative_keyword.GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Negative_keyword.GetAsync(cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            cfg.QueryParameters.AdGroupIds = adGroupIds;
+            if (campaignIds is not null)
+            {
+                cfg.QueryParameters.CampaignIds = campaignIds;
+            }
+            if (limit is not null)
+            {
+                cfg.QueryParameters.Limit = limit;
+            }
+            if (negativeKeywordStatus is not null)
+            {
+                cfg.QueryParameters.NegativeKeywordStatus = negativeKeywordStatus;
+            }
+            if (offset is not null)
+            {
+                cfg.QueryParameters.Offset = offset;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<NegativeKeyword?> GetNegativeKeywordAsync(string negativeKeywordId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Negative_keyword[negativeKeywordId].GetAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<Negative_keywordPostResponse?> CreateNegativeKeywordAsync(CreateNegativeKeywordRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Negative_keyword.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task UpdateNegativeKeywordAsync(string negativeKeywordId, UpdateNegativeKeywordRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Negative_keyword[negativeKeywordId].PutAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<BulkCreateNegativeKeywordResponse?> BulkCreateNegativeKeywordsAsync(BulkCreateNegativeKeywordRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Bulk_create_negative_keyword.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<BulkUpdateNegativeKeywordResponse?> BulkUpdateNegativeKeywordsAsync(BulkUpdateNegativeKeywordRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Bulk_update_negative_keyword.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    // ── Item Promotions ───────────────────────────────────────────────────────
-
-    public Task<BaseResponse?> CreateItemPromotionAsync(ItemPromotion body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Item_promotion.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<ItemPromotionResponse?> GetItemPromotionAsync(string promotionId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Item_promotion[promotionId].GetAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<BaseResponse?> UpdateItemPromotionAsync(string promotionId, ItemPromotion body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Item_promotion[promotionId].PutAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task DeleteItemPromotionAsync(string promotionId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Item_promotion[promotionId].DeleteAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    // ── Item Price Markdown ───────────────────────────────────────────────────
-
-    public Task<Item_price_markdownPostResponse?> CreateItemPriceMarkdownAsync(ItemPriceMarkdown body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Item_price_markdown.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<ItemPriceMarkdown?> GetItemPriceMarkdownAsync(string promotionId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Item_price_markdown[promotionId].GetAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<WithPromotion_PutResponse?> UpdateItemPriceMarkdownAsync(string promotionId, ItemPriceMarkdown body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Item_price_markdown[promotionId].PutAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task DeleteItemPriceMarkdownAsync(string promotionId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Item_price_markdown[promotionId].DeleteAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    // ── Promotions ────────────────────────────────────────────────────────────
-
-    public Task<PromotionsPagedCollection?> GetPromotionsAsync(
-        Action<RequestConfiguration<PromotionRequestBuilder.PromotionRequestBuilderGetQueryParameters>>? configure = null,
+    /// <summary>
+    /// This method adds a negative keyword to an existing ad group in a priority strategy campaign that uses manual targeting.
+    /// Specify the <b>campaignId</b> and <b>adGroupId</b> in the request body, along with the <b>negativeKeywordText</b> and <b>negativeKeywordMatchType</b>.
+    /// Call the <see href="/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns">getCampaigns</see> method to retrieve a list of current campaign IDs for a specified seller.
+    /// </summary>
+    public Task CreateNegativeKeywordAsync(
+        CreateNegativeKeywordRequest body,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Promotion.GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Negative_keyword.PostAsync(body, cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<ItemsPagedCollection?> GetPromotionListingSetAsync(
-        string promotionId,
-        Action<RequestConfiguration<Get_listing_setRequestBuilder.Get_listing_setRequestBuilderGetQueryParameters>>? configure = null,
+    /// <summary>
+    /// This method retrieves details on a specific negative keyword.
+    /// In the request, specify the <b>negative_keyword_id</b> as a path parameter.
+    /// </summary>
+    public Task<NegativeKeyword?> GetNegativeKeywordAsync(
+        string negativeKeywordId,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Promotion[promotionId].Get_listing_set.GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Negative_keyword[negativeKeywordId].GetAsync(cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task PausePromotionAsync(string promotionId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Promotion[promotionId].Pause.PostAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task ResumePromotionAsync(string promotionId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Promotion[promotionId].Resume.PostAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<PromotionsReportPagedCollection?> GetPromotionReportsAsync(
-        Action<RequestConfiguration<Promotion_reportRequestBuilder.Promotion_reportRequestBuilderGetQueryParameters>>? configure = null,
+    /// <summary>
+    /// This method updates the status of an existing negative keyword.
+    /// Specify the <b>negative_keyword_id</b> as a path parameter, and specify the <b>negativeKeywordStatus</b> in the request body.
+    /// </summary>
+    public Task UpdateNegativeKeywordAsync(
+        string negativeKeywordId,
+        UpdateNegativeKeywordRequest body,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Promotion_report.GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Negative_keyword[negativeKeywordId].PutAsync(body, cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<SummaryReportResponse?> GetPromotionSummaryReportAsync(
-        Action<RequestConfiguration<Promotion_summary_reportRequestBuilder.Promotion_summary_reportRequestBuilderGetQueryParameters>>? configure = null,
+    /// <summary>
+    /// This call downloads the report as specified by the <b>report_id</b> path parameter.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-createreporttask">createReportTask</see> to schedule and generate a Promoted Listings report. All date values are returned in UTC format (<c>yyyy-MM-ddThh:mm:ss.sssZ</c>).
+    /// <b>Note:</b> The reporting of some data related to sales and ad-fees may require a 72-hour (<b>maximum</b>) adjustment period which is often referred to as the <i>Reconciliation Period</i>. Such adjustment periods should, on average, be minimal. However, at any given time, the <b>payments</b> tab may be used to view those amounts that have actually been charged.
+    /// Important! </b>"&gt;<b>Important!</b>For <b>ad_report</b> and <b>ad_report_task</b> methods, the API call limit is subject to a per user quota. These API calls can <b>only</b> be executed a maximum of 200 times per hour for each seller/user. If the number of calls per hour exceeds this limit, any new calls will be blocked for the next hour.
+    /// </summary>
+    public Task GetReportAsync(
+        string reportId,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Promotion_summary_report.GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_report[reportId].GetAsync(cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    // ── Email Campaigns ───────────────────────────────────────────────────────
-
-    public Task<GetEmailCampaignsResponse?> GetEmailCampaignsAsync(
-        Action<RequestConfiguration<Email_campaignRequestBuilder.Email_campaignRequestBuilderGetQueryParameters>>? configure = null,
+    /// <summary>
+    /// This call retrieves information that details the fields used in each of the Promoted Listings reports. Use the returned information to configure the different types of Promoted Listings reports. You can retrieve metadata for all report types,funding models and channels, or you can filter based on funding model and/or channel.
+    /// <b>Note:</b> The reporting of some data related to sales and ad-fees may require a 72-hour (<b>maximum</b>) adjustment period which is often referred to as the <i>Reconciliation Period</i>. Such adjustment periods should, on average, be minimal. However, at any given time, the <b>payments</b> tab may be used to view those amounts that have actually been charged.
+    /// </summary>
+    public Task<ReportMetadatas?> GetReportMetadataAsync(
+        string? fundingModel = null,
+        string? channel = null,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Email_campaign.GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_report_metadata.GetAsync(cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            if (fundingModel is not null)
+            {
+                cfg.QueryParameters.FundingModel = fundingModel;
+            }
+            if (channel is not null)
+            {
+                cfg.QueryParameters.Channel = channel;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<GetEmailCampaignResponse?> GetEmailCampaignAsync(string emailCampaignId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Email_campaign[emailCampaignId].GetAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<CreateEmailCampaignResponse?> CreateEmailCampaignAsync(CreateEmailCampaignRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Email_campaign.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<UpdateEmailCampaignResponse?> UpdateEmailCampaignAsync(string emailCampaignId, UpdateCampaignRequest body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Email_campaign[emailCampaignId].PutAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<DeleteEmailCampaignResponse?> DeleteEmailCampaignAsync(string emailCampaignId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Email_campaign[emailCampaignId].DeleteAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<GetEmailCampaignAudiencesResponse?> GetEmailCampaignAudiencesAsync(
-        Action<RequestConfiguration<AudienceRequestBuilder.AudienceRequestBuilderGetQueryParameters>>? configure = null,
-        string? accessToken = null,
-        RequestOptions? requestOptions = null,
-        CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Email_campaign.Audience.GetAsync(cfg =>
-        {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
-
-    public Task<GetEmailReportResponse?> GetEmailReportAsync(
-        Action<RequestConfiguration<ReportRequestBuilder.ReportRequestBuilderGetQueryParameters>>? configure = null,
-        string? accessToken = null,
-        RequestOptions? requestOptions = null,
-        CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Email_campaign.Report.GetAsync(cfg =>
-        {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
-
-    public Task<GetEmailPreviewResponse?> GetEmailPreviewAsync(string emailCampaignId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Email_campaign[emailCampaignId].Email_preview.GetAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    // ── Ad Reports ────────────────────────────────────────────────────────────
-
-    public Task<Stream?> DownloadReportAsync(string reportId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_report[reportId].GetAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
-    public Task<ReportMetadatas?> GetReportMetadatasAsync(
-        Action<RequestConfiguration<Ad_report_metadataRequestBuilder.Ad_report_metadataRequestBuilderGetQueryParameters>>? configure = null,
-        string? accessToken = null,
-        RequestOptions? requestOptions = null,
-        CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_report_metadata.GetAsync(cfg =>
-        {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
-
-    public Task<ReportMetadata?> GetReportMetadataAsync(
+    /// <summary>
+    /// This call retrieves metadata that details the fields used by a specific Promoted Listings report type. Use the <b>report_type</b> path parameter to indicate metadata to retrieve.
+    /// This method does not use a request payload.
+    /// <b>Note:</b> The reporting of some data related to sales and ad-fees may require a 72-hour (<b>maximum</b>) adjustment period which is often referred to as the <i>Reconciliation Period</i>. Such adjustment periods should, on average, be minimal. However, at any given time, the <b>payments</b> tab may be used to view those amounts that have actually been charged.
+    /// </summary>
+    public Task<ReportMetadata?> GetReportMetadataForReportTypeAsync(
         string reportType,
-        Action<RequestConfiguration<WithReport_typeItemRequestBuilder.WithReport_typeItemRequestBuilderGetQueryParameters>>? configure = null,
+        string? fundingModel = null,
+        string? channel = null,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_report_metadata[reportType].GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_report_metadata[reportType].GetAsync(cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            if (fundingModel is not null)
+            {
+                cfg.QueryParameters.FundingModel = fundingModel;
+            }
+            if (channel is not null)
+            {
+                cfg.QueryParameters.Channel = channel;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    // ── Ad Report Tasks ───────────────────────────────────────────────────────
-
-    public Task CreateReportTaskAsync(CreateReportTask body, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_report_task.PostAsync(body, cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
-
+    /// <summary>
+    /// This method returns information on all the existing report tasks related to a seller.
+    /// Use the <b>report_task_statuses</b> query parameter to control which reports to return. You can paginate the result set by specifying a <b>limit</b>, which dictates how many report tasks to return on each page of the response. Use the <b>offset</b> parameter to specify how many reports to skip in the result set before returning the first result.
+    /// Important! </b>"&gt;<b>Important!</b>For <b>ad_report</b> and <b>ad_report_task</b> methods, the API call limit is subject to a per user quota. These API calls can <b>only</b> be executed a maximum of 200 times per hour for each seller/user. If the number of calls per hour exceeds this limit, any new calls will be blocked for the next hour.
+    /// </summary>
     public Task<ReportTaskPagedCollection?> GetReportTasksAsync(
-        Action<RequestConfiguration<Ad_report_taskRequestBuilder.Ad_report_taskRequestBuilderGetQueryParameters>>? configure = null,
+        string? limit = null,
+        string? offset = null,
+        string? reportTaskStatuses = null,
         string? accessToken = null,
         RequestOptions? requestOptions = null,
         CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_report_task.GetAsync(cfg =>
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_report_task.GetAsync(cfg =>
         {
-            configure?.Invoke(cfg);
-            ApplyHeaders(cfg.Headers, requestOptions);
-        }, ct)));
+            if (limit is not null)
+            {
+                cfg.QueryParameters.Limit = limit;
+            }
+            if (offset is not null)
+            {
+                cfg.QueryParameters.Offset = offset;
+            }
+            if (reportTaskStatuses is not null)
+            {
+                cfg.QueryParameters.ReportTaskStatuses = reportTaskStatuses;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task<ReportTask?> GetReportTaskAsync(string reportTaskId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_report_task[reportTaskId].GetAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This method creates a <i>report task</i>, which generates a Promoted Listings report based on the values specified in the call.
+    /// The report is generated based on the criteria you specify, including the report type, the report's dimensions and metrics, the report's start and end dates, the listings to include in the report, and more. <i>Metrics </i>are the quantitative measurements in the report while <i>dimensions</i> specify the attributes of the data included in the reports.
+    /// When creating a report task, you can specify the items you want included in the report. The items you specify, using either <b>listingId</b> or <b>inventoryReference</b> values, must be in a Promoted Listings campaign for them to be included in the report.
+    /// For details on the required and optional fields for each report type, see <see href="/api-docs/sell/static/marketing/pl-reports.html">Promoted Listings reporting</see>.
+    /// This call returns the URL to the report task in the <b>Location</b> response header, and the URL includes the report-task ID.
+    /// Reports often take time to generate and it's common for this call to return an HTTP status of <c>202</c>, which indicates the report is being generated. Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-getreporttasks">getReportTasks</see> (or <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-getreporttask">getReportTask</see> with the report-task ID) to determine the status of a Promoted Listings report. When a report is complete, eBay sets its status to <b>SUCCESS</b> and you can download it using the URL returned in the <b>reportHref</b> field of the <b>getReportTask</b> call. Report files are tab-separated value gzip files with a file extension of <c>.tsv.gz</c>.
+    /// <b>Note:</b> The reporting of some data related to sales and ad-fees may require a 72-hour (<b>maximum</b>) adjustment period which is often referred to as the <i>Reconciliation Period</i>. Such adjustment periods should, on average, be minimal. However, at any given time, the <b>payments</b> tab may be used to view those amounts that have actually been charged.
+    /// <b>Note:</b> This call fails if you don't submit all the required fields for the specified report type. Fields not supported by the specified report type are ignored. Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_report_metadata-getreportmetadata">getReportMetadata</see> to retrieve a list of the fields you need to configure for each Promoted Listings report type.
+    /// Important! </b>"&gt;<b>Important!</b>For <b>ad_report</b> and <b>ad_report_task</b> methods, the API call limit is subject to a per user quota. These API calls can <b>only</b> be executed a maximum of 200 times per hour for each seller/user. If the number of calls per hour exceeds this limit, any new calls will be blocked for the next hour.
+    /// Important! </b>"&gt;<b>Important!</b> The data threshold for a single report is currently 1 million records; if this threshold is exceeded, the report will fail.
+    /// </summary>
+    public Task<Error?> CreateReportTaskAsync(
+        CreateReportTask body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_report_task.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 
-    public Task DeleteReportTaskAsync(string reportTaskId, string? accessToken = null, RequestOptions? requestOptions = null, CancellationToken ct = default)
-        => ExecuteAsync(() => _tokenContext.RunAsync(accessToken, () => _kiota.Ad_report_task[reportTaskId].DeleteAsync(cfg => ApplyHeaders(cfg.Headers, requestOptions), ct)));
+    /// <summary>
+    /// This call returns the details of a specific Promoted Listings report task, as specified by the <b>report_task_id</b> path parameter.
+    /// The report task includes the report criteria (such as the report dimensions, metrics, and included listing) and the report-generation rules (such as starting and ending dates for the specified report task).
+    /// Report-task IDs are generated by eBay when you call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-createreporttask">createReportTask</see>. Get a complete list of a seller's report-task IDs by calling <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-getreporttasks">getReportTasks</see>.
+    /// Important! </b>"&gt;<b>Important!</b>For <b>ad_report</b> and <b>ad_report_task</b> methods, the API call limit is subject to a per user quota. These API calls can <b>only</b> be executed a maximum of 200 times per hour for each seller/user. If the number of calls per hour exceeds this limit, any new calls will be blocked for the next hour.
+    /// </summary>
+    public Task<ReportTask?> GetReportTaskAsync(
+        string reportTaskId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_report_task[reportTaskId].GetAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This call deletes the report task specified by the <b>report_task_id</b> path parameter. This method also deletes any reports generated by the report task.
+    /// Report task IDs are generated by eBay when you call <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-createreporttask">createReportTask</see>. Get a complete list of a seller's report-task IDs by calling <see href="/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-getreporttasks">getReportTasks</see>.
+    /// Important! </b>"&gt;<b>Important!</b>For <b>ad_report</b> and <b>ad_report_task</b> methods, the API call limit is subject to a per user quota. These API calls can <b>only</b> be executed a maximum of 200 times per hour for each seller/user. If the number of calls per hour exceeds this limit, any new calls will be blocked for the next hour.
+    /// </summary>
+    public Task DeleteReportTaskAsync(
+        string reportTaskId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Ad_report_task[reportTaskId].DeleteAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method creates an <b>item price markdown discount</b> (know simply as a "markdown discount") where a discount amount is applied directly to the items included in the discount. Discounts can be specified as either a monetary amount or a percentage off the standard sales price. eBay highlights discounted items by placing teasers for the items throughout the online sales flows.
+    /// Unlike an <see href="/develop/api/sell/marketing_api#sell-marketing_api-item_promotion-createitempromotion">item discount</see>, a markdown discount does not require the buyer meet a "threshold" before the offer takes effect. With markdown discounts, all the buyer needs to do is purchase the item to receive the discount benefit.
+    /// <b>Important:</b> There are some restrictions for which listings are available for price markdown discounts. For details, see <see href="/api-docs/sell/static/marketing/pm-requirements.html">Discounts Manager requirements and restrictions</see>.
+    /// In addition, we recommend you list items at competitive prices before including them in your markdown discounts. For an extensive list of pricing recommendations, see the <b>Growth</b> tab in Seller Hub.
+    /// There are two ways to enable items for markdown discounts:
+    /// - <b>Key-based discounts</b> select items using either the listing IDs or inventory reference IDs of the items you want to discount. Note that if you use inventory reference IDs, you must specify both the <b>inventoryReferenceId</b> and the associated <b>inventoryReferenceType</b> of the item(s) you want to include.
+    /// - <b>Rule-based discounts</b> select items using a list of eBay category IDs or seller Store category IDs. Rules can further constrain items being discounted by minimum and maximum prices, brands, and item conditions.
+    /// New discounts must be created in either a <c>DRAFT</c> or a <c>SCHEDULED</c> state. Use the DRAFT state when you are initially creating a discount and you want to be sure it's correctly configured before scheduling it to run. When you create a discount, the <b>promotionId</b> is returned in the <b>Location</b> response header. Use this ID to reference the discount in subsequent requests (such as to schedule a discount that's in a DRAFT state).
+    /// <b>Tip:</b> Refer to <see href="/api-docs/sell/static/marketing/promotions-manager.html">Discounts Manager</see> in the <i>Selling Integration Guide</i> for details and examples showing how to create and manage seller discounts.
+    /// Markdown discounts are available on all eBay marketplaces. For more information, see <see href="/api-docs/sell/static/marketing/pm-requirements.html">Discounts Manager requirements and restrictions</see>.
+    /// </summary>
+    public Task CreateItemPriceMarkdownPromotionAsync(
+        ItemPriceMarkdown body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Item_price_markdown.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method returns the complete details of the item price markdown discount that's indicated by the <b>promotion_id</b> path parameter.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-promotion-getpromotions">getPromotions</see> to retrieve the IDs of a seller's discounts.
+    /// </summary>
+    public Task<ItemPriceMarkdown?> GetItemPriceMarkdownPromotionAsync(
+        string promotionId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Item_price_markdown[promotionId].GetAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method updates the specified item price markdown discount with the new configuration that you supply in the payload of the request. Specify the discount you want to update using the <b>promotion_id</b> path parameter. Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-promotion-getpromotions">getPromotions</see> to retrieve the IDs of a seller's discounts.
+    /// When updating a discount, supply all the fields that you used to configure the original discount (and not just the fields you are updating). eBay replaces the specified discount with the values you supply in the update request and if you don't pass a field that currently has a value, the update request fails.
+    /// The parameters you are allowed to update with this request depend on the status of the discount you're updating:
+    /// - DRAFT or SCHEDULED discounts: You can update any of the parameters in these discounts that have not yet started to run, including the <b>discountRules</b>.
+    /// - RUNNING discounts: You can change the <b>endDate</b> and the item's inventory but you cannot change the discount or the start date.
+    /// - ENDED discounts: Nothing can be changed.
+    /// </summary>
+    public Task UpdateItemPriceMarkdownPromotionAsync(
+        string promotionId,
+        ItemPriceMarkdown body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Item_price_markdown[promotionId].PutAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method deletes the item price markdown discount specified by the <b>promotion_id</b> path parameter. Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-promotion-getpromotions">getPromotions</see> to retrieve the IDs of a seller's discounts.
+    /// You can delete any discount with the exception of those that are currently active (RUNNING). To end a running discount, call <see href="/develop/api/sell/marketing_api#sell-marketing_api-item_price_markdown-updateitempricemarkdownpromotion">updateItemPriceMarkdownPromotion</see> and adjust the <b>endDate</b> field as appropriate.
+    /// </summary>
+    public Task DeleteItemPriceMarkdownPromotionAsync(
+        string promotionId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Item_price_markdown[promotionId].DeleteAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method creates an <b>item discount</b>, where the buyer receives a discount when they meet the specific buying criteria. Known here as "threshold discounts", these discounts trigger when a threshold is met.
+    /// eBay highlights discounted items by placing teasers for the discounted items throughout the online buyer flows.
+    /// <i>Discounts</i> are specified as either a monetary amount or a percentage off the standard sales price of a listing, letting you offer deals such as "Buy 1 Get 1" and "Buy $50, get 20% off".
+    /// <i>Volume pricing</i> discounts increase the value of the discount as the buyer increases the quantity they purchase.
+    /// <i>Coded Coupons</i> provide unique codes that a buyer can use during checkout to receive a discount. The seller can specify the number of times a buyer can use the coupon and the maximum amount across all purchases that can be discounted using the coupon. The coupon code can also be made public (appearing on the seller's Offer page, search pages, the item listing, and the checkout page) or private (only on the seller's Offer page, but the seller can include the code in email and social media).
+    /// <b>Note</b>: Coded Coupons are currently available in the US, UK, DE, FR, IT, ES, and AU marketplaces.
+    /// There are two ways to add items to a threshold discount:
+    /// - <b>Key-based discounts</b> select items using either the listing IDs or inventory reference IDs of the items you want to discount. Note that if you use inventory reference IDs, you must specify both the <b>inventoryReferenceId</b> and the associated <b>inventoryReferenceType</b> of the item(s) you want to be discounted.
+    /// - <b>Rule-based discounts</b> select items using a list of eBay category IDs or seller Store category IDs. Rules can further constrain the items being discounted by minimum and maximum prices, brands, and item conditions.
+    /// You must create a new discount in either a <c>DRAFT</c> or <c>SCHEDULED</c> state. Use the DRAFT state when you are initially creating a discount and you want to be sure it's correctly configured before scheduling it to run. When you create a discount, the promotion ID is returned in the <b>Location</b> response header. Use this ID to reference the discount in subsequent requests.
+    /// <b>Tip:</b> Refer to the <see href="/api-docs/sell/static/marketing/promotions-manager.html">Selling Integration Guide</see> for details and examples showing how to create and manage threshold discounts using the Discounts Manager.
+    /// For information on the eBay marketplaces that support item discounts, see <see href="/api-docs/sell/static/marketing/pm-requirements.html">Discounts Manager requirements and restrictions</see>.
+    /// </summary>
+    public Task<BaseResponse?> CreateItemPromotionAsync(
+        ItemPromotion body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Item_promotion.PostAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method returns the complete details of the threshold discount specified by the <b>promotion_id</b> path parameter. Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-promotion-getpromotions">getPromotions</see> to retrieve the IDs of a seller's discounts.
+    /// </summary>
+    public Task<ItemPromotionResponse?> GetItemPromotionAsync(
+        string promotionId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Item_promotion[promotionId].GetAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method updates the specified threshold discount with the new configuration that you supply in the request. Indicate the discount you want to update using the <b>promotion_id</b> path parameter.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-promotion-getpromotions">getPromotions</see> to retrieve the IDs of a seller's discounts.
+    /// When updating a discount, supply all the fields that you used to configure the original discount (and not just the fields you are updating). eBay replaces the specified discount with the values you supply in the update request and if you don't pass a field that currently has a value, the update request will fail.
+    /// The parameters you are allowed to update with this request depend on the status of the discount you're updating:
+    /// - DRAFT or SCHEDULED discounts: You can update any of the parameters in these discounts that have not yet started to run, including the <b>discountRules</b>.
+    /// - RUNNING or PAUSED discounts: You can change the <b>endDate</b> and the item's inventory but you cannot change the discount or the start date.
+    /// - ENDED discounts: Nothing can be changed.
+    /// <b>Tip:</b> When updating a <c>RUNNING</c> or <c>PAUSED</c> discount, set the <b>status</b> field to <c>SCHEDULED</c> for the update request. When the discount is updated, the previous status (either <c>RUNNING</c> or <c>PAUSED</c>) is retained.
+    /// </summary>
+    public Task<BaseResponse?> UpdateItemPromotionAsync(
+        string promotionId,
+        ItemPromotion body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Item_promotion[promotionId].PutAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method deletes the threshold discount specified by the <b>promotion_id</b> path parameter. Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-promotion-getpromotions">getPromotions</see> to retrieve the IDs of a seller's discounts.
+    /// You can delete any discount with the exception of those that are currently active (RUNNING). To end a running threshold discount, call <see href="/develop/api/sell/marketing_api#sell-marketing_api-item_promotion-updateitempromotion">updateItemPromotion</see> and adjust the <b>endDate</b> field as appropriate.
+    /// </summary>
+    public Task DeleteItemPromotionAsync(
+        string promotionId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Item_promotion[promotionId].DeleteAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method returns the set of listings associated with the <b>promotion_id</b> specified in the path parameter. Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-promotion-getpromotions">getPromotions</see> to retrieve the IDs of a seller's discounts.
+    /// The listing details are returned in a paginated set and you can control and results returned using the following query parameters: <b>limit</b>, <b>offset</b>, <b>q</b>, <b>sort</b>, and <b>status</b>.
+    /// - <b>Maximum associated listings returned:</b> 200
+    /// - <b>Default number of listings returned:</b> 200
+    /// </summary>
+    public Task<ItemsPagedCollection?> GetListingSetAsync(
+        string promotionId,
+        string? limit = null,
+        string? offset = null,
+        string? q = null,
+        string? sort = null,
+        string? status = null,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Promotion[promotionId].Get_listing_set.GetAsync(cfg =>
+        {
+            if (limit is not null)
+            {
+                cfg.QueryParameters.Limit = limit;
+            }
+            if (offset is not null)
+            {
+                cfg.QueryParameters.Offset = offset;
+            }
+            if (q is not null)
+            {
+                cfg.QueryParameters.Q = q;
+            }
+            if (sort is not null)
+            {
+                cfg.QueryParameters.Sort = sort;
+            }
+            if (status is not null)
+            {
+                cfg.QueryParameters.Status = status;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method returns a list of a seller's undeleted discounts.
+    /// The call returns up to 200 currently-available discounts on the specified marketplace. While the response body does not include the discount's <b>discountRules</b> or <b>inventoryCriterion</b> containers, it does include the <b>promotionHref</b> (which you can use to retrieve the complete details of the discount).
+    /// Use query parameters to sort and filter the results by the number of discounts to return, the discount state or type, and the eBay marketplace. You can also supply keywords to limit the response to the discounts that contain that keywords in the title of the discount.
+    /// <b>Maximum returned:</b> 200
+    /// </summary>
+    public Task<PromotionsPagedCollection?> GetPromotionsAsync(
+        string marketplaceId,
+        string? limit = null,
+        string? offset = null,
+        string? promotionStatus = null,
+        string? promotionType = null,
+        string? q = null,
+        string? sort = null,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Promotion.GetAsync(cfg =>
+        {
+            cfg.QueryParameters.MarketplaceId = marketplaceId;
+            if (limit is not null)
+            {
+                cfg.QueryParameters.Limit = limit;
+            }
+            if (offset is not null)
+            {
+                cfg.QueryParameters.Offset = offset;
+            }
+            if (promotionStatus is not null)
+            {
+                cfg.QueryParameters.PromotionStatus = promotionStatus;
+            }
+            if (promotionType is not null)
+            {
+                cfg.QueryParameters.PromotionType = promotionType;
+            }
+            if (q is not null)
+            {
+                cfg.QueryParameters.Q = q;
+            }
+            if (sort is not null)
+            {
+                cfg.QueryParameters.Sort = sort;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method pauses a currently-active (RUNNING) threshold discount and changes the state of the discount from <c>RUNNING</c> to <c>PAUSED</c>. Pausing a discount makes the discount temporarily unavailable to buyers and any currently-incomplete transactions will not receive the offer until the discount is resumed. Also, discount teasers are not displayed when a discount is paused.
+    /// Pass the ID of the discount you want to pause using the <b>promotion_id</b> path parameter. Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-promotion-getpromotions">getPromotions</see> to retrieve the IDs of the seller's discounts.
+    /// <b>Note:</b> You can only pause threshold discounts (you cannot pause markdown discounts).
+    /// </summary>
+    public Task PausePromotionAsync(
+        string promotionId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Promotion[promotionId].Pause.PostAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method restarts a threshold discount that was previously paused and changes the state of the discount from <c>PAUSED</c> to <c>RUNNING</c>. Only discounts that have been previously paused can be resumed. Resuming a discount reinstates the teasers and any transactions that were in motion before the discount was paused will again be eligible for the discount.
+    /// Pass the ID of the discount you want to resume using the <b>promotion_id</b> path parameter. Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-promotion-getpromotions">getPromotions</see> to retrieve the IDs of the seller's discounts.
+    /// </summary>
+    public Task ResumePromotionAsync(
+        string promotionId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Promotion[promotionId].Resume.PostAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method generates a report that lists the seller's running, paused, and ended discounts for the specified eBay marketplace. The result set can be filtered by the discount status and the number of results to return. You can also supply <i>keywords</i> to limit the report to discounts that contain the specified keywords.
+    /// Specify the eBay marketplace for which you want the report run using the <b>marketplace_id</b> query parameter. Supply additional query parameters to control the report as needed.
+    /// </summary>
+    public Task<PromotionsReportPagedCollection?> GetPromotionReportsAsync(
+        string marketplaceId,
+        string? limit = null,
+        string? offset = null,
+        string? promotionStatus = null,
+        string? promotionType = null,
+        string? q = null,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Promotion_report.GetAsync(cfg =>
+        {
+            cfg.QueryParameters.MarketplaceId = marketplaceId;
+            if (limit is not null)
+            {
+                cfg.QueryParameters.Limit = limit;
+            }
+            if (offset is not null)
+            {
+                cfg.QueryParameters.Offset = offset;
+            }
+            if (promotionStatus is not null)
+            {
+                cfg.QueryParameters.PromotionStatus = promotionStatus;
+            }
+            if (promotionType is not null)
+            {
+                cfg.QueryParameters.PromotionType = promotionType;
+            }
+            if (q is not null)
+            {
+                cfg.QueryParameters.Q = q;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// <b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.
+    /// This method generates a report that summarizes the seller's discounts for the specified eBay marketplace. The report returns information on <c>RUNNING</c>, <c>PAUSED</c>, and <c>ENDED</c> discounts (deleted reports are not returned) and summarizes the seller's campaign performance for all discounts on a given site.
+    /// For information about summary reports, see <see href="/api-docs/sell/static/marketing/pm-summary-report.html">Reading the item discount Summary report</see>.
+    /// </summary>
+    public Task<SummaryReportResponse?> GetPromotionSummaryReportAsync(
+        string marketplaceId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Promotion_summary_report.GetAsync(cfg =>
+        {
+            cfg.QueryParameters.MarketplaceId = marketplaceId;
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method retrieves a list of email campaigns from a seller's eBay store.
+    /// Users can filter the results by <see href="/develop/api/sell/marketing_api#sell-marketing_api-email_campaign-getemailcampaigns.campaigntypeenum">email campaign type</see>, <see href="/develop/api/sell/marketing_api#sell-marketing_api-email_campaign-getemailcampaigns.emailcampaignstatusenum">email campaign status</see>, and <see href="/develop/api/sell/request_headers#marketplace-id-values">marketplace ID</see> using the <c>q</c> query parameter.
+    /// </summary>
+    public Task<GetEmailCampaignsResponse?> GetEmailCampaignsAsync(
+        string? limit = null,
+        string? offset = null,
+        string? q = null,
+        string? sort = null,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Email_campaign.GetAsync(cfg =>
+        {
+            if (limit is not null)
+            {
+                cfg.QueryParameters.Limit = limit;
+            }
+            if (offset is not null)
+            {
+                cfg.QueryParameters.Offset = offset;
+            }
+            if (q is not null)
+            {
+                cfg.QueryParameters.Q = q;
+            }
+            if (sort is not null)
+            {
+                cfg.QueryParameters.Sort = sort;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method creates a new email campaign. An eBay store owner can create six different types of email campaigns: Welcome, New products &amp; collections, Coupon, Sale event + markdown, Order discount, and Volume pricing.
+    /// A successful <b>createEmailCampaign</b> request returns the <b>emailCampaignId</b> assigned to the new email campaign.
+    /// The fields <b>emailCampaignType</b>, <b>audienceCodes</b>, <b>itemSelectMode</b>, <b>subject</b>, and <b>personalizedMessage</b> are required for all email campaign types.
+    /// Specific email campaign types have required values for additional fields. For more information on the email campaign types, see the <see href="/api-docs/sell/static/marketing/store-email-campaigns.html#email-campain-types">Store Email Campaigns</see> section of the Selling Integration Guide.
+    /// </summary>
+    public Task<CreateEmailCampaignResponse?> CreateEmailCampaignAsync(
+        string xEBAYCMARKETPLACEID,
+        CreateEmailCampaignRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Email_campaign.PostAsync(body, cfg =>
+        {
+            cfg.Headers.TryAdd("X-EBAY-C-MARKETPLACE-ID", xEBAYCMARKETPLACEID);
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method returns the details of a single email campaign specified by the <b>email_campaign_id</b> path parameter.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-email_campaign-getemailcampaigns">getEmailCampaigns</see> to retrieve a list of all email campaigns from a seller's eBay store.
+    /// </summary>
+    public Task<GetEmailCampaignResponse?> GetEmailCampaignAsync(
+        string emailCampaignId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Email_campaign[emailCampaignId].GetAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method lets users update an existing email campaign. Pass the <b>emailCampaignId</b> in the request URL and specify the changes to field values in the request payload.
+    /// <b>Note: </b>You can only update the custom fields of an email campaign. Fixed values, such as the <b>emailCampaignType</b>, cannot be changed. For full specifications of fixed values for each email campaign type, see the <see href="/develop/api/sell/marketing_api#sell-marketing_api-email_campaign-createemailcampaign">createEmailCampaign</see> method documentation.
+    /// </summary>
+    public Task<UpdateEmailCampaignResponse?> UpdateEmailCampaignAsync(
+        string emailCampaignId,
+        UpdateCampaignRequest body,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Email_campaign[emailCampaignId].PutAsync(body, cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method deletes the email campaign specified by the <b>email_campaign_id</b> path parameter.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-email_campaign-getemailcampaigns">getEmailCampaigns</see> to retrieve all of the seller's email campaigns. Use the <b>email_campaign_id</b> of the desired email campaign in the response as the path parameter for this request.
+    /// </summary>
+    public Task<DeleteEmailCampaignResponse?> DeleteEmailCampaignAsync(
+        string emailCampaignId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Email_campaign[emailCampaignId].DeleteAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method retrieves all available email newsletter audiences for the <see href="/develop/api/sell/marketing_api#sell-marketing_api-email_campaign-getemailcampaigns.campaigntypeenum">email campaign type</see> specified by the <b>emailCampaignType</b> path parameter.
+    /// Use the optional <b>limit</b> and <b>offset</b> path parameters to paginate the results and to control which records are returned, respectively.
+    /// </summary>
+    public Task<GetEmailCampaignAudiencesResponse?> GetAudiencesAsync(
+        string emailCampaignType,
+        string? limit = null,
+        string? offset = null,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Email_campaign.Audience.GetAsync(cfg =>
+        {
+            cfg.QueryParameters.EmailCampaignType = emailCampaignType;
+            if (limit is not null)
+            {
+                cfg.QueryParameters.Limit = limit;
+            }
+            if (offset is not null)
+            {
+                cfg.QueryParameters.Offset = offset;
+            }
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method returns a preview of the email sent by the email campaign indicated by the <b>email_campaign_id</b> path parameter.
+    /// Call <see href="/develop/api/sell/marketing_api#sell-marketing_api-email_campaign-getemailcampaigns">getEmailCampaigns</see> to obtain a list of email campaigns. Use the <b>emailCampaignId</b> value of the desired email campaign as the <b>email_campaign_id</b> path parameter value.
+    /// If this call is executed successfully, the response returns a <b>content</b> field that contains the raw HTML code of the email campaign that can then be rendered anywhere.
+    /// <b>Note:</b> The eBay listings in the email are sorted according to the email campaign sort criteria. The individual listings can change over time, as well.
+    /// The result of the email preview call can be treated as a snapshot of the email campaign taken at the date and time of the <b>renderDate</b> value found in the results of the call.
+    /// </summary>
+    public Task<GetEmailPreviewResponse?> GetEmailPreviewAsync(
+        string emailCampaignId,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Email_campaign[emailCampaignId].Email_preview.GetAsync(cfg =>
+        {
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
+
+    /// <summary>
+    /// This method returns the seller's email campaign performance report for a time period specified by the <b>startDate</b> and <b>endDate</b> path parameters. The maximum date range for a report retrieved by this method is one year.
+    /// <b>Note: </b>The <b>startDate</b> and <b>endDate</b> must be given in UTC format, as shown in the following example:
+    /// <c>sell/marketing/v1/email_campaign/report?startDate=2022-11-01T19:09:02.768Z&amp;endDate=2022-12-28T19:09:02.768Z</c>
+    /// The email report returns a list of metrics, such as the number of times an email report has been opened and resulted in clicks.
+    /// </summary>
+    public Task<GetEmailReportResponse?> GetEmailReportAsync(
+        string endDate,
+        string startDate,
+        string? accessToken = null,
+        RequestOptions? requestOptions = null,
+        CancellationToken ct = default)
+        => RestInvocation.CallAsync(
+            _tokenContext,
+            accessToken,
+            () => _kiota.Email_campaign.Report.GetAsync(cfg =>
+        {
+            cfg.QueryParameters.EndDate = endDate;
+            cfg.QueryParameters.StartDate = startDate;
+            RestInvocation.ApplyHeaders(cfg.Headers, _config, requestOptions);
+        }, ct));
 }
