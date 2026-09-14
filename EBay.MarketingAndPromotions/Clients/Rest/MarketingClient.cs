@@ -67,7 +67,7 @@ public sealed class MarketingClient
             headers[k] = new[] { v };
     }
 
-    private async Task<T?> ExecuteAsync<T>(Func<Task<T?>> op)
+    private static async Task<T?> ExecuteAsync<T>(Func<Task<T?>> op)
     {
         try { return await op(); }
         catch (ApiException ex) when (ex.ResponseStatusCode == (int)HttpStatusCode.Unauthorized)
@@ -80,7 +80,7 @@ public sealed class MarketingClient
         }
     }
 
-    private async Task ExecuteAsync(Func<Task> op)
+    private static async Task ExecuteAsync(Func<Task> op)
     {
         try { await op(); }
         catch (ApiException ex) when (ex.ResponseStatusCode == (int)HttpStatusCode.Unauthorized)
