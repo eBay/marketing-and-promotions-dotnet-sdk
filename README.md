@@ -352,7 +352,7 @@ dotnet build EBay.MarketingAndPromotions/EBay.MarketingAndPromotions.csproj
 
 ### Prerequisites
 
-- .NET 10.0 SDK
+- .NET 10 SDK, plus the .NET 8 and .NET 9 SDKs so every target framework can build
 - Kiota CLI tool (auto-installed via dotnet tools)
 
 ### Building
