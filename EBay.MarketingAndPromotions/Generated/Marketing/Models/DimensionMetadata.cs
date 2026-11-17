@@ -39,7 +39,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public string DimensionKey { get; set; }
 #endif
-        /// <summary>An list of annotation keys associated with the specified dimension of the report.</summary>
+        /// <summary>A list of annotation keys associated with the specified dimension of the report.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public List<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.DimensionKeyAnnotation>? DimensionKeyAnnotations { get; set; }

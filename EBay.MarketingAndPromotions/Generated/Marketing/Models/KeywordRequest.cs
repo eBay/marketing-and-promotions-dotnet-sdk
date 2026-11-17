@@ -22,7 +22,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// A type that defines the fields used by the &lt;b&gt;keyword&lt;/b&gt; requests.
+    /// A type that defines the fields used by the &lt;b&gt;Keyword&lt;/b&gt; method.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class KeywordRequest : IAdditionalDataHolder, IParsable

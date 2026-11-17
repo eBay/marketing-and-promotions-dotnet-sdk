@@ -29,7 +29,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
     {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
-        /// <summary>Name of the entity that threw the error.</summary>
+        /// <summary>This is the name of the parameter/field for which the error was thrown.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Name { get; set; }
@@ -37,7 +37,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public string Name { get; set; }
 #endif
-        /// <summary>The value that was set for the element specified in the &lt;b&gt;name&lt;/b&gt; field.</summary>
+        /// <summary>This is the value of the parameter/field for which the error was thrown.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Value { get; set; }

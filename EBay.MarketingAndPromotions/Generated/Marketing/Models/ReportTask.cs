@@ -129,7 +129,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public string ReportId { get; set; }
 #endif
-        /// <summary>An eBay-assigned name for the report that&apos;s created by the &lt;b&gt;createReportTask&lt;/b&gt; call. This name is unique for the seller.</summary>
+        /// <summary>An eBay-assigned name for the report that&apos;s created by the &lt;b&gt;createReportTask&lt;/b&gt; method. This name is unique for the seller.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? ReportName { get; set; }

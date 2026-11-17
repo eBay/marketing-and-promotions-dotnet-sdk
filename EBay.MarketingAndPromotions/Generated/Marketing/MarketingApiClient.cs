@@ -27,6 +27,7 @@ using EBay.MarketingAndPromotions.Generated.Marketing.Negative_keyword;
 using EBay.MarketingAndPromotions.Generated.Marketing.Promotion;
 using EBay.MarketingAndPromotions.Generated.Marketing.Promotion_report;
 using EBay.MarketingAndPromotions.Generated.Marketing.Promotion_summary_report;
+using EBay.MarketingAndPromotions.Generated.Marketing.Seller_promotional_offers;
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
 using Microsoft.Kiota.Serialization.Form;
@@ -109,6 +110,11 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing
         public global::EBay.MarketingAndPromotions.Generated.Marketing.Promotion_summary_report.Promotion_summary_reportRequestBuilder Promotion_summary_report
         {
             get => new global::EBay.MarketingAndPromotions.Generated.Marketing.Promotion_summary_report.Promotion_summary_reportRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>Seller promotional offers</summary>
+        public global::EBay.MarketingAndPromotions.Generated.Marketing.Seller_promotional_offers.Seller_promotional_offersRequestBuilder Seller_promotional_offers
+        {
+            get => new global::EBay.MarketingAndPromotions.Generated.Marketing.Seller_promotional_offers.Seller_promotional_offersRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
         /// Instantiates a new <see cref="global::EBay.MarketingAndPromotions.Generated.Marketing.MarketingApiClient"/> and sets the default values.

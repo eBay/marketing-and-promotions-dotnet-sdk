@@ -20,35 +20,17 @@ namespace EBay.MarketingAndPromotions.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    /// <summary>
+    /// Registers <paramref name="config"/> and a singleton <see cref="MarketingAndPromotionsClient"/>. The client
+    /// owns its HTTP connections and is disposed with the container. Reach the individual APIs through
+    /// its properties.
+    /// </summary>
     public static IServiceCollection AddMarketingAndPromotionsSdk(
         this IServiceCollection services,
         MarketingAndPromotionsConfiguration config)
     {
         services.AddSingleton(config);
-        services.AddSingleton<ITokenContext, AsyncLocalTokenContext>();
-
-        foreach (var endpoint in MarketingAndPromotionsClient.RestEndpointNames)
-        {
-            var id = endpoint.ApiId;
-            services.AddHttpClient(endpoint.HttpClientName, (sp, c) =>
-                    c.BaseAddress = new Uri(sp.GetRequiredService<MarketingAndPromotionsConfiguration>().RestBaseUrl(id)))
-                .ConfigureHttpClient((sp, c) =>
-                    c.Timeout = sp.GetRequiredService<MarketingAndPromotionsConfiguration>().HttpTimeout)
-                .AddHttpMessageHandler(sp =>
-                    new DiagnosticLoggingHandler(sp.GetRequiredService<MarketingAndPromotionsConfiguration>()));
-        }
-
-        services.AddScoped<MarketingAndPromotionsClient>(sp =>
-        {
-            var factory = sp.GetRequiredService<IHttpClientFactory>();
-            return new MarketingAndPromotionsClient(
-                sp.GetRequiredService<MarketingAndPromotionsConfiguration>(),
-                factory,
-                sp.GetRequiredService<ITokenContext>());
-        });
-
-        services.AddScoped(sp => sp.GetRequiredService<MarketingAndPromotionsClient>().Marketing);
-        services.AddScoped(sp => sp.GetRequiredService<MarketingAndPromotionsClient>().Recommendation);
+        services.AddSingleton(_ => new MarketingAndPromotionsClient(config));
         return services;
     }
 }
