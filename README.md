@@ -4,6 +4,7 @@ A production-ready .NET SDK for eBay Marketing and Recommendation APIs, providin
 
 ## Features
 
+- **Target frameworks**: .NET Framework 4.7.2, .NET 8, .NET 9 and .NET 10
 - **Marketing API**: Complete advertising campaign management (81+ operations)
   - Ad campaigns and ad management
   - Keywords and negative keywords
@@ -141,57 +142,23 @@ var recommendations = await client.Recommendation.FindListingRecommendationsAsyn
 
 ### 3. Dependency Injection (ASP.NET Core)
 
+`AddMarketingAndPromotionsSdk` registers the configuration and one shared `MarketingAndPromotionsClient` (a singleton that owns its HTTP connections and is disposed with the container). Inject the client and use its properties for the individual APIs:
+
 ```csharp
-using MarketingAndPromotions.Extensions;
-using MarketingAndPromotions.Configuration;
+using EBay.MarketingAndPromotions;
+using EBay.MarketingAndPromotions.Configuration;
+using EBay.MarketingAndPromotions.Extensions;
 
-// In Program.cs or Startup.cs
-builder.Services.AddSingleton<ITokenRefreshHandler, MyTokenRefreshHandler>();
-
-builder.Services.AddMarketingAndPromotionsSdk(config =>
+builder.Services.AddMarketingAndPromotionsSdk(new MarketingAndPromotionsConfiguration
 {
-    config.TokenRefreshHandler = sp.GetRequiredService<ITokenRefreshHandler>();
+    AccessToken = builder.Configuration["EBay:AccessToken"]
 });
 
-// Inject the SDK or sub-clients
-public class MarketingController : ControllerBase
-{
-    private readonly MarketingAndPromotionsClient _sdk;
-    private readonly MarketingClient _marketing;
-    private readonly RecommendationClient _recommendation;
-
-    public MarketingController(
-        MarketingAndPromotionsClient sdk,
-        MarketingClient marketing,
-        RecommendationClient recommendation)
-    {
-        _sdk = sdk;
-        _marketing = marketing;
-        _recommendation = recommendation;
-    }
-
-    [HttpGet("campaigns")]
-    public async Task<IActionResult> GetCampaigns()
-    {
-        var campaigns = await _marketing.GetCampaignsAsync();
-        return Ok(campaigns);
-    }
-
-    [HttpPost("campaigns")]
-    public async Task<IActionResult> CreateCampaign([FromBody] string campaignJson)
-    {
-        var campaign = await _marketing.CreateCampaignAsync(campaignJson);
-        return Ok(campaign);
-    }
-
-    [HttpGet("recommendations")]
-    public async Task<IActionResult> GetRecommendations()
-    {
-        var recommendations = await _recommendation.FindListingRecommendationsAsync();
-        return Ok(recommendations);
-    }
-}
+app.MapGet("/example", async (MarketingAndPromotionsClient sdk) =>
+    Results.Ok(await sdk.Marketing.GetCampaignsAsync()));
 ```
+
+To route requests through your own handler (proxy, client certificates, a test double), pass it to the constructor: `new MarketingAndPromotionsClient(config, handler)`. The handler is shared by all APIs and is not disposed by the client.
 
 ## API Operations
 
@@ -297,6 +264,25 @@ The recommendation API returns:
 - **promoteWithAd indicator**: Whether eBay recommends promoting the listing
 - **bidPercentage**: Current trending bid percentage for similar promoted items
 
+## Trusted hosts and sandbox
+
+The access token is only sent to trusted hosts: the eBay hosts in `MarketingAndPromotionsConfiguration.DefaultAllowedHosts` (production and their `*.sandbox.ebay.com` counterparts) plus any you add to `AllowedHosts`. The sandbox needs no extra configuration:
+
+```csharp
+var config = new MarketingAndPromotionsConfiguration
+{
+    AccessToken = "...",
+    MarketingBaseUrl = "https://api.sandbox.ebay.com/sell/marketing/v1",
+};
+```
+
+Any other host, for example a proxy, has to be added explicitly; the client constructor throws `InvalidOperationException` otherwise:
+
+```csharp
+config.MarketingBaseUrl = "https://ebay-proxy.example.com/sell/marketing/v1";
+config.AllowedHosts.Add("ebay-proxy.example.com");
+```
+
 ## Error Handling
 
 ```csharp
@@ -353,6 +339,7 @@ dotnet build EBay.MarketingAndPromotions/EBay.MarketingAndPromotions.csproj
 ### Prerequisites
 
 - .NET 10 SDK, plus the .NET 8 and .NET 9 SDKs so every target framework can build
+- `net472` builds on any OS (reference assemblies come from NuGet); its tests run on Windows only
 - Kiota CLI tool (auto-installed via dotnet tools)
 
 ### Building
@@ -369,9 +356,8 @@ dotnet pack EBay.MarketingAndPromotions/EBay.MarketingAndPromotions.csproj
 
 ## Dependencies
 
-- **Microsoft.Kiota.Bundle**: REST client generation and runtime
-- **Microsoft.Extensions.DependencyInjection.Abstractions**: DI support
-- **Microsoft.Extensions.Http**: HttpClient factory integration
+- **Microsoft.Kiota.Bundle** (>= 1.22.0): REST runtime
+- **Microsoft.Extensions.DependencyInjection.Abstractions** (>= 6.0.0): `AddMarketingAndPromotionsSdk` registration
 
 ## License
 
