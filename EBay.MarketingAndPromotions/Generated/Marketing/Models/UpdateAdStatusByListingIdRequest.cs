@@ -29,7 +29,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
     {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
-        /// <summary>A unique eBay-assigned ID for an ad group in a campaign that uses the Cost Per Click (CPC) funding model.&lt;br /&gt;&lt;br /&gt;Use the  &lt;a href=&quot;/develop/api/sell/marketing_api#sell-marketing_api-ad_group-getadgroups&quot;&gt;getAdGroups&lt;/a&gt; method to retrieve the ad group IDs for a seller.</summary>
+        /// <summary>A unique eBay-assigned ID for an ad group in a campaign that uses the Cost Per Click (CPC) funding model.&lt;br /&gt;&lt;br /&gt;Use the  &lt;a href=&quot;/api-docs/sell/marketing/resources/adgroup/methods/getAdGroups&quot;&gt;getAdGroups&lt;/a&gt; method to retrieve the ad group IDs for a seller.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? AdGroupId { get; set; }

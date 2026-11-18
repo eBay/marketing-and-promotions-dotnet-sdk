@@ -23,7 +23,7 @@ using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
     /// <summary>
-    /// This type defines the fields returned in an error condition.
+    /// The errors or warnings object type.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class ErrorDetailV3 : ApiException, IAdditionalDataHolder, IParsable

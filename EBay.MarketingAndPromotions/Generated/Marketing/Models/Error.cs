@@ -38,7 +38,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public string Category { get; set; }
 #endif
-        /// <summary>Name for the primary system where the error occurred. This is relevant for application errors.</summary>
+        /// <summary>Name for the primary system where the error occurred.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Domain { get; set; }
@@ -82,7 +82,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public List<string> OutputRefIds { get; set; }
 #endif
-        /// <summary>An array of name/value pairs that describe details the error condition. These are useful when multiple errors are returned.</summary>
+        /// <summary>An array of name/value pairs that describe details the error condition.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public List<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorParameter>? Parameters { get; set; }
@@ -90,7 +90,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public List<global::EBay.MarketingAndPromotions.Generated.Marketing.Models.ErrorParameter> Parameters { get; set; }
 #endif
-        /// <summary>Further helps indicate which subsystem the error is coming from. System subcategories include: Initialization, Serialization, Security, Monitoring, Rate Limiting, etc.</summary>
+        /// <summary>Further helps indicate which subsystem the error is coming from.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Subdomain { get; set; }

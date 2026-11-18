@@ -10,7 +10,7 @@
       "name": "eBay API License Agreement",
       "url": "https://developer.ebay.com/join/api-license-agreement"
     },
-    "version": "v1.24.1"
+    "version": "v1.25.0"
   },
   "servers": [
     {
@@ -21,10 +21,16 @@
           "default": "/sell/marketing/v1"
         }
       }
+    },
+    {
+      "url": "https://api.sandbox.ebay.com{basePath}",
+      "description": "Sandbox",
+      "variables": {
+        "basePath": {
+          "default": "/sell/marketing/v1"
+        }
+      }
     }
-  ],
-  "security": [
-    {}
   ],
   "paths": {
     "/ad_campaign/{campaign_id}/bulk_create_ads_by_inventory_reference": {
@@ -72,7 +78,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -229,6 +235,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "To gain access to Promoted Listings, you must be in good standing with recent sales activity."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -312,7 +323,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -520,6 +531,11 @@
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
                 },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
+                },
                 "36152": {
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
@@ -612,7 +628,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -754,6 +770,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -837,7 +858,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -969,6 +990,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "To gain access to Promoted Listings, you must be in good standing with recent sales activity."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -1052,7 +1078,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1199,6 +1225,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "This operation is not supported when selected adRateStrategy is DYNAMIC for the campaign."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -1282,7 +1313,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1454,6 +1485,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "This operation is not supported when selected adRateStrategy is DYNAMIC for the campaign."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -1537,7 +1573,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1665,6 +1701,11 @@
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
                 },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
+                },
                 "36160": {
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
@@ -1752,7 +1793,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1934,6 +1975,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -2070,7 +2116,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -2457,6 +2503,11 @@
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
                 },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
+                },
                 "36221": {
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
@@ -2696,6 +2747,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -2783,7 +2839,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -3028,6 +3084,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -3111,7 +3172,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -3228,6 +3289,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -3314,7 +3380,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -3643,6 +3709,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "This operation is not supported when selected adRateStrategy is DYNAMIC for the campaign."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -3741,7 +3812,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -4038,6 +4109,11 @@
                   "category": "BUSINESS",
                   "description": "This method is not supported for campaigns with smart targeting type."
                 },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
+                },
                 "36213": {
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
@@ -4113,7 +4189,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -4361,7 +4437,7 @@
                 "36216": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'defaultBid' value {defaultBidValue} is not valid or missing."
+                  "description": "The 'defaultBid' value is required for this call."
                 },
                 "36217": {
                   "domain": "API_MARKETING",
@@ -4425,6 +4501,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "This method is not supported for campaigns with smart targeting type."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 },
                 "36213": {
                   "domain": "API_MARKETING",
@@ -4524,7 +4605,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -4547,7 +4628,7 @@
                 "35041": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'marketplaceId' is required."
+                  "description": "A 'marketplaceId' is required. Supported marketplaces are: {supportedMarketplaces}."
                 },
                 "35045": {
                   "domain": "API_MARKETING",
@@ -4720,7 +4801,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -4748,7 +4829,7 @@
                 "35041": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'marketplaceId' is required."
+                  "description": "A 'marketplaceId' is required. Supported marketplaces are: {supportedMarketplaces}."
                 },
                 "35045": {
                   "domain": "API_MARKETING",
@@ -4910,7 +4991,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success",
+            "description": "OK",
             "headers": {
               "Location": {
                 "schema": {
@@ -5102,6 +5183,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "Another campaign cannot be created at this time, as the user is currently using a feature that only supports one campaign at a time."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -5278,13 +5364,14 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "$ref": "#/components/schemas/MarketplaceIdEnum"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -5585,7 +5672,7 @@
                 "35041": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'marketplaceId' is required."
+                  "description": "A 'marketplaceId' is required. Supported marketplaces are: {supportedMarketplaces}."
                 },
                 "35042": {
                   "domain": "API_MARKETING",
@@ -5796,6 +5883,11 @@
                   "category": "BUSINESS",
                   "description": "Another campaign cannot be created at this time, as the user is currently using a feature that only supports one campaign at a time."
                 },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
+                },
                 "36151": {
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
@@ -5900,7 +5992,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -5971,7 +6063,7 @@
                 "35001": {
                   "domain": "API_MARKETING",
                   "category": "APPLICATION",
-                  "description": "There was a problem with an eBay internal system or process. Contact eBay Developers support for assistance."
+                  "description": "There was a problem with an eBay internal system or process. Contact eBay Developer Technical Support for assistance."
                 },
                 "35002": {
                   "domain": "API_MARKETING",
@@ -6089,6 +6181,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -6241,6 +6338,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -6327,7 +6429,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -6447,7 +6549,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -6673,6 +6775,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "The status of this campaign cannot be modified through this API. Refer to the API call documentation for more information."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -6825,6 +6932,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -6928,7 +7040,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -6951,7 +7063,7 @@
                 "35041": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'marketplaceId' is required."
+                  "description": "A 'marketplaceId' is required. Supported marketplaces are: {supportedMarketplaces}."
                 }
               }
             }
@@ -7074,7 +7186,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -7112,7 +7224,7 @@
                 "35041": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'marketplaceId' is required."
+                  "description": "A 'marketplaceId' is required. Supported marketplaces are: {supportedMarketplaces}."
                 },
                 "35045": {
                   "domain": "API_MARKETING",
@@ -7228,7 +7340,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -7252,7 +7364,7 @@
                 "35041": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'marketplaceId' is required."
+                  "description": "A 'marketplaceId' is required. Supported marketplaces are: {supportedMarketplaces}."
                 },
                 "35135": {
                   "domain": "API_MARKETING",
@@ -7296,7 +7408,7 @@
                 "35057": {
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
-                  "description": "The listing Id {listingId} does not belong to the seller making this call"
+                  "description": "The listing ID {listingId} does not belong to the seller making this call."
                 },
                 "35068": {
                   "domain": "API_MARKETING",
@@ -7517,6 +7629,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "The 'adRateStrategy' of this campaign cannot be modified through this API. Refer to the API call documentation for more information."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -7742,6 +7859,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "A 'biddingStrategy' cannot be supplied for smart targeting campaigns. Please either remove 'biddingStrategy' from the request to create a smart targeting campaign or supply another value for 'campaignTargetingType'."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -7785,7 +7907,7 @@
         "tags": [
           "campaign"
         ],
-        "description": "This method updates the daily budget for a priority strategy campaign that uses the Cost Per Click (CPC) funding model.<br /><br />A click occurs when an eBay user finds and clicks on the sellerÃÂ¢ÃÂÃÂs listing (within the search results) after using a keyword that the seller has created for the campaign. For each ad in an ad group in the campaign, each click triggers a cost, which gets subtracted from the campaignÃÂ¢ÃÂÃÂs daily budget. If the cost of the clicks exceeds the daily budget, the Promoted Listings campaign will be paused until the next day.<br /><br />Specify the <b>campaign_id</b> as a path parameter. You can retrieve the campaign IDs for a seller by calling the <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns\">getCampaigns</a> method.<br><br><span class=\"tablenote\"><b>Note:</b> The daily budget for a campaign can only be updated 15 times per day. If this limit is exceeded, an error will occur and you will be blocked from updating the  budget until the next day.</span>",
+        "description": "This method updates the daily budget for a priority strategy campaign that uses the Cost Per Click (CPC) funding model.<br /><br />A click occurs when an eBay user finds and clicks on the seller's listing (within the search results) after using a keyword that the seller has created for the campaign. For each ad in an ad group in the campaign, each click triggers a cost, which gets subtracted from the campaign's daily budget. If the cost of the clicks exceeds the daily budget, the Promoted Listings campaign will be paused until the next day.<br /><br />Specify the <b>campaign_id</b> as a path parameter. You can retrieve the campaign IDs for a seller by calling the <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-campaign-getcampaigns\">getCampaigns</a> method.<br><br><span class=\"tablenote\"><b>Note:</b> The daily budget for a campaign can only be updated 15 times per day. If this limit is exceeded, an error will occur and you will be blocked from updating the  budget until the next day.</span>",
         "operationId": "updateCampaignBudget",
         "parameters": [
           {
@@ -7825,7 +7947,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -7943,6 +8065,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 },
                 "36153": {
                   "domain": "API_MARKETING",
@@ -8209,6 +8336,11 @@
                   "category": "BUSINESS",
                   "description": "The 'campaignName' of this campaign cannot be modified through this API. Refer to the API call documentation for more information."
                 },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
+                },
                 "36408": {
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
@@ -8296,7 +8428,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -8472,6 +8604,11 @@
                   "category": "BUSINESS",
                   "description": "This method is not supported for campaigns with smart targeting type."
                 },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
+                },
                 "36316": {
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
@@ -8574,7 +8711,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -8715,6 +8852,11 @@
                   "category": "BUSINESS",
                   "description": "This method is not supported for campaigns with smart targeting type."
                 },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
+                },
                 "36316": {
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
@@ -8828,7 +8970,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -9149,6 +9291,11 @@
                   "category": "BUSINESS",
                   "description": "This method is not supported for campaigns with smart targeting type."
                 },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
+                },
                 "36319": {
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
@@ -9229,7 +9376,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -9394,7 +9541,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -9537,6 +9684,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "This method is not supported for campaigns with smart targeting type."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -9609,7 +9761,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -9707,7 +9859,7 @@
                 "36337": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "You have exceeded the maximum number of negative keyword requests in a bulk. Only {maxSupportedNegativeKeywordRequestNumberInBulk} Ids are supported per call."
+                  "description": "You have exceeded the maximum number of negative keyword requests in a bulk. Only {maxSupportedNegativeKeywordRequestNumberInBulk} IDs are supported per call."
                 },
                 "36338": {
                   "domain": "API_MARKETING",
@@ -9762,6 +9914,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "This method is not supported for campaigns with smart targeting type."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -9829,7 +9986,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -9862,7 +10019,7 @@
                 "36337": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "You have exceeded the maximum number of negative keyword requests in a bulk. Only {maxSupportedNegativeKeywordRequestNumberInBulk} Ids are supported per call."
+                  "description": "You have exceeded the maximum number of negative keyword requests in a bulk. Only {maxSupportedNegativeKeywordRequestNumberInBulk} IDs are supported per call."
                 },
                 "36340": {
                   "domain": "API_MARKETING",
@@ -9922,6 +10079,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -10336,6 +10498,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "This method is not supported for campaigns with smart targeting type."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -10391,7 +10558,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -10540,7 +10707,7 @@
         },
         "responses": {
           "204": {
-            "description": "Success",
+            "description": "No Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -10613,6 +10780,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -10651,7 +10823,7 @@
         "tags": [
           "ad_report"
         ],
-        "description": "This call downloads the report as specified by the <b>report_id</b> path parameter.  <br><br>Call <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-createreporttask\" title=\"createReportTask API docs\">createReportTask</a> to schedule and generate a Promoted Listings report. All date values are returned in UTC format (<code>yyyy-MM-ddThh:mm:ss.sssZ</code>).<br/><br/><span class=\"tablenote\"><b>Note:</b> The reporting of some data related to sales and ad-fees may require a 72-hour (<b>maximum</b>) adjustment period which is often referred to as the <i>Reconciliation Period</i>. Such adjustment periods should, on average, be minimal. However, at any given time, the <b>payments</b> tab may be used to view those amounts that have actually been charged.</span><br/><div class=\"msgbox_important\"><p class=\"msgbox_importantInDiv\" data-mc-autonum=\"&lt;b&gt;&lt;span style=&quot;color: #dd1e31;&quot; class=&quot;mcFormatColor&quot;&gt;Important! &lt;/span&gt;&lt;/b&gt;\"><span class=\"autonumber\"><span><b><span style=\"color: #dd1e31;\" class=\"mcFormatColor\">Important!</span></b></span></span>For <b>ad_report</b> and <b>ad_report_task</b> methods, the API call limit is subject to a per user quota. These API calls can <b>only</b> be executed a maximum of 200 times per hour for each seller/user. If the number of calls per hour exceeds this limit, any new calls will be blocked for the next hour.</p></div>",
+        "description": "This method downloads the report as specified by the <b>report_id</b> path parameter.  <br><br>Call <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-createreporttask\" title=\"createReportTask API docs\">createReportTask</a> to schedule and generate a Promoted Listings report. All date values are returned in UTC format (<code>yyyy-MM-ddThh:mm:ss.sssZ</code>).<br/><br/><span class=\"tablenote\"><b>Note:</b> The reporting of some data related to sales and ad-fees may require a 72-hour (<b>maximum</b>) adjustment period which is often referred to as the <i>Reconciliation Period</i>. Such adjustment periods should, on average, be minimal. However, at any given time, the <b>payments</b> tab may be used to view those amounts that have actually been charged.</span><br/><div class=\"msgbox_important\"><p class=\"msgbox_importantInDiv\" data-mc-autonum=\"&lt;b&gt;&lt;span style=&quot;color: #dd1e31;&quot; class=&quot;mcFormatColor&quot;&gt;Important! &lt;/span&gt;&lt;/b&gt;\"><span class=\"autonumber\"><span><b><span style=\"color: #dd1e31;\" class=\"mcFormatColor\">Important!</span></b></span></span>For <b>ad_report</b> and <b>ad_report_task</b> methods, the API call limit is subject to a per user quota. These API calls can <b>only</b> be executed a maximum of 200 times per hour for each seller/user. If the number of calls per hour exceeds this limit, any new calls will be blocked for the next hour.</p></div>",
         "operationId": "getReport",
         "parameters": [
           {
@@ -10668,7 +10840,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "text/tab-separated-values": {
                 "schema": {
@@ -10677,8 +10849,8 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -10696,18 +10868,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
           "500": {
-            "description": "Internal Server error",
+            "description": "Internal Server Error",
             "content": {
               "application/json": {
                 "schema": {
@@ -10740,7 +10902,7 @@
         "tags": [
           "ad_report_metadata"
         ],
-        "description": "This call retrieves information that details the fields used in each of the Promoted Listings reports. Use the returned information to configure the different types of Promoted Listings reports.</br></br> You can retrieve metadata for all report types,funding models and channels, or you can filter based on funding model and/or channel.<br/><br/><span class=\"tablenote\"><b>Note:</b> The reporting of some data related to sales and ad-fees may require a 72-hour (<b>maximum</b>) adjustment period which is often referred to as the <i>Reconciliation Period</i>. Such adjustment periods should, on average, be minimal. However, at any given time, the <b>payments</b> tab may be used to view those amounts that have actually been charged.</span>",
+        "description": "This method retrieves information that details the fields used in each of the Promoted Listings reports. Use the returned information to configure the different types of Promoted Listings reports.</br></br> You can retrieve metadata for all report types,funding models and channels, or you can filter based on funding model and/or channel.<br/><br/><span class=\"tablenote\"><b>Note:</b> The reporting of some data related to sales and ad-fees may require a 72-hour (<b>maximum</b>) adjustment period which is often referred to as the <i>Reconciliation Period</i>. Such adjustment periods should, on average, be minimal. However, at any given time, the <b>payments</b> tab may be used to view those amounts that have actually been charged.</span>",
         "operationId": "getReportMetadata",
         "parameters": [
           {
@@ -10768,7 +10930,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -10807,7 +10969,7 @@
             }
           },
           "500": {
-            "description": "Internal Server error",
+            "description": "Internal Server Error",
             "content": {
               "application/json": {
                 "schema": {
@@ -10840,7 +11002,7 @@
         "tags": [
           "ad_report_metadata"
         ],
-        "description": "This call retrieves metadata that details the fields used by a specific Promoted Listings report type. Use the <b>report_type</b> path parameter to indicate metadata to retrieve.<br/><br/>This method does not use a request payload.<br/><br/><span class=\"tablenote\"><b>Note:</b> The reporting of some data related to sales and ad-fees may require a 72-hour (<b>maximum</b>) adjustment period which is often referred to as the <i>Reconciliation Period</i>. Such adjustment periods should, on average, be minimal. However, at any given time, the <b>payments</b> tab may be used to view those amounts that have actually been charged.</span>",
+        "description": "This method retrieves metadata that details the fields used by a specific Promoted Listings report type. Use the <b>report_type</b> path parameter to indicate metadata to retrieve.<br/><br/>This method does not use a request payload.<br/><br/><span class=\"tablenote\"><b>Note:</b> The reporting of some data related to sales and ad-fees may require a 72-hour (<b>maximum</b>) adjustment period which is often referred to as the <i>Reconciliation Period</i>. Such adjustment periods should, on average, be minimal. However, at any given time, the <b>payments</b> tab may be used to view those amounts that have actually been charged.</span>",
         "operationId": "getReportMetadataForReportType",
         "parameters": [
           {
@@ -10879,7 +11041,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -10927,7 +11089,7 @@
                 "35133": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'fundingModel' is not supported for the  'report_type' {reportType}."
+                  "description": "The 'fundingModel' is not supported for the 'report_type' {reportType}."
                 }
               }
             }
@@ -10959,10 +11121,19 @@
                   "$ref": "#/components/schemas/Error"
                 }
               }
+            },
+            "x-response-codes": {
+              "errors": {
+                "35116": {
+                  "domain": "API_MARKETING",
+                  "category": "REQUEST",
+                  "description": "Supplied 'report_type' not found. Valid values are: {supportedReportTypes}."
+                }
+              }
             }
           },
           "500": {
-            "description": "Internal Server error",
+            "description": "Internal Server Error",
             "content": {
               "application/json": {
                 "schema": {
@@ -11034,7 +11205,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -11073,7 +11244,7 @@
             }
           },
           "500": {
-            "description": "Internal Server error",
+            "description": "Internal Server Error",
             "content": {
               "application/json": {
                 "schema": {
@@ -11189,7 +11360,7 @@
                 "35041": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "A 'marketplaceId' is required. Supported marketplaces are: {supportedMarketplaces}"
+                  "description": "A 'marketplaceId' is required. Supported marketplaces are: {supportedMarketplaces}."
                 },
                 "35045": {
                   "domain": "API_MARKETING",
@@ -11264,17 +11435,17 @@
                 "35118": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'reportFormat' is missing or invalid. Valid values are: {supportedReportFormats}"
+                  "description": "The 'reportFormat' is missing or invalid. Valid values are: {supportedReportFormats}."
                 },
                 "35119": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The minimum set of 'dimensionKey' is not provided for the 'reportType' {reportType}. Minimum required dimensionKeys are: {minimumDimensionKeys}"
+                  "description": "The minimum set of 'dimensionKey' is not provided for the 'reportType' {reportType}. Minimum required dimensionKeys are: {minimumDimensionKeys}."
                 },
                 "35120": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "At least  one 'metricKey' must be provided for 'reportType' {reportType}. Valid metricKeys are: {supportedMetricKeys}"
+                  "description": "At least  one 'metricKey' must be provided for 'reportType' {reportType}. Valid metricKeys are: {supportedMetricKeys}."
                 },
                 "35121": {
                   "domain": "API_MARKETING",
@@ -11289,12 +11460,12 @@
                 "35123": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'dimensionKey' {dimensionKey} is not valid for the 'fundingModel' {fundingModel}"
+                  "description": "The 'dimensionKey' {dimensionKey} is not valid for the 'fundingModel' {fundingModel}."
                 },
                 "35124": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "Multiple funding models are not supported. Please use one of the following funding models: {supportedFundingModels}"
+                  "description": "Multiple funding models are not supported. Please use one of the following funding models: {supportedFundingModels}."
                 },
                 "35125": {
                   "domain": "API_MARKETING",
@@ -11304,22 +11475,22 @@
                 "35126": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "Multiple channels are not supported. Please use one of the following channels: {supportedChannels}"
+                  "description": "Multiple channels are not supported. Please use one of the following channels: {supportedChannels}."
                 },
                 "35127": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'channels' are not supported for the 'fundingModel' {fundingModel}"
+                  "description": "The 'channels' are not supported for the 'fundingModel' {fundingModel}."
                 },
                 "35128": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'dimensionKey' {dimensionKey} is not valid for the 'channels' {supportedChannels}"
+                  "description": "The 'dimensionKey' {dimensionKey} is not valid for the 'channels' {supportedChannels}."
                 },
                 "35129": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'metricKey' {metricKey} is not supported for the 'channels' {supportedChannels}"
+                  "description": "The 'metricKey' {metricKey} is not supported for the 'channels' {supportedChannels}."
                 },
                 "35130": {
                   "domain": "API_MARKETING",
@@ -11329,7 +11500,7 @@
                 "35131": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "The 'annotationKey' {annotationKey} is not supported for the 'channels' {supportedChannels}"
+                  "description": "The 'annotationKey' {annotationKey} is not supported for the 'channels' {supportedChannels}."
                 },
                 "35137": {
                   "domain": "API_MARKETING",
@@ -11353,12 +11524,12 @@
                 "35089": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "You are currently not authorized to access the Promoted Listings Advanced program. Please contact support"
+                  "description": "You are currently not authorized to access the Promoted Listings Advanced program. Please contact support."
                 },
                 "35091": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
-                  "description": "'additionalRecords' are supported only with COST_PER_CLICK FundingModel and non-performing data is applicable for account level reports with no Day level dimension. 'additionalRecords' are applicable for reportTypes {supportedReportTypes}"
+                  "description": "'additionalRecords' are supported only with COST_PER_CLICK FundingModel and non-performing data is applicable for account level reports with no Day level dimension. 'additionalRecords' are applicable for reportTypes {supportedReportTypes}."
                 }
               }
             }
@@ -11377,7 +11548,7 @@
                 "35051": {
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
-                  "description": "The 'marketplaceId' {marketplaceId} is not supported. Supported marketplaces are: {supportedMarketplaces}"
+                  "description": "The 'marketplaceId' {marketplaceId} is not supported. Supported marketplaces are: {supportedMarketplaces}."
                 },
                 "35068": {
                   "domain": "API_MARKETING",
@@ -11398,7 +11569,7 @@
             }
           },
           "500": {
-            "description": "Internal Server error",
+            "description": "Internal Server Error",
             "content": {
               "application/json": {
                 "schema": {
@@ -11431,7 +11602,7 @@
         "tags": [
           "ad_report_task"
         ],
-        "description": "This call returns the details of a specific Promoted Listings report task, as specified by the <b>report_task_id</b> path parameter. <p>The report task includes the report criteria (such as the report dimensions, metrics, and included listing) and the report-generation rules (such as starting and ending dates for the specified report task).</p>  <p>Report-task IDs are generated by eBay when you call <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-createreporttask\">createReportTask</a>. Get a complete list of a seller's report-task IDs by calling <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-getreporttasks\">getReportTasks</a>.</p><br/><div class=\"msgbox_important\"><p class=\"msgbox_importantInDiv\" data-mc-autonum=\"&lt;b&gt;&lt;span style=&quot;color: #dd1e31;&quot; class=&quot;mcFormatColor&quot;&gt;Important! &lt;/span&gt;&lt;/b&gt;\"><span class=\"autonumber\"><span><b><span style=\"color: #dd1e31;\" class=\"mcFormatColor\">Important!</span></b></span></span>For <b>ad_report</b> and <b>ad_report_task</b> methods, the API call limit is subject to a per user quota. These API calls can <b>only</b> be executed a maximum of 200 times per hour for each seller/user. If the number of calls per hour exceeds this limit, any new calls will be blocked for the next hour.</p></div>",
+        "description": "This method returns the details of a specific Promoted Listings report task, as specified by the <b>report_task_id</b> path parameter. <p>The report task includes the report criteria (such as the report dimensions, metrics, and included listing) and the report-generation rules (such as starting and ending dates for the specified report task).</p>  <p>Report-task IDs are generated by eBay when you call <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-createreporttask\">createReportTask</a>. Get a complete list of a seller's report-task IDs by calling <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-getreporttasks\">getReportTasks</a>.</p><br/><div class=\"msgbox_important\"><p class=\"msgbox_importantInDiv\" data-mc-autonum=\"&lt;b&gt;&lt;span style=&quot;color: #dd1e31;&quot; class=&quot;mcFormatColor&quot;&gt;Important! &lt;/span&gt;&lt;/b&gt;\"><span class=\"autonumber\"><span><b><span style=\"color: #dd1e31;\" class=\"mcFormatColor\">Important!</span></b></span></span>For <b>ad_report</b> and <b>ad_report_task</b> methods, the API call limit is subject to a per user quota. These API calls can <b>only</b> be executed a maximum of 200 times per hour for each seller/user. If the number of calls per hour exceeds this limit, any new calls will be blocked for the next hour.</p></div>",
         "operationId": "getReportTask",
         "parameters": [
           {
@@ -11448,7 +11619,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -11457,8 +11628,8 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -11476,18 +11647,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
           "500": {
-            "description": "Internal Server error",
+            "description": "Internal Server Error",
             "content": {
               "application/json": {
                 "schema": {
@@ -11518,7 +11679,7 @@
         "tags": [
           "ad_report_task"
         ],
-        "description": "This call deletes the report task specified by the <b>report_task_id</b> path parameter. This method also deletes any reports generated by the report task.  <p>Report task IDs are generated by eBay when you call <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-createreporttask\">createReportTask</a>. Get a complete list of a seller's report-task IDs by calling <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-getreporttasks\">getReportTasks</a>.</p><br/><div class=\"msgbox_important\"><p class=\"msgbox_importantInDiv\" data-mc-autonum=\"&lt;b&gt;&lt;span style=&quot;color: #dd1e31;&quot; class=&quot;mcFormatColor&quot;&gt;Important! &lt;/span&gt;&lt;/b&gt;\"><span class=\"autonumber\"><span><b><span style=\"color: #dd1e31;\" class=\"mcFormatColor\">Important!</span></b></span></span>For <b>ad_report</b> and <b>ad_report_task</b> methods, the API call limit is subject to a per user quota. These API calls can <b>only</b> be executed a maximum of 200 times per hour for each seller/user. If the number of calls per hour exceeds this limit, any new calls will be blocked for the next hour.</p></div>",
+        "description": "This method deletes the report task specified by the <b>report_task_id</b> path parameter. This method also deletes any reports generated by the report task.  <p>Report task IDs are generated by eBay when you call <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-createreporttask\">createReportTask</a>. Get a complete list of a seller's report-task IDs by calling <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-ad_report_task-getreporttasks\">getReportTasks</a>.</p><br/><div class=\"msgbox_important\"><p class=\"msgbox_importantInDiv\" data-mc-autonum=\"&lt;b&gt;&lt;span style=&quot;color: #dd1e31;&quot; class=&quot;mcFormatColor&quot;&gt;Important! &lt;/span&gt;&lt;/b&gt;\"><span class=\"autonumber\"><span><b><span style=\"color: #dd1e31;\" class=\"mcFormatColor\">Important!</span></b></span></span>For <b>ad_report</b> and <b>ad_report_task</b> methods, the API call limit is subject to a per user quota. These API calls can <b>only</b> be executed a maximum of 200 times per hour for each seller/user. If the number of calls per hour exceeds this limit, any new calls will be blocked for the next hour.</p></div>",
         "operationId": "deleteReportTask",
         "parameters": [
           {
@@ -11544,8 +11705,8 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -11559,16 +11720,6 @@
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
                   "description": "No ReportTask found for 'report_task_id' {report_task_id}. Please correct the 'report_task_id' and try again."
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
@@ -11593,7 +11744,7 @@
             }
           },
           "500": {
-            "description": "Internal Server error",
+            "description": "Internal Server Error",
             "content": {
               "application/json": {
                 "schema": {
@@ -11864,6 +12015,11 @@
                   "category": "REQUEST",
                   "description": "Priority is not supported for the item_price_markdown calls."
                 },
+                "345098": {
+                  "domain": "API_MARKETING",
+                  "category": "REQUEST",
+                  "description": "Sale can be active for a maximum of {maxSaleDurationDays} days."
+                },
                 "345110": {
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
@@ -12030,7 +12186,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -12223,7 +12379,7 @@
             }
           },
           "204": {
-            "description": "Success",
+            "description": "No Content",
             "x-response-codes": {
               "errors": {
                 "38226": {
@@ -12449,6 +12605,11 @@
                   "domain": "API_MARKETING",
                   "category": "REQUEST",
                   "description": "The giving inventory criterion type is not consistent with existing active promotion. For help, see the documentation for this call."
+                },
+                "345098": {
+                  "domain": "API_MARKETING",
+                  "category": "REQUEST",
+                  "description": "Sale can be active for a maximum of {maxSaleDurationDays} days."
                 },
                 "345110": {
                   "domain": "API_MARKETING",
@@ -13326,7 +13487,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -14252,7 +14413,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -14459,7 +14620,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -14567,7 +14728,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Success",
+            "description": "No Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -14683,7 +14844,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -16189,7 +16350,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -16322,6 +16483,11 @@
                   "category": "BUSINESS",
                   "description": "We are currently testing a premium ads product with a small invite-only group. We will share more information when we are ready to expand."
                 },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
+                },
                 "37035": {
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
@@ -16408,7 +16574,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -16520,6 +16686,11 @@
                   "domain": "API_MARKETING",
                   "category": "BUSINESS",
                   "description": "To gain access to Promoted Listings, you must be in good standing with recent sales activity."
+                },
+                "35310": {
+                  "domain": "API_MARKETING",
+                  "category": "BUSINESS",
+                  "description": "Advertising services aren't available for teen accounts. Any active advertising campaigns will be paused for this teen account. If the account status changes and the account is still eligible to use advertising services, eBay will automatically resume the campaigns."
                 }
               }
             }
@@ -16557,10 +16728,269 @@
           }
         ]
       }
+    },
+    "/seller_promotional_offers": {
+      "summary": "Seller promotional offers",
+      "get": {
+        "tags": [
+          "seller_promotional_offers"
+        ],
+        "summary": "Retrieves a list of offers",
+        "description": "<div class=\"msgbox_important\"><p class=\"msgbox_importantInDiv\" data-mc-autonum=\"&lt;b&gt;&lt;span style=&quot;color: #dd1e31;&quot; class=&quot;mcFormatColor&quot;&gt;Important! &lt;/span&gt;&lt;/b&gt;\"><span class=\"autonumber\"><span><b><span style=\"color: #dd1e31;\" class=\"mcFormatColor\">Important!</span></b></span></span> When implementing the eBay Promotions API, partners are required to surface links to eBay's promotion terms and conditions for sellers before allowing sellers to activate the promotions. The link should remain surfaced once the promotion has been activated. eBay will provide the relevant promotion link(s) and instructions. Additionally, Partners are required to ask sellers to take action to activate a promotion themselves.</p></div><br>This method can be used to retrieve a list of promotional offers available to the seller on a specified marketplace.<br><br>If a returned promotional offer is in <code>REQUIRES_ACTIVATION</code> state, the returned <b>promotionHash</b> and <b>promotionId</b> values can be used with the <a href=\"/api-docs/marketing-private/sell/marketing/resources/seller_promotional_offers/methods/activatePromotion\" target=\"_blank \">activatePromotion</a> method to activate the promotion on the seller's account.",
+        "operationId": "getSellerPromotionalOffers",
+        "parameters": [
+          {
+            "name": "X-EBAY-C-MARKETPLACE-ID",
+            "in": "header",
+            "description": "This header identifies the eBay marketplace on which seller promotional offers will be retrieved.<br><br>See <a href=\"#sell-marketing_api-item_price_markdown-createitempricemarkdownpromotion.marketplaceidenum\">MarketplaceIdEnum</a> for supported values.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "description": "The eBay marketplace ID.",
+              "maxLength": 32
+            },
+            "example": "EBAY_US"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "This header is used to indicate the natural language and locale preferred by the user for the response.<br><br>This header can be used to target a specific locale of a marketplace that supports multiple locales. For example:<ul><li>When targeting the French locale of the Belgium marketplace, pass in <code>fr-BE</code> to specify this. If this locale is not specified, the language will default to Dutch.</li><li>When targeting the French locale of the Canadian marketplace, pass in <code>fr-CA</code> to specify this. If this locale is not specified, the language will default to English.</li></ul>",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "description": "The preferred language and locale.",
+              "maxLength": 128
+            },
+            "example": "en-CA, fr-CA"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SellerPromotionalOffersResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "x-response-codes": {
+              "errors": {
+                "39205": {
+                  "domain": "API_MARKETING",
+                  "category": "REQUEST",
+                  "description": "Invalid or missing X-EBAY-C-MARKETPLACE-ID header value."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "x-response-codes": {
+              "errors": {
+                "39201": {
+                  "domain": "API_MARKETING",
+                  "category": "APPLICATION",
+                  "description": "Internal server error encountered. If this problem persists, contact the eBay Developers Program for support."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_auth": [
+              "https://api.ebay.com/oauth/api_scope/sell.marketing.readonly"
+            ]
+          }
+        ]
+      }
+    },
+    "/seller_promotional_offers/activate_promotion": {
+      "summary": "Activate a seller promotion",
+      "post": {
+        "tags": [
+          "seller_promotional_offers"
+        ],
+        "summary": "Signs up the seller for the specified promotion.",
+        "description": "<div class=\"msgbox_important\"><p class=\"msgbox_importantInDiv\" data-mc-autonum=\"&lt;b&gt;&lt;span style=&quot;color: #dd1e31;&quot; class=&quot;mcFormatColor&quot;&gt;Important! &lt;/span&gt;&lt;/b&gt;\"><span class=\"autonumber\"><span><b><span style=\"color: #dd1e31;\" class=\"mcFormatColor\">Important!</span></b></span></span> When implementing the eBay Promotions API, partners are required to surface links to eBay's promotion terms and conditions for sellers before allowing sellers to activate the promotions. The link should remain surfaced once the promotion has been activated. eBay will provide the relevant promotion link(s) and instructions. Additionally, Partners are required to ask sellers to take action to activate a promotion themselves.</p></div><br>This method can be used to activate a promotion on a seller's account.<br><br>The promotion to activate is specified through its <b>promotionHash</b> and <b>promotionId</b> fields. The values can be retrieved using the <a href=\"/api-docs/marketing-private/sell/marketing/resources/seller_promotional_offers/methods/getSellerPromotionalOffers\" target=\"_blank \">getSellerPromotionalOffers</a> method.<br><br>If the call is successful, HTTP status code <b>200 OK</b> will be returned, and the promotion will be activated on the seller's account.",
+        "operationId": "activatePromotion",
+        "parameters": [
+          {
+            "name": "X-EBAY-C-MARKETPLACE-ID",
+            "in": "header",
+            "description": "This header identifies the eBay marketplace on which the promotional offer will be activated.<br><br>See <a href=\"#sell-marketing_api-item_price_markdown-createitempricemarkdownpromotion.marketplaceidenum\">MarketplaceIdEnum</a> for supported values.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "description": "The eBay marketplace ID.",
+              "maxLength": 32
+            },
+            "example": "EBAY_US"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "This header indicates the format of the request body provided by the client. Its value should be set to <b>application/json</b>. <br><br> For more information, refer to <a href=\"/api-docs/static/rest-request-components.html#HTTP\" target=\"_blank \">HTTP request headers</a>.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "This header is used to indicate the natural language and locale preferred by the user for the response.<br><br>This header can be used to target a specific locale of a marketplace that supports multiple locales. For example:<ul><li>When targeting the French locale of the Belgium marketplace, pass in <code>fr-BE</code> to specify this. If this locale is not specified, the language will default to Dutch.</li><li>When targeting the French locale of the Canadian marketplace, pass in <code>fr-CA</code> to specify this. If this locale is not specified, the language will default to English.</li></ul>",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "description": "The preferred language and locale.",
+              "maxLength": 128
+            },
+            "example": "en-CA, fr-CA"
+          }
+        ],
+        "requestBody": {
+          "description": "Promotion Signup Request Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PromotionSignUpRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromotionSignUpResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "x-response-codes": {
+              "errors": {
+                "39204": {
+                  "domain": "API_MARKETING",
+                  "category": "REQUEST",
+                  "description": "The seller is not eligible for this promotion."
+                },
+                "39205": {
+                  "domain": "API_MARKETING",
+                  "category": "REQUEST",
+                  "description": "Invalid or missing X-EBAY-C-MARKETPLACE-ID header value."
+                },
+                "39207": {
+                  "domain": "API_MARKETING",
+                  "category": "REQUEST",
+                  "description": "The promotion is expired."
+                },
+                "39208": {
+                  "domain": "API_MARKETING",
+                  "category": "REQUEST",
+                  "description": "Invalid or missing promotionId."
+                },
+                "39209": {
+                  "domain": "API_MARKETING",
+                  "category": "REQUEST",
+                  "description": "Invalid or missing promotionHash."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "x-response-codes": {
+              "errors": {
+                "39201": {
+                  "domain": "API_MARKETING",
+                  "category": "APPLICATION",
+                  "description": "Internal server error encountered. If this problem persists, contact the eBay Developers Program for support."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_auth": [
+              "https://api.ebay.com/oauth/api_scope/sell.marketing"
+            ]
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
+      "Activation": {
+        "type": "object",
+        "description": "This type defines the activation information for a promotion.",
+        "properties": {
+          "activationRequired": {
+            "type": "boolean",
+            "description": "This boolean indicates if activation is required for the promotion.<br><br>If returned as <code>true</code>, activation is required for the promotion. Use the <a href=/develop/api/sell/marketing_api#sell-marketing_api-seller_promotional_offers-activatepromotion\">activatePromotion</a> method to activate a promotion.",
+            "examples": [
+              true
+            ]
+          },
+          "promotionHash": {
+            "type": "string",
+            "description": "The unique hash associated with the promotion that is required for activation.<br><br>This value, alongside the promotion's <b>promotionId</b>, can be passed in the <a href=/develop/api/sell/marketing_api#sell-marketing_api-seller_promotional_offers-activatepromotion\">activatePromotion</a> method to activate a promotion for a seller.",
+            "examples": [
+              "ab124sjV8"
+            ],
+            "maxLength": 256
+          }
+        }
+      },
       "Ad": {
         "type": "object",
         "required": [
@@ -17430,19 +17860,6 @@
         },
         "description": "This type defines a container that lists the ads that <b>bulkDeleteAdsByInventoryReference</b> deleted."
       },
-      "BulkUpdateAdStatusByInventoryReferenceIdRequest": {
-        "type": "object",
-        "properties": {
-          "requests": {
-            "type": "array",
-            "description": "An array of listing IDs and bid percentages.",
-            "items": {
-              "$ref": "#/components/schemas/UpdateAdStatusByInventoryReferenceIdRequest"
-            }
-          }
-        },
-        "description": "A type that defines the fields for the <b>BulkUpdateAdStatusByInventoryReferenceId</b> request."
-      },
       "BulkUpdateAdStatusByListingIdRequest": {
         "type": "object",
         "required": [
@@ -17490,19 +17907,6 @@
           }
         },
         "description": "A type that defines the fields for the <b>BulkUpdateAdStatusByInventoryReference</b> response."
-      },
-      "BulkUpdateAdsStatusByInventoryReferenceResponse": {
-        "type": "object",
-        "properties": {
-          "responses": {
-            "type": "array",
-            "description": "A list of inventory references that were processed from the request.",
-            "items": {
-              "$ref": "#/components/schemas/UpdateAdsByInventoryReferenceResponse"
-            }
-          }
-        },
-        "description": "A type that defines the fields for the <b>BulkUpdateAdsStatusByInventoryReference</b> response."
       },
       "BulkUpdateKeywordRequest": {
         "type": "object",
@@ -18643,7 +19047,7 @@
         "description": "This type defines the annotation values associated with a dimension. Annotations are metadata of the dimension. For example, annotations for a listing ID could be <code>listing_title</code> or <code>listing_quantity_sold</code>."
       },
       "DimensionKeyEnum": {
-        "type": "string",
+        "type": "object",
         "description": "An enumerated type used to define the dimension key field. | - **MARKETPLACE_ID**: This enum value indicates that the dimension key is marketplace ID. ",
         "enum": [
           "MARKETPLACE_ID"
@@ -18667,7 +19071,7 @@
           },
           "dimensionKeyAnnotations": {
             "type": "array",
-            "description": "An list of annotation keys associated with the specified dimension of the report.",
+            "description": "A list of annotation keys associated with the specified dimension of the report.",
             "items": {
               "$ref": "#/components/schemas/DimensionKeyAnnotation"
             }
@@ -18786,7 +19190,7 @@
           },
           "domain": {
             "type": "string",
-            "description": "Name for the primary system where the error occurred. This is relevant for application errors."
+            "description": "Name for the primary system where the error occurred."
           },
           "errorId": {
             "type": "integer",
@@ -18817,14 +19221,14 @@
           },
           "parameters": {
             "type": "array",
-            "description": "An array of name/value pairs that describe details the error condition. These are useful when multiple errors are returned.",
+            "description": "An array of name/value pairs that describe details the error condition.",
             "items": {
               "$ref": "#/components/schemas/ErrorParameter"
             }
           },
           "subdomain": {
             "type": "string",
-            "description": "Further helps indicate which subsystem the error is coming from. System subcategories include: Initialization, Serialization, Security, Monitoring, Rate Limiting, etc."
+            "description": "Further helps indicate which subsystem the error is coming from."
           }
         },
         "description": "This type defines the fields that can be returned in an error."
@@ -18879,7 +19283,35 @@
             "description": "The name of the subdomain in which the error or warning occurred. For example, checkout is a subdomain in the buying domain."
           }
         },
-        "description": "This type defines the fields returned in an error condition."
+        "description": "The errors or warnings object type.",
+        "examples": [
+          {
+            "domain": "domain",
+            "subdomain": "subdomain",
+            "outputRefIds": [
+              "outputRefIds",
+              "outputRefIds"
+            ],
+            "errorId": 6,
+            "inputRefIds": [
+              "inputRefIds",
+              "inputRefIds"
+            ],
+            "category": "category",
+            "message": "message",
+            "longMessage": "longMessage",
+            "parameters": [
+              {
+                "name": "name",
+                "value": "value"
+              },
+              {
+                "name": "name",
+                "value": "value"
+              }
+            ]
+          }
+        ]
       },
       "ErrorParameter": {
         "type": "object",
@@ -18900,14 +19332,20 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Name of the entity that threw the error."
+            "description": "This is the name of the parameter/field for which the error was thrown."
           },
           "value": {
             "type": "string",
-            "description": "The value that was set for the element specified in the <b>name</b> field."
+            "description": "This is the value of the parameter/field for which the error was thrown."
           }
         },
-        "description": "This type defines the parameters for an error."
+        "description": "This type defines the parameters for an error.",
+        "examples": [
+          {
+            "name": "name",
+            "value": "value"
+          }
+        ]
       },
       "ExclusionsEnum": {
         "type": "object",
@@ -18917,7 +19355,7 @@
         ]
       },
       "FundingModelEnum": {
-        "type": "string",
+        "type": "object",
         "description": "This enumerated type defines the funding models that specify how the Promoted Listing fee is calculated.<br /><br />The seller is assessed a Promoted Listing fee only if an item sells via a <i>Promoted Listing action</i>. For more information, see <a href=\"/api-docs/sell/static/marketing/pl-overview.html#funding-model\" target=\"_blank\">Funding Models</a>. | - **COST_PER_SALE**: This enum value indicates that the Promoted Listing fee is calculated by multiplying the <b>bidPercentage</b> by the final sales price of a transaction. - **COST_PER_CLICK**: This enum value indicates that the Promoted Listing fee is calculated on a Cost Per Click (CPC) basis.",
         "enum": [
           "COST_PER_SALE",
@@ -19273,7 +19711,7 @@
         "description": "This complex type is used to identify an item that is managed by the Inventory API. The type defines the fields contained in an inventory reference ID."
       },
       "InventoryReferenceTypeEnum": {
-        "type": "string",
+        "type": "object",
         "description": "An enumerated type defining the type of the seller's inventory reference ID. When specifying an inventory item, you must always specify both <b>inventoryReferenceId</b> and <b>inventoryReferenceType</b>. | - **INVENTORY_ITEM**: This enum value is used if you want to identify a single-item listing by its item ID or SKU. - **INVENTORY_ITEM_GROUP**: This enum value is used if you want to identify a multi-variation listing by its item ID or <b>inventoryItemGroupKey</b> as defined in the Inventory API.",
         "enum": [
           "INVENTORY_ITEM",
@@ -19358,7 +19796,7 @@
           },
           "endDate": {
             "type": "string",
-            "description": "The date and time the discount ends, in UTC format (<code>yyyy-MM-ddThh:mm:ssZ</code>). The value supplied for <b>endDate</b> must be at least 24 hours after the value supplied for the <b>startDate</b> of the markdown discount.<br><br>For display purposes, convert this time into the local time of the seller.  <br><br><b>Max value:</b><ul><li><code>14</code> days for the AT, CH, DE, ES, FR, IE, IT, and UK, marketplaces.</li>  <li><code>45</code> days for all other marketplaces.</li></ul>"
+            "description": "The date and time the discount ends, in UTC format (<code>yyyy-MM-ddThh:mm:ssZ</code>). The value supplied for <b>endDate</b> must be at least 24 hours after the value supplied for the <b>startDate</b> of the markdown discount.<br><br>For display purposes, convert this time into the local time of the seller.  <br><br><b>Max duration for markdown discounts:</b><ul><li><code>14</code> days for the AT, CH, IE, and UK marketplaces.</li> <li><code>30</code> days for DE, ES, FR, IT, and TW marketplaces.</li>  <li><code>45</code> days for all other marketplaces.</li></ul>"
           },
           "marketplaceId": {
             "description": "The eBay marketplace ID of the site where the markdown discount is hosted. Markdown discounts are supported on all eBay marketplaces.",
@@ -19719,7 +20157,7 @@
             "$ref": "#/components/schemas/MatchTypeEnum"
           }
         },
-        "description": "A type that defines the fields used by the <b>keyword</b> requests."
+        "description": "A type that defines the fields used by the <b>Keyword</b> method."
       },
       "KeywordResponse": {
         "type": "object",
@@ -19845,6 +20283,10 @@
         "type": "string",
         "description": "This enumerated type defines the unique IDs for each of the eBay marketplaces. | - **EBAY_AT**: This enumeration value indicates that the eBay Marketplace is the Austria site (ebay.at). - **EBAY_AU**: This enumeration value indicates that the eBay Marketplace is the Australia site (ebay.com.au). - **EBAY_BE**: This enumeration value indicates that the eBay marketplace is the Belgium (Dutch) site (www.ebay.be). - **EBAY_CA**: This enumeration value indicates that the eBay Marketplace is the Canada (English) site (ebay.ca). - **EBAY_CH**: This enumeration value indicates that the eBay Marketplace is the Switzerland site (ebay.ch). - **EBAY_CN**: Reserved for future use. - **EBAY_CZ**: Reserved for future use. - **EBAY_DE**: This enumeration value indicates that the eBay Marketplace is the Germany site (ebay.de). - **EBAY_DK**: Reserved for future use. - **EBAY_ES**: This enumeration value indicates that the eBay Marketplace is the Spain site (ebay.es). - **EBAY_FI**: Reserved for future use. - **EBAY_FR**: This enumeration value indicates that the eBay Marketplace is the France site (ebay.fr). - **EBAY_GB**: This enumeration value indicates that the eBay Marketplace is the UK site (ebay.co.uk). - **EBAY_GR**: Reserved for future use. - **EBAY_HK**: This enumeration value indicates that the eBay Marketplace is the Hong Kong site (ebay.com.hk). - **EBAY_HU**: Reserved for future use. - **EBAY_ID**: Reserved for future use. - **EBAY_IE**: This enumeration value indicates that the eBay Marketplace is the Ireland site (ebay.ie). - **EBAY_IL**: Reserved for future use. - **EBAY_IN**: This enumeration value indicates that the eBay Marketplace is the India site (ebay.in). Note: eBay India is no longer a functioning eBay marketplace. - **EBAY_IT**: This enumeration value indicates that the eBay Marketplace is the Italy site (ebay.it). - **EBAY_JP**: Reserved for future use. - **EBAY_MY**: This enumeration value indicates that the eBay Marketplace is the Malaysia site (ebay.com/my). - **EBAY_NL**: This enumeration value indicates that the eBay Marketplace is the Netherlands site (ebay.nl). - **EBAY_NO**: Reserved for future use. - **EBAY_NZ**: Reserved for future use. - **EBAY_PE**: Reserved for future use. - **EBAY_PH**: This enumeration value indicates that the eBay Marketplace is the Philippines site (ebay.ph). - **EBAY_PL**: This enumeration value indicates that the eBay Marketplace is the Poland site (ebay.pl). - **EBAY_PR**: Reserved for future use. - **EBAY_PT**: Reserved for future use. - **EBAY_RU**: Reserved for future use. - **EBAY_SE**: Reserved for future use. - **EBAY_SG**: This enumeration value indicates that the eBay Marketplace is the Singapore site (ebay.com/sg). - **EBAY_TH**: This enumeration value indicates that the eBay Marketplace is the Thailand site (export.ebay.co.th). - **EBAY_TW**: This enumeration value indicates that the eBay Marketplace is the Taiwan site (ebay.com/tw). - **EBAY_US**: This enumeration value indicates that the eBay Marketplace is the US site (ebay.com). - **EBAY_VN**: This enumeration value indicates that the eBay Marketplace is the Vietnam site (ebay.vn). - **EBAY_ZA**: Reserved for future use. - **EBAY_HALF_US**: This enumeration value is no longer applicable as the Half.com site no longer exists. - **EBAY_MOTORS_US**: Indicates the parent category for \"Auto Parts and Vehicles\" on the EBAY_US marketplace (https://www.ebay.com/motors).",
         "enum": [
+          "EBAY_US",
+          "EBAY_CA",
+          "EBAY_GB",
+          "EBAY_AU",
           "EBAY_AT",
           "EBAY_AU",
           "EBAY_BE",
@@ -19918,7 +20360,6 @@
       "MetricMetadata": {
         "type": "object",
         "required": [
-          "description",
           "metricKey"
         ],
         "properties": {
@@ -20065,6 +20506,31 @@
         "enum": [
           "ACTIVE",
           "ARCHIVED"
+        ]
+      },
+      "OfferStateEnum": {
+        "type": "string",
+        "description": "This enumerated type indicates the status of a seller promotional offer. | - **REQUIRES_ACTIVATION**: This enum value indicates that the offer is associated with a promotion that must be activated by the seller before becoming available.<br><br><span class=\"tablenote\"><b>Note:</b> Use the <a href=\"/api-docs/marketing-private/sell/marketing/resources/seller_promotional_offers/methods/activatePromotion\" target=\"_blank \">activatePromotion</a> method to activate an offer in the <code>REQUIRES_ACTIVATION</code state.</span> - **ACTIVATED**: This enum value indicates that the promotion associated with the offer has been activated on the seller's account. - **ELIGIBLE**: This enum value indicates that the seller is eligible for the promotional offer, but the offer is not yet active. - **ACTIVE**: This enum value indicates that the promotional offer is active. - **EXPIRED**: <span class=\"tablenote\"><b>Note:</b> Only live promotional offers are currently being returned.</span><br>This enum value indicates that the promotional offer has expired.",
+        "enum": [
+          "REQUIRES_ACTIVATION",
+          "ACTIVATED",
+          "ELIGIBLE",
+          "ACTIVE",
+          "EXPIRED"
+        ],
+        "examples": [
+          "ELIGIBLE"
+        ]
+      },
+      "OfferTypeEnum": {
+        "type": "string",
+        "description": "This enumerated type indicates the type of a seller promotional offer. | - **RSVP**: This enum value indicates that the offer is associated with an RSVP promotion. RSVP promotions must be activated through the <b>activatePromotion</b> method before they can be participated in. - **NON_RSVP**: This enum value indicates that the offer is not associated with an RSVP promotion and does not require activation before the seller can participate.",
+        "enum": [
+          "RSVP",
+          "NON_RSVP"
+        ],
+        "examples": [
+          "RSVP"
         ]
       },
       "PriceRange": {
@@ -20258,6 +20724,42 @@
           "MANUAL"
         ]
       },
+      "PromotionSignUpRequest": {
+        "type": "object",
+        "description": "This type defines the fields required to activate a specific promotion for a seller.",
+        "properties": {
+          "promotionId": {
+            "type": "string",
+            "description": "The unique identifier of the promotion.<br><br>Use the <b>getSellerPromotionalOffers</b> method to retrieve this value for eligible promotions.",
+            "examples": [
+              "47566"
+            ],
+            "maxLength": 20
+          },
+          "promotionHash": {
+            "type": "string",
+            "description": "The unique hash associated with the promotion.<br><br>Use the <b>getSellerPromotionalOffers</b> method to retrieve this value for eligible promotions.",
+            "examples": [
+              "krFLv6VS7V8asd"
+            ],
+            "maxLength": 256
+          }
+        }
+      },
+      "PromotionSignUpResponse": {
+        "type": "object",
+        "description": "This type defines the response fields of the <b>activatePromotion</b> method.",
+        "properties": {
+          "promotionId": {
+            "type": "string",
+            "description": "The unique identifier of the promotion specified in the request.",
+            "examples": [
+              "47566"
+            ],
+            "maxLength": 20
+          }
+        }
+      },
       "PromotionStatusEnum": {
         "type": "object",
         "description": "<span class=\"tablenote\"><b>Note:</b> As of July 8th 2024, <i>promotions</i> are now being referred to as <i>discounts</i> on Seller Hub and eBay help pages. Sell Marketing API documentation has been updated to reflect this product name change, but note that no API interface changes have been made.</span><br>An enumerated type for the values that represent the different states that can be assigned to a discount. | - **SCHEDULED**: Indicates the discount start date is in future (greater than current date). The discount is not yet live. - **RUNNING**: Indicates the discount is live on the site. - **PAUSED**: Indicates the discount is currently on hold. Call <b>resumePromotion</b> to restart the discount. - **DRAFT**: Indicates the discount is a draft. Call <b>updateItemPromotion</b> to submit the full details of the discount, schedule it, and make it active. - **ENDED**: Indicates the discount has ended. - **INVALID**: This is for internal use only for when discount type specified in the request is invalid. ",
@@ -20404,7 +20906,7 @@
       },
       "ReportFormatEnum": {
         "type": "object",
-        "description": "This enum defines the format of a report file. Currently, the only supported format is <code>TSV_GZIP</code>, which is a gzip file with tab separated values. | - **TSV_GZIP**: Indicates a gzip file with tab separated values.",
+        "description": "This enumerated type defines the format of a report file. Currently, the only supported format is <code>TSV_GZIP</code>, which is a gzip file with tab separated values. | - **TSV_GZIP**: Indicates a gzip file with tab separated values.",
         "enum": [
           "TSV_GZIP"
         ]
@@ -20467,7 +20969,7 @@
             }
           }
         },
-        "description": "This type defines the metadata used by the all report types."
+        "description": "This type defines the metadata used by all report types."
       },
       "ReportTask": {
         "type": "object",
@@ -20569,7 +21071,7 @@
           },
           "reportName": {
             "type": "string",
-            "description": "An eBay-assigned name for the report that's created by the <b>createReportTask</b> call. This name is unique for the seller."
+            "description": "An eBay-assigned name for the report that's created by the <b>createReportTask</b> method. This name is unique for the seller."
           },
           "reportTaskCompletionDate": {
             "type": "string",
@@ -20647,7 +21149,7 @@
       },
       "ReportTypeEnum": {
         "type": "object",
-        "description": "An enum that defines the type of reports you can generate.<br /><br /><span class=\"tablenote\"><b>Tip:</b> For details about which report types can be used for Promoted Listings general strategy ad campaigns or Promoted Listings priority strategy ad campaigns, see <a href=\"/api-docs/sell/static/marketing/pl-reports.html\" target=\"_blank\">Promoted Listings reporting</a>.</span> | - **ACCOUNT_PERFORMANCE_REPORT**: This enum value indicates that the report is based on the account performance. This report offers a <i>daily view</i> of the seller's Promoted Listings performance. - **ALL_CAMPAIGN_PERFORMANCE_SUMMARY_REPORT**: This enum value indicates that the report is based on campaign performance. This report provides performance data for all of a seller's campaigns. - **CAMPAIGN_PERFORMANCE_REPORT**: This enum value indicates that the report is a detailed item-based campaign performance report. This report offers an <i>item level view</i> of the performance of specific ad campaigns. - **CAMPAIGN_PERFORMANCE_SUMMARY_REPORT**: This enum value indicates that the report is a summary campaign performance report. This report offers a <i>daily summary view</i> of the performance of specific ad campaigns.  - **INVENTORY_PERFORMANCE_REPORT**: This enum value indicates that the report is an inventory performance report. This report offers a <i>listing view</i> of the performance of all the seller's Promoted Listings.<br><br><span class=\"tablenote\"><b>Note:</b>  The Inventory Performance Summary report is not currently available; availability date is pending.</span> - **LISTING_PERFORMANCE_REPORT**: This enum value indicates that the report is based on listings. This report offers a <i>daily view</i> of the performance of each listing. - **KEYWORD_PERFORMANCE_REPORT**: This enum value indicates that the report is a keyword performance report. This report provides keyword performance data for a specific campaign. - **TRANSACTION_REPORT**: This enum value indicates that the report is a transaction report. This report provides transaction-level details to sellers for both general strategy ad campaigns or priority strategy ad campaigns. - **SEARCH_QUERY_PERFORMANCE_REPORT**: This enum value indicates that the report is a search query performance report. This report offers details to sellers that help them understand buyer search patterns and behaviors, indicating which search queries most effectively led the buyers to their products and the impressions, clicks or amount of sales generated. This data can be used by sellers to choose more relevant keywords and negative keywords.  ",
+        "description": "An enumerated type that defines the type of reports you can generate.<br /><br /><span class=\"tablenote\"><b>Tip:</b> For details about which report types can be used for Promoted Listings general strategy ad campaigns or Promoted Listings priority strategy ad campaigns, see <a href=\"/api-docs/sell/static/marketing/pl-reports.html\" target=\"_blank\">Promoted Listings reporting</a>.</span> | - **ACCOUNT_PERFORMANCE_REPORT**: This enum value indicates that the report is based on the account performance. This report offers a <i>daily view</i> of the seller's Promoted Listings performance. - **ALL_CAMPAIGN_PERFORMANCE_SUMMARY_REPORT**: This enum value indicates that the report is based on campaign performance. This report provides performance data for all of a seller's campaigns. - **CAMPAIGN_PERFORMANCE_REPORT**: This enum value indicates that the report is a detailed item-based campaign performance report. This report offers an <i>item level view</i> of the performance of specific ad campaigns. - **CAMPAIGN_PERFORMANCE_SUMMARY_REPORT**: This enum value indicates that the report is a summary campaign performance report. This report offers a <i>daily summary view</i> of the performance of specific ad campaigns.  - **INVENTORY_PERFORMANCE_REPORT**: This enum value indicates that the report is an inventory performance report. This report offers a <i>listing view</i> of the performance of all the seller's Promoted Listings.<br><br><span class=\"tablenote\"><b>Note:</b>  The Inventory Performance Summary report is not currently available; availability date is pending.</span> - **LISTING_PERFORMANCE_REPORT**: This enum value indicates that the report is based on listings. This report offers a <i>daily view</i> of the performance of each listing. - **KEYWORD_PERFORMANCE_REPORT**: This enum value indicates that the report is a keyword performance report. This report provides keyword performance data for a specific campaign. - **TRANSACTION_REPORT**: This enum value indicates that the report is a transaction report. This report provides transaction-level details to sellers for both general strategy ad campaigns or priority strategy ad campaigns. - **SEARCH_QUERY_PERFORMANCE_REPORT**: This enum value indicates that the report is a search query performance report. This report offers details to sellers that help them understand buyer search patterns and behaviors, indicating which search queries most effectively led the buyers to their products and the impressions, clicks or amount of sales generated. This data can be used by sellers to choose more relevant keywords and negative keywords.  ",
         "enum": [
           "ACCOUNT_PERFORMANCE_REPORT",
           "ALL_CAMPAIGN_PERFORMANCE_SUMMARY_REPORT",
@@ -20774,6 +21276,154 @@
           }
         },
         "description": "This type defines all rules/inclusion filters used to add listings to campaigns or discounts. Use of the specific fields is different for campaigns or discounts. See <a href= \"/api-docs/sell/static/marketing/using-the-selectionrules-container.html \" target=\"_blank\">Using the selectionRules container</a>."
+      },
+      "SellerPromotionalOffersResponse": {
+        "type": "object",
+        "description": "This type defines the response array of the <b>getSellerPromotionalOffers</b> method.",
+        "properties": {
+          "sellerPromotionalOffers": {
+            "type": "array",
+            "description": "This array returns a list each seller promotional offer for which a seller is eligible.",
+            "examples": [
+              [
+                {
+                  "promotionId": "123456",
+                  "title": "Seller Message title 0",
+                  "description": "Seller Message Description 0",
+                  "promotionStartDate": "2021-09-14T02:00:00Z",
+                  "promotionEndDate": "2021-09-24T02:00:00Z",
+                  "offerStartDate": "2025-04-01T07:00:00Z",
+                  "offerEndDate": "2025-05-01T07:00:00Z",
+                  "transactionsUsed": 0,
+                  "transactionsRemaining": 2147483647,
+                  "learnMoreUrl": "https://www.ebay.com",
+                  "offerState": "ELIGIBLE",
+                  "offerType": "NON_RSVP",
+                  "marketplaceId": "EBAY_US"
+                }
+              ]
+            ],
+            "items": {
+              "$ref": "#/components/schemas/SellerPromotionalOffer"
+            },
+            "maxItems": 10
+          }
+        }
+      },
+      "SellerPromotionalOffer": {
+        "type": "object",
+        "description": "This type returns the details of a promotional offer for which a seller is eligible.",
+        "properties": {
+          "promotionId": {
+            "type": "string",
+            "description": "The unique identifier of the promotion.",
+            "examples": [
+              "123456"
+            ],
+            "maxLength": 20
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the promotion.",
+            "examples": [
+              "Seller Message title 0"
+            ],
+            "maxLength": 256
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the promotion.",
+            "examples": [
+              "Seller Message Description 0"
+            ],
+            "maxLength": 1024
+          },
+          "promotionStartDate": {
+            "type": "string",
+            "description": "A timestamp indicating the date and time when the seller promotion began.<br><br>This value is returned in UTC format (<code>yyyy-MM-ddTHH:mm:ssZ</code>), which can be converted into the local time of the buyer.",
+            "examples": [
+              "2026-04-01T07:34:35Z"
+            ]
+          },
+          "promotionEndDate": {
+            "type": "string",
+            "description": "A timestamp that indicates the date and time when the seller promotion ends.<br><br>This value is returned in UTC format (<code>yyyy-MM-ddTHH:mm:ssZ</code>), which can be converted into the local time of the buyer.",
+            "examples": [
+              "2026-04-01T07:34:35Z"
+            ]
+          },
+          "offerStartDate": {
+            "type": "string",
+            "description": "A timestamp that indicates the date and time when the promotional offer becomes active for the seller. This value is returned in UTC format (<code>yyyy-MM-ddTHH:mm:ssZ</code>), which can be converted into the local time of the buyer.",
+            "examples": [
+              "2026-04-01T07:34:35Z"
+            ]
+          },
+          "offerEndDate": {
+            "type": "string",
+            "description": "A timestamp that indicates the date and time when the promotional offer is no longer active for the seller. This value is returned in UTC format (<code>yyyy-MM-ddTHH:mm:ssZ</code>), which can be converted into the local time of the buyer.",
+            "examples": [
+              "2026-04-01T07:34:35Z"
+            ]
+          },
+          "transactionsUsed": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The number of transactions that have been used so far during the promotional offer period.<br><br><span class=\"tablenote\"><b>Note:</b> This field is only returned if the promotional offer is transaction based.</span>",
+            "examples": [
+              0
+            ],
+            "minimum": 0
+          },
+          "transactionsRemaining": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The number of transactions remaining in the promotional offer period.<br><br><span class=\"tablenote\"><b>Note:</b> This field is only returned if the promotional offer is transaction based.</span>",
+            "examples": [
+              2147483647
+            ],
+            "minimum": 0
+          },
+          "unlimitedTransactions": {
+            "type": "boolean",
+            "description": "This boolean field indicates whether the promotional offer has unlimited transactions or a limited cap on transactions.<br><br>If returned as <code>true</code>, the seller can receive benefits from the promotional offer for all eligible transactions or charges.",
+            "examples": [
+              true
+            ]
+          },
+          "budgetAmountUsed": {
+            "description": "This container shows the budget that has been used so far during the promotional offer period.<br><br><span class=\"tablenote\"><b>Note:</b> This container is only returned if the promotional offer is budget based.</span>",
+            "$ref": "#/components/schemas/Amount"
+          },
+          "budgetAmountRemaining": {
+            "description": "This container shows the budget remaining in the promotional offer period.<br><br><span class=\"tablenote\"><b>Note:</b> This container is only returned if the promotional offer is budget based.</span>",
+            "$ref": "#/components/schemas/Amount"
+          },
+          "learnMoreUrl": {
+            "type": "string",
+            "description": "The URL for the webpage that explains more details about the particular promotion, including the Terms and Conditions for the promotion.",
+            "examples": [
+              "https://www.ebay.com"
+            ],
+            "maxLength": 2000
+          },
+          "activation": {
+            "description": "This container returns activation information for the promotion that contains one or more offers, including if activation is required and the <b>promotionHash</b> value needed for activation.<br><br>This field is only returned for RSVP promotions that require activation.",
+            "$ref": "#/components/schemas/Activation"
+          },
+          "offerState": {
+            "description": "The current state of the promotional offer.<br><br>If the offer state is returned as <code>REQUIRES_ACTIVATION</code>, use the <a href=/develop/api/sell/marketing_api#sell-marketing_api-seller_promotional_offers-activatepromotion\">activatePromotion</a> method to activate the promotion for the seller.",
+            "$ref": "#/components/schemas/OfferStateEnum"
+          },
+          "offerType": {
+            "description": "The promotional offer type. This field specifies if a promotional offer is associated with an RSVP promotion that needs to be activated before use.<br><br><b>Valid values</b>:<ul><li><code>RSVP</code></li><li><code>NON_RSVP</code></li></ul>",
+            "$ref": "#/components/schemas/OfferTypeEnum"
+          },
+          "marketplaceId": {
+            "description": "The eBay marketplace associated with the promotion.",
+            "$ref": "#/components/schemas/MarketplaceIdEnum"
+          }
+        }
       },
       "SortField": {
         "type": "object",
@@ -21095,7 +21745,7 @@
         "properties": {
           "adGroupId": {
             "type": "string",
-            "description": "A unique eBay-assigned ID for an ad group in a campaign that uses the Cost Per Click (CPC) funding model.<br /><br />Use the  <a href=\"/develop/api/sell/marketing_api#sell-marketing_api-ad_group-getadgroups\">getAdGroups</a> method to retrieve the ad group IDs for a seller."
+            "description": "A unique eBay-assigned ID for an ad group in a campaign that uses the Cost Per Click (CPC) funding model.<br /><br />Use the  <a href=\"/api-docs/sell/marketing/resources/adgroup/methods/getAdGroups\">getAdGroups</a> method to retrieve the ad group IDs for a seller."
           },
           "adStatus": {
             "description": "An enumeration value representing the current status of the ad.<br /><br /><b>Valid Values:</b><ul><li><code>ACTIVE</code></li><li><code>PAUSED</code></li><li><code>ARCHIVED</code></li></ul>",

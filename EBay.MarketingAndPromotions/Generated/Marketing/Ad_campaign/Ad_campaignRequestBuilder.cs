@@ -239,15 +239,8 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Ad_campaign
             public string Limit { get; set; }
 #endif
             /// <summary>This parameter specifies the eBay marketplace ID of the site for which you want to retrieve campaigns.&lt;br&gt;&lt;br&gt;See &lt;a href=&quot;/develop/api/sell/request_headers#marketplace-id-values&quot; target=&quot;_blank&quot;&gt;Marketplace ID values&lt;/a&gt; for supported Marketplace ID values.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
             [QueryParameter("marketplace_id")]
-            public string? MarketplaceId { get; set; }
-#nullable restore
-#else
-            [QueryParameter("marketplace_id")]
-            public string MarketplaceId { get; set; }
-#endif
+            public global::EBay.MarketingAndPromotions.Generated.Marketing.Models.MarketplaceIdEnum? MarketplaceId { get; set; }
             /// <summary>This query parameter specifies the number of campaigns to skip in the result set before returning the first report in the paginated response.&lt;br&gt;&lt;br&gt;Combine &lt;b&gt;offset&lt;/b&gt; with the &lt;b&gt;limit&lt;/b&gt; query parameter to control the items returned in the response. For example, if you supply an &lt;b&gt;offset&lt;/b&gt; of &lt;code&gt;0&lt;/code&gt; and a &lt;b&gt;limit&lt;/b&gt; of &lt;code&gt;10&lt;/code&gt;, the first page of the response contains the first 10 items from the complete list of items retrieved by the call. If &lt;b&gt;offset&lt;/b&gt; is &lt;code&gt;10&lt;/code&gt; and &lt;b&gt;limit&lt;/b&gt; is &lt;code&gt;20&lt;/code&gt;, the first page of the response contains items 11-30 from the complete result set.&lt;br&gt;&lt;br&gt; &lt;b&gt;Default:&lt;/b&gt; 0</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

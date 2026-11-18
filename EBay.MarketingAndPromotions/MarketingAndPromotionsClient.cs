@@ -24,64 +24,84 @@ using System.Net.Http;
 
 namespace EBay.MarketingAndPromotions;
 
+/// <summary>
+/// Entry point for the Marketing and Promotions APIs. The client owns its HTTP connections:
+/// create one per application (or register it with <c>AddMarketingAndPromotionsSdk</c>, which adds it
+/// as a singleton) and dispose it on shutdown. Reach the individual APIs through its properties.
+/// </summary>
 public class MarketingAndPromotionsClient : IDisposable
 {
-    internal const string MarketingClientName = "MarketingAndPromotionsClient.Marketing";
-    internal const string RecommendationClientName = "MarketingAndPromotionsClient.Recommendation";
-
     private readonly HttpClient[] _ownedClients;
 
     public MarketingClient Marketing { get; private set; } = null!;
     public RecommendationClient Recommendation { get; private set; } = null!;
 
-    /// <summary>
-    /// DI-friendly constructor. Named HttpClients come from <see cref="IHttpClientFactory"/>.
-    /// </summary>
-    internal MarketingAndPromotionsClient(
-        MarketingAndPromotionsConfiguration config,
-        IHttpClientFactory factory,
-        ITokenContext tokenContext)
+    /// <summary>Creates a client with its own HTTP connections.</summary>
+    public MarketingAndPromotionsClient(MarketingAndPromotionsConfiguration config)
+        : this(config, CreateDefaultPrimaryHandler, disposeHandlers: true)
     {
-        _ownedClients = [];
-        var auth = new BaseBearerTokenAuthenticationProvider(new KiotaAuthProvider(config, tokenContext));
-        InitializeRestClients(auth, config, tokenContext, endpoint => factory.CreateClient(endpoint.HttpClientName));
     }
 
     /// <summary>
-    /// Standalone constructor for use outside DI (tests, scripts).
-    /// Creates its own HttpClients with DiagnosticLoggingHandler.
+    /// Creates a client that sends every request through <paramref name="primaryHandler"/>, for example to
+    /// configure a proxy or client certificates, or to substitute a test double. The handler is shared by
+    /// all APIs and is not disposed by this client.
     /// </summary>
-    public MarketingAndPromotionsClient(MarketingAndPromotionsConfiguration config)
+    public MarketingAndPromotionsClient(MarketingAndPromotionsConfiguration config, HttpMessageHandler primaryHandler)
+        : this(config, RequireHandler(primaryHandler), disposeHandlers: false)
     {
+    }
+
+    private MarketingAndPromotionsClient(
+        MarketingAndPromotionsConfiguration config,
+        Func<HttpMessageHandler> primaryHandler,
+        bool disposeHandlers)
+    {
+        config.ValidateTrustedHosts();
         var tokenContext = new AsyncLocalTokenContext();
         var auth = new BaseBearerTokenAuthenticationProvider(new KiotaAuthProvider(config, tokenContext));
         var owned = new List<HttpClient>();
-        InitializeRestClients(auth, config, tokenContext, endpoint =>
+        HttpClient Build(DelegatingHandler logging, string baseUrl)
         {
-            var client = BuildStandaloneHttpClient(config, endpoint.BaseUrl);
+            logging.InnerHandler = primaryHandler();
+            var client = new HttpClient(logging, disposeHandlers)
+            {
+                BaseAddress = new Uri(baseUrl),
+                Timeout = config.HttpTimeout
+            };
             owned.Add(client);
             return client;
-        });
+        }
+        InitializeRestClients(auth, config, tokenContext, endpoint => Build(new DiagnosticLoggingHandler(config), endpoint.BaseUrl));
         _ownedClients = [.. owned];
     }
 
-    private static HttpClient BuildStandaloneHttpClient(MarketingAndPromotionsConfiguration config, string baseUrl)
+    private static HttpMessageHandler CreateDefaultPrimaryHandler() =>
+#if NETFRAMEWORK
+        // .NET Framework defaults to 2 connections per host outside ASP.NET.
+        new HttpClientHandler { MaxConnectionsPerServer = 64 };
+#else
+        new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromMinutes(2) };
+#endif
+
+    private static Func<HttpMessageHandler> RequireHandler(HttpMessageHandler primaryHandler)
     {
-        var handler = new DiagnosticLoggingHandler(config)
+#if NETFRAMEWORK
+        if (primaryHandler is null)
         {
-            InnerHandler = new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromMinutes(2) }
-        };
-        return new HttpClient(handler) { BaseAddress = new Uri(baseUrl), Timeout = config.HttpTimeout };
+            throw new ArgumentNullException(nameof(primaryHandler));
+        }
+#else
+        ArgumentNullException.ThrowIfNull(primaryHandler);
+#endif
+        return () => primaryHandler;
     }
 
-    internal static IReadOnlyList<(string ApiId, string HttpClientName)> RestEndpointNames { get; } =
-    [
-        ("marketing", MarketingClientName),
-        ("recommendation", RecommendationClientName)
-    ];
-
     internal static IReadOnlyList<RestEndpoint> RestEndpoints(MarketingAndPromotionsConfiguration config) =>
-        [.. RestEndpointNames.Select(name => new RestEndpoint(name.ApiId, name.HttpClientName, config.RestBaseUrl(name.ApiId)))];
+    [
+        new RestEndpoint("marketing", config.RestBaseUrl("marketing")),
+        new RestEndpoint("recommendation", config.RestBaseUrl("recommendation"))
+    ];
 
     private void InitializeRestClients(
         IAuthenticationProvider auth,
@@ -106,6 +126,6 @@ public class MarketingAndPromotionsClient : IDisposable
     }
 }
 
-internal sealed record RestEndpoint(string ApiId, string HttpClientName, string BaseUrl);
+internal sealed record RestEndpoint(string ApiId, string BaseUrl);
 
 internal delegate HttpClient RestHttpClientProvider(RestEndpoint endpoint);

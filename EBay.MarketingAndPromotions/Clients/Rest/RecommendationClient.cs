@@ -35,8 +35,8 @@ public sealed class RecommendationClient
     }
 
     /// <summary>
-    /// The <b>find</b> method currently returns information for a single recommendation type (<c>AD</c>) which contains information that sellers can use to configure <see href="/api-docs/sell/static/marketing/promoted-listings.html">Promoted Listings</see> ad campaigns.
-    /// The response from this method includes an array of the seller's listing IDs, where each element in the array contains recommendations related to the associated listing ID. For details on how to use this method, see <see href="/api-docs/sell/static/marketing/pl-reco-api.html">Using the Recommendation API to help configure campaigns</see>.
+    /// The <b>find</b> method currently returns information for a single recommendation type (<c>AD</c>) which contains information that sellers can use to configure <see href="https://developer.ebay.com/api-docs/sell/static/marketing/promoted-listings.html">Promoted Listings</see> ad campaigns.
+    /// The response from this method includes an array of the seller's listing IDs, where each element in the array contains recommendations related to the associated listing ID. For details on how to use this method, see <see href="https://developer.ebay.com/api-docs/sell/static/marketing/pl-reco-api.html">Using the Recommendation API to help configure campaigns</see>.
     /// <b>The AD recommendation type</b>
     /// The <c>AD</c> type contains two sets of information:
     /// - <b>The promoteWithAd indicator</b>

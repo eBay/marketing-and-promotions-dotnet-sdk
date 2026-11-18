@@ -43,7 +43,7 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 #else
         public string Description { get; set; }
 #endif
-        /// <summary>The date and time the discount ends, in UTC format (&lt;code&gt;yyyy-MM-ddThh:mm:ssZ&lt;/code&gt;). The value supplied for &lt;b&gt;endDate&lt;/b&gt; must be at least 24 hours after the value supplied for the &lt;b&gt;startDate&lt;/b&gt; of the markdown discount.&lt;br&gt;&lt;br&gt;For display purposes, convert this time into the local time of the seller.  &lt;br&gt;&lt;br&gt;&lt;b&gt;Max value:&lt;/b&gt;&lt;ul&gt;&lt;li&gt;&lt;code&gt;14&lt;/code&gt; days for the AT, CH, DE, ES, FR, IE, IT, and UK, marketplaces.&lt;/li&gt;  &lt;li&gt;&lt;code&gt;45&lt;/code&gt; days for all other marketplaces.&lt;/li&gt;&lt;/ul&gt;</summary>
+        /// <summary>The date and time the discount ends, in UTC format (&lt;code&gt;yyyy-MM-ddThh:mm:ssZ&lt;/code&gt;). The value supplied for &lt;b&gt;endDate&lt;/b&gt; must be at least 24 hours after the value supplied for the &lt;b&gt;startDate&lt;/b&gt; of the markdown discount.&lt;br&gt;&lt;br&gt;For display purposes, convert this time into the local time of the seller.  &lt;br&gt;&lt;br&gt;&lt;b&gt;Max duration for markdown discounts:&lt;/b&gt;&lt;ul&gt;&lt;li&gt;&lt;code&gt;14&lt;/code&gt; days for the AT, CH, IE, and UK marketplaces.&lt;/li&gt; &lt;li&gt;&lt;code&gt;30&lt;/code&gt; days for DE, ES, FR, IT, and TW marketplaces.&lt;/li&gt;  &lt;li&gt;&lt;code&gt;45&lt;/code&gt; days for all other marketplaces.&lt;/li&gt;&lt;/ul&gt;</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? EndDate { get; set; }

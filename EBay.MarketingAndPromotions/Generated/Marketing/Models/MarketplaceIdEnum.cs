@@ -17,25 +17,33 @@ using System.Runtime.Serialization;
 using System;
 namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
 {
-    /// <summary>The eBay marketplace ID of the site where the discount is hosted. Threshold discounts are supported on a select set of marketplaces while markdown discounts are supported on all eBay marketplaces. &lt;p&gt;&lt;b&gt;Valid values for threshold discounts are as follows:&lt;/b&gt;&lt;/p&gt;  &lt;ul class=&quot;compact&quot;&gt;&lt;li&gt;&lt;code&gt;EBAY_AU&lt;/code&gt; = Australia&lt;/li&gt; &lt;li&gt;&lt;code&gt;EBAY_DE&lt;/code&gt; = Germany&lt;/li&gt; &lt;li&gt;&lt;code&gt;EBAY_ES&lt;/code&gt; = Spain&lt;/li&gt; &lt;li&gt;&lt;code&gt;EBAY_FR&lt;/code&gt; = France&lt;/li&gt; &lt;li&gt;&lt;code&gt;EBAY_GB&lt;/code&gt; = Great Britain&lt;/li&gt; &lt;li&gt;&lt;code&gt;EBAY_IT&lt;/code&gt; = Italy&lt;/li&gt; &lt;li&gt;&lt;code&gt;EBAY_US&lt;/code&gt; = United States&lt;/li&gt;&lt;/ul&gt;</summary>
+    /// <summary>This enumerated type defines the unique IDs for each of the eBay marketplaces. | - **EBAY_AT**: This enumeration value indicates that the eBay Marketplace is the Austria site (ebay.at). - **EBAY_AU**: This enumeration value indicates that the eBay Marketplace is the Australia site (ebay.com.au). - **EBAY_BE**: This enumeration value indicates that the eBay marketplace is the Belgium (Dutch) site (www.ebay.be). - **EBAY_CA**: This enumeration value indicates that the eBay Marketplace is the Canada (English) site (ebay.ca). - **EBAY_CH**: This enumeration value indicates that the eBay Marketplace is the Switzerland site (ebay.ch). - **EBAY_CN**: Reserved for future use. - **EBAY_CZ**: Reserved for future use. - **EBAY_DE**: This enumeration value indicates that the eBay Marketplace is the Germany site (ebay.de). - **EBAY_DK**: Reserved for future use. - **EBAY_ES**: This enumeration value indicates that the eBay Marketplace is the Spain site (ebay.es). - **EBAY_FI**: Reserved for future use. - **EBAY_FR**: This enumeration value indicates that the eBay Marketplace is the France site (ebay.fr). - **EBAY_GB**: This enumeration value indicates that the eBay Marketplace is the UK site (ebay.co.uk). - **EBAY_GR**: Reserved for future use. - **EBAY_HK**: This enumeration value indicates that the eBay Marketplace is the Hong Kong site (ebay.com.hk). - **EBAY_HU**: Reserved for future use. - **EBAY_ID**: Reserved for future use. - **EBAY_IE**: This enumeration value indicates that the eBay Marketplace is the Ireland site (ebay.ie). - **EBAY_IL**: Reserved for future use. - **EBAY_IN**: This enumeration value indicates that the eBay Marketplace is the India site (ebay.in). Note: eBay India is no longer a functioning eBay marketplace. - **EBAY_IT**: This enumeration value indicates that the eBay Marketplace is the Italy site (ebay.it). - **EBAY_JP**: Reserved for future use. - **EBAY_MY**: This enumeration value indicates that the eBay Marketplace is the Malaysia site (ebay.com/my). - **EBAY_NL**: This enumeration value indicates that the eBay Marketplace is the Netherlands site (ebay.nl). - **EBAY_NO**: Reserved for future use. - **EBAY_NZ**: Reserved for future use. - **EBAY_PE**: Reserved for future use. - **EBAY_PH**: This enumeration value indicates that the eBay Marketplace is the Philippines site (ebay.ph). - **EBAY_PL**: This enumeration value indicates that the eBay Marketplace is the Poland site (ebay.pl). - **EBAY_PR**: Reserved for future use. - **EBAY_PT**: Reserved for future use. - **EBAY_RU**: Reserved for future use. - **EBAY_SE**: Reserved for future use. - **EBAY_SG**: This enumeration value indicates that the eBay Marketplace is the Singapore site (ebay.com/sg). - **EBAY_TH**: This enumeration value indicates that the eBay Marketplace is the Thailand site (export.ebay.co.th). - **EBAY_TW**: This enumeration value indicates that the eBay Marketplace is the Taiwan site (ebay.com/tw). - **EBAY_US**: This enumeration value indicates that the eBay Marketplace is the US site (ebay.com). - **EBAY_VN**: This enumeration value indicates that the eBay Marketplace is the Vietnam site (ebay.vn). - **EBAY_ZA**: Reserved for future use. - **EBAY_HALF_US**: This enumeration value is no longer applicable as the Half.com site no longer exists. - **EBAY_MOTORS_US**: Indicates the parent category for &quot;Auto Parts and Vehicles&quot; on the EBAY_US marketplace (https://www.ebay.com/motors).</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum MarketplaceIdEnum
     {
-        [EnumMember(Value = "EBAY_AT")]
+        [EnumMember(Value = "EBAY_US")]
         #pragma warning disable CS1591
-        EBAY_AT,
+        EBAY_US,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "EBAY_CA")]
+        #pragma warning disable CS1591
+        EBAY_CA,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "EBAY_GB")]
+        #pragma warning disable CS1591
+        EBAY_GB,
         #pragma warning restore CS1591
         [EnumMember(Value = "EBAY_AU")]
         #pragma warning disable CS1591
         EBAY_AU,
         #pragma warning restore CS1591
+        [EnumMember(Value = "EBAY_AT")]
+        #pragma warning disable CS1591
+        EBAY_AT,
+        #pragma warning restore CS1591
         [EnumMember(Value = "EBAY_BE")]
         #pragma warning disable CS1591
         EBAY_BE,
-        #pragma warning restore CS1591
-        [EnumMember(Value = "EBAY_CA")]
-        #pragma warning disable CS1591
-        EBAY_CA,
         #pragma warning restore CS1591
         [EnumMember(Value = "EBAY_CH")]
         #pragma warning disable CS1591
@@ -68,10 +76,6 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
         [EnumMember(Value = "EBAY_FR")]
         #pragma warning disable CS1591
         EBAY_FR,
-        #pragma warning restore CS1591
-        [EnumMember(Value = "EBAY_GB")]
-        #pragma warning disable CS1591
-        EBAY_GB,
         #pragma warning restore CS1591
         [EnumMember(Value = "EBAY_GR")]
         #pragma warning disable CS1591
@@ -164,10 +168,6 @@ namespace EBay.MarketingAndPromotions.Generated.Marketing.Models
         [EnumMember(Value = "EBAY_TW")]
         #pragma warning disable CS1591
         EBAY_TW,
-        #pragma warning restore CS1591
-        [EnumMember(Value = "EBAY_US")]
-        #pragma warning disable CS1591
-        EBAY_US,
         #pragma warning restore CS1591
         [EnumMember(Value = "EBAY_VN")]
         #pragma warning disable CS1591
