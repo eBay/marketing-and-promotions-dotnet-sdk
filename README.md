@@ -1,373 +1,282 @@
-# Marketing and Promotions .NET SDK
+# eBay Marketing and Promotions SDK for .NET
 
-A production-ready .NET SDK for eBay Marketing and Recommendation APIs, providing unified access to advertising campaigns, promotions, and listing recommendations.
+Run Promoted Listings campaigns, promotions and email campaigns, and get listing recommendations. This SDK wraps the eBay Marketing API and Recommendation API behind one client, `MarketingAndPromotionsClient`.
 
-## Features
-
-- **Target frameworks**: .NET Framework 4.7.2, .NET 8, .NET 9 and .NET 10
-- **Marketing API**: Complete advertising campaign management (81+ operations)
-  - Ad campaigns and ad management
-  - Keywords and negative keywords
-  - Promotions and price markdowns
-  - Email campaigns
-  - Reporting and analytics
-- **Recommendation API**: Listing promotion recommendations (1 operation)
-- **OAuth Authentication**: Token refresh handler interface for seamless authentication
-- **Dependency Injection**: First-class support for ASP.NET Core DI
-- **Strong Typing**: Internal generated types with public abstraction layer
-
-## Architecture
-
-```
-EBay.MarketingAndPromotions/
-├── Generated/                    # Kiota-generated REST clients (internal)
-│   ├── Marketing/
-│   └── Recommendation/
-├── Clients/
-│   ├── Rest/
-│   │   ├── MarketingClient.cs   # REST client wrappers (public API)
-│   │   └── RecommendationClient.cs
-├── Configuration/                # SDK configuration and auth
-├── Exceptions/                   # SDK exceptions
-└── MarketingAndPromotionsClient.cs  # Main SDK facade
-```
+- **Target frameworks:** .NET Framework 4.7.2, .NET 8, .NET 9 and .NET 10
+- **C#:** usable from C# 7.3 and later
 
 ## Installation
 
+The package `EBay.MarketingAndPromotions` is not on nuget.org yet. Reference the project, or build the package and add it to a local feed:
+
 ```bash
-# From source
-dotnet pack EBay.MarketingAndPromotions/EBay.MarketingAndPromotions.csproj
-dotnet add reference path/to/EBay.MarketingAndPromotions.1.0.0.nupkg
-
-# Or add project reference
-dotnet add reference EBay.MarketingAndPromotions/EBay.MarketingAndPromotions.csproj
+dotnet pack EBay.MarketingAndPromotions -c Release -o artifacts/packages
 ```
 
-## Quick Start
-
-### 1. Implement Token Refresh Handler
-
-```csharp
-using MarketingAndPromotions.Configuration;
-
-public class MyTokenRefreshHandler : ITokenRefreshHandler
-{
-    private readonly string _clientId;
-    private readonly string _clientSecret;
-    private string? _accessToken;
-    private DateTime _tokenExpiry;
-
-    public MyTokenRefreshHandler(string clientId, string clientSecret)
-    {
-        _clientId = clientId;
-        _clientSecret = clientSecret;
-    }
-
-    public async Task<string> GetAccessTokenAsync(CancellationToken cancellationToken = default)
-    {
-        if (_accessToken != null && DateTime.UtcNow < _tokenExpiry.AddMinutes(-5))
-        {
-            return _accessToken;
-        }
-
-        // Refresh token using eBay OAuth API
-        using var client = new HttpClient();
-        var request = new HttpRequestMessage(HttpMethod.Post, "https://api.ebay.com/identity/v1/oauth2/token");
-        request.Headers.Authorization = new AuthenticationHeaderValue(
-            "Basic",
-            Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_clientId}:{_clientSecret}")));
-        
-        request.Content = new FormUrlEncodedContent(new[]
-        {
-            new KeyValuePair<string, string>("grant_type", "client_credentials"),
-            new KeyValuePair<string, string>("scope", "https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/sell.marketing")
-        });
-
-        var response = await client.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
-
-        var json = await response.Content.ReadAsStringAsync(cancellationToken);
-        var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(json);
-
-        _accessToken = tokenResponse.AccessToken;
-        _tokenExpiry = DateTime.UtcNow.AddSeconds(tokenResponse.ExpiresIn);
-
-        return _accessToken;
-    }
-}
-```
-
-### 2. Configure and Use the SDK
+## Quick start
 
 ```csharp
 using EBay.MarketingAndPromotions;
 using EBay.MarketingAndPromotions.Configuration;
 
-// Create configuration
 var config = new MarketingAndPromotionsConfiguration
 {
-    TokenRefreshHandler = new MyTokenRefreshHandler(clientId, secret),
-    MarketingBaseUrl = "https://api.ebay.com/sell/marketing/v1",
-    RecommendationBaseUrl = "https://api.ebay.com/sell/recommendation/v1"
+    // A user or application access token from your own OAuth flow (see "Authentication").
+    AccessToken = Environment.GetEnvironmentVariable("EBAY_ACCESS_TOKEN")
 };
 
-// Create SDK client
 using var client = new MarketingAndPromotionsClient(config);
 
-// Campaign management
-var campaign = await client.Marketing.CreateCampaignAsync(campaignJson);
-var campaigns = await client.Marketing.GetCampaignsAsync();
-await client.Marketing.EndCampaignAsync(campaignId);
-
-// Ad management
-var ad = await client.Marketing.CreateAdByListingIdAsync(campaignId, adJson);
-var ads = await client.Marketing.GetAdsAsync(campaignId);
-await client.Marketing.DeleteAdAsync(campaignId, adId);
-
-// Keyword management
-var keyword = await client.Marketing.CreateKeywordAsync(campaignId, keywordJson);
-var keywords = await client.Marketing.GetKeywordsAsync(campaignId);
-
-// Promotions
-var promotion = await client.Marketing.CreateItemPromotionAsync(promotionJson);
-var markdown = await client.Marketing.CreateItemPriceMarkdownPromotionAsync(markdownJson);
-
-// Email campaigns
-var emailCampaign = await client.Marketing.CreateEmailCampaignAsync(emailCampaignJson);
-var emailCampaigns = await client.Marketing.GetEmailCampaignsAsync();
-
-// Recommendations
-var recommendations = await client.Recommendation.FindListingRecommendationsAsync();
+var campaigns = await client.Marketing.GetCampaignsAsync(limit: "10");
+Console.WriteLine($"{campaigns?.Total} campaigns");
 ```
 
-### 3. Dependency Injection (ASP.NET Core)
+## APIs
 
-`AddMarketingAndPromotionsSdk` registers the configuration and one shared `MarketingAndPromotionsClient` (a singleton that owns its HTTP connections and is disposed with the container). Inject the client and use its properties for the individual APIs:
+| `MarketingAndPromotionsClient` property | API | Default base URL | Access token |
+|---|---|---|---|
+| `Marketing` | Marketing API | `https://api.ebay.com/sell/marketing/v1` | User (some operations: application) |
+| `Recommendation` | Recommendation API | `https://api.ebay.com/sell/recommendation/v1` | User |
+
+"Access token" is what eBay's OpenAPI spec declares: an application token (client credentials) or a user token (authorization code). Scopes are listed per API below.
+
+<details>
+<summary><b>Marketing</b>: Marketing API, 84 operations</summary>
+
+Scopes: `https://api.ebay.com/oauth/api_scope`, `https://api.ebay.com/oauth/api_scope/sell.marketing`, `https://api.ebay.com/oauth/api_scope/sell.marketing.readonly`
+
+| Method | Description |
+|---|---|
+| `BulkCreateAdsByInventoryReferenceAsync` | This method adds multiple listings that are managed with the Inventory API to an existing Promoted Listings campaign. |
+| `BulkCreateAdsByListingIdAsync` | This method adds multiple listings to an existing Promoted Listings campaign using listingId values generated by the Trading API or Inventory API, or using values generated by an ad group ID. |
+| `BulkDeleteAdsByInventoryReferenceAsync` | This method works with listings created with the Inventory API. |
+| `BulkDeleteAdsByListingIdAsync` | This method works with listing IDs created with either the Trading API or the Inventory API. |
+| `BulkUpdateAdsBidByInventoryReferenceAsync` | This method works with listings created with either the Trading API or the Inventory API. |
+| `BulkUpdateAdsBidByListingIdAsync` | This method works with listings created with either the Trading API or the Inventory API. |
+| `BulkUpdateAdsStatusAsync` | This method works with listings created with either the Trading API or the Inventory API. |
+| `BulkUpdateAdsStatusByListingIdAsync` | The method updates the status of ads in bulk, based on listing ID values. |
+| `GetAdsAsync` | This method retrieves Promoted Listings ads that are associated with listings created with either the Trading API or the Inventory API. |
+| `CreateAdByListingIdAsync` | This method adds a listing to an existing Promoted Listings campaign using a listingId value generated by the Trading API or Inventory API, or using a value generated by an ad group ID. |
+| `CreateAdsByInventoryReferenceAsync` | This method adds a listing that is managed with the Inventory API to an existing Promoted Listings campaign. |
+| `GetAdAsync` | This method retrieves the specified ad from the specified campaign. |
+| `DeleteAdAsync` | This method removes the specified ad from the specified campaign. |
+| `DeleteAdsByInventoryReferenceAsync` | This method works with listings that are managed with the Inventory API. |
+| `GetAdsByInventoryReferenceAsync` | This method retrieves Promoted Listings ads associated with listings that are managed with the Inventory API from the specified campaign. |
+| `UpdateBidAsync` | This method updates the bid percentage (also known as the "ad rate") for the specified ad in the specified campaign. |
+| `GetAdGroupsAsync` | This method retrieves ad groups for the specified campaign. |
+| `CreateAdGroupAsync` | This method adds an ad group to an existing priority strategy campaign that uses manual targeting. |
+| `GetAdGroupAsync` | This method retrieves the details of a specified ad group, such as the ad group’s default bid and status. |
+| `UpdateAdGroupAsync` | This method updates the ad group associated with a campaign. |
+| `SuggestBidsAsync` | This method allows sellers to retrieve the suggested bids for input keywords and match type. |
+| `SuggestKeywordsAsync` | This method allows sellers to retrieve a list of keyword ideas to be targeted for Promoted Listings campaigns. |
+| `CloneCampaignAsync` | This method clones (makes a copy of) the specified campaign's campaign criterion. |
+| `GetCampaignsAsync` | This method retrieves the details for all of the seller's defined campaigns. |
+| `CreateCampaignAsync` | This method can be used to create a Promoted Listings general, priority, or offsite campaign. |
+| `GetCampaignAsync` | This method retrieves the details of a single campaign, as specified with the campaign_id query parameter. |
+| `DeleteCampaignAsync` | This method deletes the campaign specified by the campaign_id query parameter. |
+| `EndCampaignAsync` | This method ends an active (RUNNING) or paused campaign. |
+| `FindCampaignByAdReferenceAsync` | This method retrieves the campaigns containing the listing that is specified using either a listing ID, or an inventory reference ID and inventory reference type pair. |
+| `GetCampaignByNameAsync` | This method retrieves the details of a single campaign, as specified with the campaign_name query parameter. |
+| `PauseCampaignAsync` | This method pauses an active (RUNNING) campaign. |
+| `ResumeCampaignAsync` | This method resumes a paused campaign, as long as its end date is in the future. |
+| `SuggestBudgetAsync` | This method allows sellers to retrieve the suggested budget for an offsite campaign. |
+| `SuggestItemsAsync` | This method allows sellers to obtain ideas for listings, which can be targeted for Promoted Listings campaigns. |
+| `SuggestMaxCpcAsync` | This method allows sellers to retrieve the suggested maximum cost-per-click value for a smart targeting campaign. |
+| `UpdateAdRateStrategyAsync` | This method updates the ad rate strategy for an existing rules-based general strategy ad campaign that uses the Cost Per Sale (CPS) funding model. |
+| `UpdateBiddingStrategyAsync` | This method allows sellers to change the bidding strategy for a specified Cost Per Click (CPC) campaign that uses manual targeting. |
+| `UpdateCampaignBudgetAsync` | This method updates the daily budget for a priority strategy campaign that uses the Cost Per Click (CPC) funding model. |
+| `UpdateCampaignIdentificationAsync` | This method can be used to change the name of a campaign, as well as modify the start or end dates. |
+| `BulkCreateKeywordAsync` | This method adds keywords, in bulk, to an existing priority strategy ad group in a campaign that uses manual targeting. |
+| `BulkUpdateKeywordAsync` | This method updates the bids and statuses of keywords, in bulk, for an existing priority strategy campaign. |
+| `GetKeywordsAsync` | This method can be used to retrieve all of the keywords for ad groups in priority strategy campaigns that use the Cost Per Click (CPC) funding model. |
+| `CreateKeywordAsync` | This method creates keywords using a specified campaign ID for an existing priority strategy campaign that uses manual targeting. |
+| `GetKeywordAsync` | This method retrieves details on a specific keyword from an ad group within a priority strategy campaign that uses the Cost Per Click (CPC) funding model. |
+| `UpdateKeywordAsync` | This method updates keywords using a campaign ID and keyword ID for an existing priority strategy campaign. |
+| `BulkCreateNegativeKeywordAsync` | This method adds negative keywords, in bulk, to an existing ad group in a priority strategy campaign that uses manual targeting. |
+| `BulkUpdateNegativeKeywordAsync` | This method updates the statuses of existing negative keywords, in bulk. |
+| `GetNegativeKeywordsAsync` | This method can be used to retrieve all of the negative keywords for ad groups in priority strategy campaigns that use the Cost Per Click (CPC) funding model. |
+| `CreateNegativeKeywordAsync` | This method adds a negative keyword to an existing ad group in a priority strategy campaign that uses manual targeting. |
+| `GetNegativeKeywordAsync` | This method retrieves details on a specific negative keyword. |
+| `UpdateNegativeKeywordAsync` | This method updates the status of an existing negative keyword. |
+| `GetReportAsync` | This method downloads the report as specified by the report_id path parameter. |
+| `GetReportMetadataAsync` | This method retrieves information that details the fields used in each of the Promoted Listings reports. |
+| `GetReportMetadataForReportTypeAsync` | This method retrieves metadata that details the fields used by a specific Promoted Listings report type. |
+| `GetReportTasksAsync` | This method returns information on all the existing report tasks related to a seller. |
+| `CreateReportTaskAsync` | This method creates a report task, which generates a Promoted Listings report based on the values specified in the call. |
+| `GetReportTaskAsync` | This method returns the details of a specific Promoted Listings report task, as specified by the report_task_id path parameter. |
+| `DeleteReportTaskAsync` | This method deletes the report task specified by the report_task_id path parameter. |
+| `CreateItemPriceMarkdownPromotionAsync` | This method creates an item price markdown discount (know simply as a "markdown discount") where a discount amount is applied directly to the items included in the discount. |
+| `GetItemPriceMarkdownPromotionAsync` | This method returns the complete details of the item price markdown discount that's indicated by the promotion_id path parameter. |
+| `UpdateItemPriceMarkdownPromotionAsync` | This method updates the specified item price markdown discount with the new configuration that you supply in the payload of the request. |
+| `DeleteItemPriceMarkdownPromotionAsync` | This method deletes the item price markdown discount specified by the promotion_id path parameter. |
+| `CreateItemPromotionAsync` | This method creates an item discount, where the buyer receives a discount when they meet the specific buying criteria. |
+| `GetItemPromotionAsync` | This method returns the complete details of the threshold discount specified by the promotion_id path parameter. |
+| `UpdateItemPromotionAsync` | This method updates the specified threshold discount with the new configuration that you supply in the request. |
+| `DeleteItemPromotionAsync` | This method deletes the threshold discount specified by the promotion_id path parameter. |
+| `GetListingSetAsync` | This method returns the set of listings associated with the promotion_id specified in the path parameter. |
+| `GetPromotionsAsync` | This method returns a list of a seller's undeleted discounts. |
+| `PausePromotionAsync` | This method pauses a currently-active (RUNNING) threshold discount and changes the state of the discount from RUNNING to PAUSED. |
+| `ResumePromotionAsync` | This method restarts a threshold discount that was previously paused and changes the state of the discount from PAUSED to RUNNING. |
+| `GetPromotionReportsAsync` | This method generates a report that lists the seller's running, paused, and ended discounts for the specified eBay marketplace. |
+| `GetPromotionSummaryReportAsync` | This method generates a report that summarizes the seller's discounts for the specified eBay marketplace. |
+| `GetEmailCampaignsAsync` | This method retrieves a list of email campaigns from a seller's eBay store. |
+| `CreateEmailCampaignAsync` | This method creates a new email campaign. |
+| `GetEmailCampaignAsync` | This method returns the details of a single email campaign specified by the email_campaign_id path parameter. |
+| `UpdateEmailCampaignAsync` | This method lets users update an existing email campaign. |
+| `DeleteEmailCampaignAsync` | This method deletes the email campaign specified by the email_campaign_id path parameter. |
+| `GetAudiencesAsync` | This method retrieves all available email newsletter audiences for the email campaign type specified by the emailCampaignType path parameter. |
+| `GetEmailPreviewAsync` | This method returns a preview of the email sent by the email campaign indicated by the email_campaign_id path parameter. |
+| `GetEmailReportAsync` | This method returns the seller's email campaign performance report for a time period specified by the startDate and endDate path parameters. |
+| `UpsertVideoAdsPreferencesAsync` | Call this method to create or update video ads preferences for a single listing in an ad campaign. |
+| `BulkUpsertVideoAdsPreferencesAsync` | Call this method to create or update video ads preferences for multiple listings in a single ad campaign request. |
+| `GetSellerPromotionalOffersAsync` | Retrieves a list of offers |
+| `ActivatePromotionAsync` | Signs up the seller for the specified promotion. |
+
+</details>
+
+<details>
+<summary><b>Recommendation</b>: Recommendation API, 1 operation</summary>
+
+Scopes: `https://api.ebay.com/oauth/api_scope/sell.inventory`
+
+| Method | Description |
+|---|---|
+| `FindListingRecommendationsAsync` | The find method currently returns information for a single recommendation type (AD) which contains information that sellers can use to configure Promoted Listings ad campaigns. |
+
+</details>
+
+## Authentication
+
+The SDK does not obtain or refresh tokens: get them with your own OAuth flow ([eBay OAuth guide](https://developer.ebay.com/develop/guides/sell/authorization)) and give them to the SDK in one of two ways:
+
+- `MarketingAndPromotionsConfiguration.AccessToken`: used for every call that doesn't pass its own token.
+- The `accessToken` parameter on every method: used for that call only, for example a user token where the configuration holds an application token.
+
+```csharp
+string userToken = Environment.GetEnvironmentVariable("EBAY_USER_TOKEN")!;
+var campaigns = await client.Marketing.GetCampaignsAsync(limit: "10", accessToken: userToken);
+```
+
+A token is only ever sent to trusted hosts, see below.
+
+## Configuration
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `MarketingBaseUrl` | `string` | `https://api.ebay.com/sell/marketing/v1` | Base URL of the Marketing API. |
+| `RecommendationBaseUrl` | `string` | `https://api.ebay.com/sell/recommendation/v1` | Base URL of the Recommendation API. |
+| `AccessToken` | `string?` |  | Fallback bearer token used when no per-call accessToken is supplied. |
+| `DiagnosticLogging` | `bool` | `false` | When true, logs the HTTP method, URL, status code, and response reason phrase for all non-success responses to stderr. |
+| `HttpTimeout` | `TimeSpan` | 30 seconds | Timeout applied to all HTTP requests. |
+| `DefaultRequestOptions` | `RequestOptions` | no headers | Default headers applied to every REST request. |
+| `AllowedHosts` | `IList<string>` | empty | Additional hosts trusted with the access token, for example a proxy (see below). |
+
+`MarketingAndPromotionsConfiguration.DefaultAllowedHosts` lists the hosts trusted by default.
+
+## Sandbox and trusted hosts
+
+The access token is only sent to trusted hosts: the hosts in `MarketingAndPromotionsConfiguration.DefaultAllowedHosts`, which are the eBay production hosts and their `*.sandbox.ebay.com` counterparts, plus any in `AllowedHosts`. Switching to the sandbox needs only the base URLs:
+
+```csharp
+var sandboxConfig = new MarketingAndPromotionsConfiguration
+{
+    AccessToken = Environment.GetEnvironmentVariable("EBAY_SANDBOX_ACCESS_TOKEN"),
+    MarketingBaseUrl = "https://api.sandbox.ebay.com/sell/marketing/v1",
+    RecommendationBaseUrl = "https://api.sandbox.ebay.com/sell/recommendation/v1",
+};
+```
+
+Any other host, for example a proxy that forwards to eBay, has to be added to `AllowedHosts`; the client constructor throws `InvalidOperationException` otherwise:
+
+```csharp
+var proxied = new MarketingAndPromotionsConfiguration
+{
+    MarketingBaseUrl = "https://ebay-proxy.example.com/sell/marketing/v1",
+    AllowedHosts = { "ebay-proxy.example.com" },
+};
+```
+
+## Dependency injection
+
+`AddMarketingAndPromotionsSdk` registers the configuration and one shared `MarketingAndPromotionsClient` as a singleton. It owns its HTTP connections and is disposed with the container. Inject the client and use its properties for the individual APIs:
 
 ```csharp
 using EBay.MarketingAndPromotions;
 using EBay.MarketingAndPromotions.Configuration;
 using EBay.MarketingAndPromotions.Extensions;
 
+var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMarketingAndPromotionsSdk(new MarketingAndPromotionsConfiguration
 {
     AccessToken = builder.Configuration["EBay:AccessToken"]
 });
 
-app.MapGet("/example", async (MarketingAndPromotionsClient sdk) =>
-    Results.Ok(await sdk.Marketing.GetCampaignsAsync()));
-```
-
-To route requests through your own handler (proxy, client certificates, a test double), pass it to the constructor: `new MarketingAndPromotionsClient(config, handler)`. The handler is shared by all APIs and is not disposed by the client.
-
-## API Operations
-
-### Marketing API
-
-#### Campaign Operations
-```csharp
-// Create campaign
-var campaign = await client.Marketing.CreateCampaignAsync(campaignJson);
-
-// Get campaigns
-var campaigns = await client.Marketing.GetCampaignsAsync();
-var campaign = await client.Marketing.GetCampaignAsync(campaignId);
-var campaign = await client.Marketing.GetCampaignByNameAsync();
-
-// Manage campaigns
-await client.Marketing.EndCampaignAsync(campaignId);
-await client.Marketing.DeleteCampaignAsync(campaignId);
-var clone = await client.Marketing.CloneCampaignAsync(campaignId, cloneRequestJson);
-
-// Find campaign
-var campaign = await client.Marketing.FindCampaignByAdReferenceAsync();
-```
-
-#### Ad Operations
-```csharp
-// Create ads
-var ad = await client.Marketing.CreateAdByListingIdAsync(campaignId, adJson);
-var ads = await client.Marketing.CreateAdsByInventoryReferenceAsync(campaignId, requestJson);
-
-// Bulk create ads
-var bulkAds = await client.Marketing.BulkCreateAdsByListingIdAsync(campaignId, requestJson);
-var bulkAds = await client.Marketing.BulkCreateAdsByInventoryReferenceAsync(campaignId, requestJson);
-
-// Get ads
-var ad = await client.Marketing.GetAdAsync(campaignId, adId);
-var ads = await client.Marketing.GetAdsAsync(campaignId);
-
-// Delete ads
-await client.Marketing.DeleteAdAsync(campaignId, adId);
-```
-
-#### Keyword Operations
-```csharp
-// Create keywords
-var keyword = await client.Marketing.CreateKeywordAsync(campaignId, keywordJson);
-var keywords = await client.Marketing.BulkCreateKeywordAsync(campaignId, requestJson);
-
-// Get keywords
-var keyword = await client.Marketing.GetKeywordAsync(campaignId, keywordId);
-var keywords = await client.Marketing.GetKeywordsAsync(campaignId);
-```
-
-#### Promotion Operations
-```csharp
-// Item promotions
-var promotion = await client.Marketing.CreateItemPromotionAsync(promotionJson);
-var promotion = await client.Marketing.GetItemPromotionAsync(promotionId);
-await client.Marketing.DeleteItemPromotionAsync(promotionId);
-
-// Price markdown promotions
-var markdown = await client.Marketing.CreateItemPriceMarkdownPromotionAsync(markdownJson);
-var markdown = await client.Marketing.GetItemPriceMarkdownPromotionAsync(promotionId);
-await client.Marketing.DeleteItemPriceMarkdownPromotionAsync(promotionId);
-```
-
-#### Email Campaign Operations
-```csharp
-// Create and manage email campaigns
-var emailCampaign = await client.Marketing.CreateEmailCampaignAsync(emailCampaignJson);
-var emailCampaign = await client.Marketing.GetEmailCampaignAsync(emailCampaignId);
-var emailCampaigns = await client.Marketing.GetEmailCampaignsAsync();
-await client.Marketing.DeleteEmailCampaignAsync(emailCampaignId);
-```
-
-#### Report Operations
-```csharp
-// Create report task
-await client.Marketing.CreateReportTaskAsync(taskJson);
-
-// Get report task
-var reportTask = await client.Marketing.GetReportTaskAsync(reportTaskId);
-
-// Delete report task
-await client.Marketing.DeleteReportTaskAsync(reportTaskId);
-```
-
-### Recommendation API
-
-#### Find Listing Recommendations
-```csharp
-// Get recommendations for all active listings
-var recommendations = await client.Recommendation.FindListingRecommendationsAsync();
-
-// Get recommendations for specific listings
-var requestJson = @"{
-    ""listingIds"": [""item1"", ""item2"", ""item3""]
-}";
-var recommendations = await client.Recommendation.FindListingRecommendationsAsync(requestJson);
-```
-
-The recommendation API returns:
-- **promoteWithAd indicator**: Whether eBay recommends promoting the listing
-- **bidPercentage**: Current trending bid percentage for similar promoted items
-
-## Trusted hosts and sandbox
-
-The access token is only sent to trusted hosts: the eBay hosts in `MarketingAndPromotionsConfiguration.DefaultAllowedHosts` (production and their `*.sandbox.ebay.com` counterparts) plus any you add to `AllowedHosts`. The sandbox needs no extra configuration:
-
-```csharp
-var config = new MarketingAndPromotionsConfiguration
+var app = builder.Build();
+app.MapGet("/example", async (MarketingAndPromotionsClient client) =>
 {
-    AccessToken = "...",
-    MarketingBaseUrl = "https://api.sandbox.ebay.com/sell/marketing/v1",
-};
+    var campaigns = await client.Marketing.GetCampaignsAsync(limit: "10");
+    return Results.Ok();
+});
+app.Run();
 ```
 
-Any other host, for example a proxy, has to be added explicitly; the client constructor throws `InvalidOperationException` otherwise:
+## Custom HTTP handler
+
+To send requests through your own handler, for example for a proxy, client certificates or a test double, pass it to the constructor. The handler is shared by all APIs and is not disposed by the client:
 
 ```csharp
-config.MarketingBaseUrl = "https://ebay-proxy.example.com/sell/marketing/v1";
-config.AllowedHosts.Add("ebay-proxy.example.com");
+var handler = new HttpClientHandler { Proxy = new WebProxy("http://corporate-proxy:8080") };
+using var proxiedClient = new MarketingAndPromotionsClient(config, handler);
 ```
 
-## Error Handling
+## Error handling
 
 ```csharp
-using MarketingAndPromotions.Exceptions;
-
 try
 {
-    var campaign = await client.Marketing.GetCampaignAsync(campaignId);
+    var campaigns = await client.Marketing.GetCampaignsAsync(limit: "10");
 }
-catch (SdkException ex)
+catch (UnauthorizedException)
 {
-    Console.WriteLine($"SDK Error: {ex.Message}");
+    // HTTP 401: the token is missing, expired, for the other environment, or lacks a scope.
 }
-catch (HttpRequestException ex)
+catch (ApiException ex)
 {
-    Console.WriteLine($"HTTP Error: {ex.Message}");
+    // Any other REST error.
+    Console.WriteLine($"HTTP {ex.ResponseStatusCode}");
 }
 ```
 
-## Regenerating the SDK
+- `UnauthorizedException` (HTTP 401) derives from `SdkException`.
+- Other REST errors throw Kiota's `ApiException`, or a generated subclass named in eBay's spec for that operation, with `ResponseStatusCode`. eBay's error text is only available where the spec describes the error body correctly; set `DiagnosticLogging = true` to log failed requests to stderr.
 
-When OpenAPI specs change:
+## .NET Framework
 
-```bash
-# Run the regeneration script
-./generate.sh
+The `net472` build is a classic package that `packages.config` projects can use. Such projects must list every dependency themselves. At the minimum versions the SDK supports, these are:
 
-# Or manually:
-dotnet tool restore
-dotnet kiota generate -l csharp -d specs/openapi/marketing.yaml ...
-dotnet build EBay.MarketingAndPromotions/EBay.MarketingAndPromotions.csproj
-```
+| Package | Version |
+|---|---|
+| Microsoft.Kiota.Abstractions, .Bundle, .Http.HttpClientLibrary, .Serialization.Form, .Serialization.Json, .Serialization.Multipart, .Serialization.Text | 1.22.0 |
+| Std.UriTemplate | 2.0.8 |
+| Microsoft.IO.RecyclableMemoryStream | 3.0.1 |
+| Microsoft.Extensions.DependencyInjection.Abstractions | 6.0.0 |
+| System.Diagnostics.DiagnosticSource, System.Net.Http.WinHttpHandler | 6.0.0 |
+| System.Text.Json, System.Text.Encodings.Web, System.IO.Pipelines, Microsoft.Bcl.AsyncInterfaces | 10.0.0 |
+| System.Runtime.CompilerServices.Unsafe | 6.1.2 |
+| System.Memory, System.Threading.Tasks.Extensions | 4.6.3 |
+| System.Buffers, System.Numerics.Vectors, System.ValueTuple | 4.6.1 |
 
-## Configuration Options
-
-| Property | Default | Description |
-|----------|---------|-------------|
-| `MarketingBaseUrl` | `https://api.ebay.com/sell/marketing/v1` | Marketing API base URL |
-| `RecommendationBaseUrl` | `https://api.ebay.com/sell/recommendation/v1` | Recommendation API base URL |
-| `TokenRefreshHandler` | (required) | OAuth token refresh handler |
-
-## Project Structure
-
-- **Generated/**: Kiota-generated REST clients (internal, committed to git)
-  - Marketing/: 81+ operations for advertising campaigns
-  - Recommendation/: Listing promotion recommendations
-- **Clients/Rest/**: Hand-crafted wrappers exposing public API
-- **Configuration/**: SDK config, auth providers
-- **Exceptions/**: SDK exceptions
-- **Extensions/**: DI extension methods
+With these versions the app needs binding redirects for Microsoft.Bcl.AsyncInterfaces (10.0.0.0), System.Buffers (4.0.5.0), System.Memory (4.0.5.0), System.Runtime.CompilerServices.Unsafe (6.0.3.0), System.Text.Encodings.Web (10.0.0.0), System.Text.Json (10.0.0.0) and System.Threading.Tasks.Extensions (4.2.4.0). There must be no redirect for System.ValueTuple: .NET Framework 4.7.1+ provides it. Newer package versions work too and change the redirect versions.
 
 ## Development
 
-### Prerequisites
+- .NET 10 SDK, plus the .NET 8 and .NET 9 SDKs so every target framework builds. `net472` builds on any OS; its tests run on Windows only.
+- Build: `dotnet build EBay.MarketingAndPromotions`
+- Test: `dotnet test tests/EBay.MarketingAndPromotions.Tests`
+- Most of this repository is generated from eBay's API specs by the SDK generator (`api-sdk-definitions`): the API clients, `Configuration/`, `Extensions/`, `MarketingAndPromotionsClient.cs`, `specs/` and `generate.sh`. Change the generator, not the generated files. `./generate.sh` reruns Kiota for the specs in `specs/openapi`.
 
-- .NET 10 SDK, plus the .NET 8 and .NET 9 SDKs so every target framework can build
-- `net472` builds on any OS (reference assemblies come from NuGet); its tests run on Windows only
-- Kiota CLI tool (auto-installed via dotnet tools)
-
-### Building
-
-```bash
-dotnet build EBay.MarketingAndPromotions/EBay.MarketingAndPromotions.csproj
-```
-
-### Packaging
-
-```bash
-dotnet pack EBay.MarketingAndPromotions/EBay.MarketingAndPromotions.csproj
-```
-
-## Dependencies
-
-- **Microsoft.Kiota.Bundle** (>= 1.22.0): REST runtime
-- **Microsoft.Extensions.DependencyInjection.Abstractions** (>= 6.0.0): `AddMarketingAndPromotionsSdk` registration
+See [CONTRIBUTING.adoc](CONTRIBUTING.adoc).
 
 ## License
 
-[Apache 2.0](LICENSE) © 2026 eBay Inc.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run `./generate.sh` if specs changed
-5. Ensure `dotnet build` succeeds
-6. Submit a pull request
+Apache 2.0, see [LICENSE](LICENSE).
